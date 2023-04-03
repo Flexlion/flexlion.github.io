@@ -96,6 +96,10 @@
   .gallery-image_hair {
     border: 2px solid rgba(255, 255, 255, 0);
     transition: 0.5s;
+    cursor: pointer;
+    margin: -50px -20px; 
+    scale: 50%;
+    flex-shrink: 0;
   }
 
   .gallery-image_hair[selected="true"]{
