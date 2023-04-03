@@ -1,0 +1,152 @@
+  body {
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+  }
+  main {
+    flex: 1 0 auto;
+  }
+  #main-container {
+    position: relative;
+  }   
+  footer {
+    background-color: #fff;
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+  }
+  map img{
+    border-radius: 45px;
+  }
+  .image-gallery {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  
+  .gallery-image {
+    border: 2px solid white;
+    cursor: pointer;
+  }
+  
+  .gallery-image:hover {
+    border: 2px solid blue;
+    transition: 0.5s;
+  }
+  
+  .image-gallery_skin {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+  }
+  
+  .gallery-image_skin {
+    border: 2px solid white;
+    cursor: pointer;
+    margin: -70px -80px; 
+    scale: 35%;
+    flex-shrink: 0;
+  }
+  
+  .gallery-image_skin:hover {
+    border: 2px solid blue;
+    transition: 0.5s;
+  }
+
+  .image-gallery_hair {
+    background-color: grey;
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    width: fit-content;
+  }
+  
+  .gallery-image_hair {
+    border: 2px solid rgba(255, 255, 255, 0);
+    cursor: pointer;
+    margin: -50px -20px; 
+    scale: 50%;
+    flex-shrink: 0;
+  }
+  
+  .gallery-image_hair:hover {
+    border: 2px solid blue;
+    transition: 0.5s;
+  }
+  
+  map{
+    cursor: pointer;
+  }
+
+  .image-gallery_eyebrow {
+    background-color: grey;
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    width: fit-content;
+  }
+  
+  .gallery-image_eyebrow {
+    border: 2px solid rgba(255, 255, 255, 0);
+    cursor: pointer;
+    margin: -25px -25px;
+    scale: 70%;
+    flex-shrink: 0;
+  }
+  
+  .gallery-image_eyebrow:hover {
+    border: 2px solid blue;
+    transition: 0.5s;
+  }
+  
+  .image-gallery_pants {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    width: fit-content;
+  }
+  
+  .gallery-image_pants {
+    border: 2px solid rgba(255, 255, 255, 0);
+    cursor: pointer;
+    margin: -55px -55px; 
+    scale: 40%;
+    flex-shrink: 0;
+  }
+  
+  .gallery-image_pants:hover {
+    border: 2px solid blue;
+    transition: 0.5s;
+  }
+  .customize {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    width: fit-content;
+  }
+  
+  .CstContainer {
+    position: relative;
+    width: 250px; 
+    height: 300px; 
+    margin-right: 20px;
+    display: inline-block; 
+    vertical-align: top; 
+  }
+  
+  .base {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
+  }
+  
+  .item {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+    cursor: pointer;
+  }
