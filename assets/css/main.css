@@ -28,11 +28,15 @@
   .gallery-image {
     border: 2px solid white;
     cursor: pointer;
+    transition: 0.5s;
+  }
+
+  .gallery-image[selected="true"]{
+    border: 2px solid blue;
   }
   
   .gallery-image:hover {
-    border: 2px solid blue;
-    transition: 0.5s;
+    border: 2px solid cyan;
   }
   
   .image-gallery_skin {
@@ -47,11 +51,15 @@
     margin: -70px -80px; 
     scale: 35%;
     flex-shrink: 0;
+    transition: 0.5s;
+  }
+
+  .gallery-image_skin[selected="true"]{
+    border: 2px solid blue;
   }
   
   .gallery-image_skin:hover {
-    border: 2px solid blue;
-    transition: 0.5s;
+    border: 2px solid cyan;
   }
 
   .image-gallery_hair {
@@ -64,15 +72,15 @@
   
   .gallery-image_hair {
     border: 2px solid rgba(255, 255, 255, 0);
-    cursor: pointer;
-    margin: -50px -20px; 
-    scale: 50%;
-    flex-shrink: 0;
+    transition: 0.5s;
+  }
+
+  .gallery-image_hair[selected="true"]{
+    border: 2px solid blue;
   }
   
   .gallery-image_hair:hover {
-    border: 2px solid blue;
-    transition: 0.5s;
+    border: 2px solid cyan;
   }
   
   map{
@@ -93,11 +101,15 @@
     margin: -25px -25px;
     scale: 70%;
     flex-shrink: 0;
+    transition: 0.5s;
+  }
+
+  .gallery-image_eyebrow[selected="true"]{
+    border: 2px solid blue;
   }
   
   .gallery-image_eyebrow:hover {
-    border: 2px solid blue;
-    transition: 0.5s;
+    border: 2px solid cyan;
   }
   
   .image-gallery_pants {
@@ -113,11 +125,15 @@
     margin: -55px -55px; 
     scale: 40%;
     flex-shrink: 0;
+    transition: 0.5s;
+  }
+
+  .gallery-image_pants[selected="true"]{
+    border: 2px solid blue;
   }
   
   .gallery-image_pants:hover {
-    border: 2px solid blue;
-    transition: 0.5s;
+    border: 2px solid cyan;
   }
   .customize {
     display: flex;
