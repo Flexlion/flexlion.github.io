@@ -62,6 +62,29 @@
     border: 2px solid cyan;
   }
 
+  .image-gallery_eyecolor {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+  }
+  
+  .gallery-image_eyecolor {
+    border: 2px solid white;
+    cursor: pointer;
+    margin: -70px -80px; 
+    scale: 35%;
+    flex-shrink: 0;
+    transition: 0.5s;
+  }
+
+  .gallery-image_eyecolor[selected="true"]{
+    border: 2px solid blue;
+  }
+  
+  .gallery-image_eyecolor:hover {
+    border: 2px solid cyan;
+  }
+
   .image-gallery_hair {
     background-color: grey;
     display: flex;

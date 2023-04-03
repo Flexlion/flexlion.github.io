@@ -30,6 +30,9 @@ $(document).ready(function () {
   $('.gallery-image_skin').click(function(event) {
     click_img(event);
   });
+  $('.gallery-image_eyecolor').click(function(event) {
+    click_img(event);
+  });
   $('.gallery-image_hair').click(function(event) {
     click_img(event);
   });
