@@ -25,6 +25,13 @@ function loadAnims(url){
   );
 };
 
+function onVsMapSelect(target){
+  document.getElementById('chosenMapImg').setAttribute('src', target.src);
+  var mapInfo = document.getElementById('chosenMapInfo');
+  mapInfo.setAttribute("map_id", target.getAttribute("map_id"));
+  mapInfo.textContent = target.alt;
+}
+
 function loadGalleryImgs(){
   const mapPerLine = 4;
 
@@ -43,7 +50,10 @@ function loadGalleryImgs(){
       var mapName = VersusSceneInfo[mapId]["__RowId"].slice(4);
       if(/\d$/.test(mapName)) mapName = mapName.slice(0, mapName.length - 2);
 
-      versusMap.alt = mapNames[mapName];
+      
+      if(mapName in mapNames) versusMap.alt = mapNames[mapName];
+      else versusMap.alt = mapName;
+      
       versusMap.src = "https://raw.githubusercontent.com/Leanny/leanny.github.io/master/splat3/images/stage/Vss_" + mapName + ".png";
       versusMap.setAttribute("map_id", VersusSceneInfo[mapId]["Id"]);
 
@@ -53,20 +63,26 @@ function loadGalleryImgs(){
       };
       versusMap.addEventListener('click', (event) => {
         var target = event.target;
-        document.getElementById('chosenMapImg').setAttribute('src', target.src);
-        var mapInfo = document.getElementById('chosenMapInfo');
-        mapInfo.setAttribute("map_id", target.getAttribute("map_id"));
-        mapInfo.textContent = target.alt;
+        onVsMapSelect(target);
       });
       versusMap.setAttribute("width", "160");
       versusMap.setAttribute("height", "90");
       versusMap.setAttribute("class", "gallery-image_map");
       versusMap.setAttribute("data-dismiss", "modal");
       mapGallery.appendChild(versusMap);
+
+      if(mapId == 0) onVsMapSelect(versusMap);
     }
     modalMapBody.appendChild(mapGallery);
   }
 };
+
+function onWeaponSelect(target){
+  document.getElementById('chosenWeaponImg').setAttribute('src', target.src);
+  var weaponInfo = document.getElementById('chosenWeaponInfo');
+  weaponInfo.setAttribute("weapon_id", target.getAttribute("weapon_id"));
+  weaponInfo.textContent = target.alt;
+}
 
 function loadWeapons(){
   const weapPerLine = 6;
@@ -86,8 +102,11 @@ function loadWeapons(){
 
     for(var weapId = i * weapPerLine; weapId < Math.min((i + 1) * weapPerLine, validInfos.length); weapId++){
       var weapon = new Image();
-
-      weapon.alt = weaponNames[validInfos[weapId]["__RowId"]];
+      var codeName = validInfos[weapId]["__RowId"];
+      
+      if(codeName in weaponNames) weapon.alt = weaponNames[codeName];
+      else weapon.alt = codeName;
+      
       weapon.src = "https://raw.githubusercontent.com/Leanny/leanny.github.io/master/splat3/images/weapon/Wst_" + validInfos[weapId]["__RowId"] + ".png";
       weapon.setAttribute("weapon_id", validInfos[weapId]["Id"]);
 
@@ -97,16 +116,15 @@ function loadWeapons(){
       };
       weapon.addEventListener('click', (event) => {
         var target = event.target;
-        document.getElementById('chosenWeaponImg').setAttribute('src', target.src);
-        var weaponInfo = document.getElementById('chosenWeaponInfo');
-        weaponInfo.setAttribute("weapon_id", target.getAttribute("weapon_id"));
-        weaponInfo.textContent = target.alt;
+        onWeaponSelect(target);
       });
       weapon.setAttribute("width", "90");
       weapon.setAttribute("height", "90");
       weapon.setAttribute("class", "gallery-image_weapon");
       weapon.setAttribute("data-dismiss", "modal");
       weapGallery.appendChild(weapon);
+
+      if(weapId == 0) onWeaponSelect(weapon);
     }
     modalWpnBody.appendChild(weapGallery);
   }
