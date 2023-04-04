@@ -46,9 +46,9 @@
           <div>
             <p class="lead">Map:</p>
             <map>
-              <img id="selected-image" src="https://github.com/Leanny/leanny.github.io/blob/master/splat3/images/stageL/Vss_Yunohana.webp?raw=true" data-toggle="modal" data-target="#modalMap" width="320" height="180" alt="">
+              <img id="chosenMapImg" src="https://github.com/Leanny/leanny.github.io/blob/master/splat3/images/stageL/Vss_Yunohana.webp?raw=true" data-toggle="modal" data-target="#modalMap" width="320" height="180" alt="">
             </map>
-            <p class="" id="mapName" >Scorch Gorge</p>
+            <p class="" id="chosenMapInfo" >Scorch Gorge</p>
             <p class="">Nightime <input type="checkbox"></p> 
           </div><hr>
     </div>
@@ -189,23 +189,23 @@
             </div><br>
             <p>Weapon, gear and animation.</p> 
             <div class="customize">
-              <div class="weapon">
-                <div class="CstContainer">
-                  <img src="./assets/img/player/customize/BtnWeapon.png" class="base">
-                  <img src="./assets/img/player/customize/Wst_Shooter_First_00.png" class="item" data-toggle="modal" data-target="#modalWpn">
-                </div>
-                <div class="CstContainer">
-                  <img src="./assets/img/player/customize/BtnHeadgear.png" class="base">
-                  <img src="./assets/img/player/customize/Hed_FST000.png" class="item" data-toggle="modal" data-target="#modalHed">
-                </div>
-                <div class="CstContainer">
-                  <img src="./assets/img/player/customize/BtnClothes.png" class="base">
-                  <img src="./assets/img/player/customize/Clt_FST001.png" class="item" data-toggle="modal" data-target="#modalClt">
-                </div>
-                <div class="CstContainer">
-                  <img src="./assets/img/player/customize/BtnShoes.png" class="base">
-                  <img src="./assets/img/player/customize/Shs_SHI000.png" class="item" data-toggle="modal" data-target="#modalShs">
-                </div>
+              <div class="CstContainer">
+                <img src="./assets/img/player/customize/BtnWeapon.png" class="base">
+                <img src="./assets/img/player/customize/Wst_Shooter_First_00.png" class="item" data-toggle="modal" data-target="#modalWpn" id="chosenWeaponImg">
+                <p class="" id="chosenWeaponInfo" >Splattershot Jr</p>
+              </div>
+              <div class="CstContainer">
+                <img src="./assets/img/player/customize/BtnHeadgear.png" class="base">
+                <img src="./assets/img/player/customize/Hed_FST000.png" class="item" data-toggle="modal" data-target="#modalHed">
+              </div>
+              <div class="CstContainer">
+                <img src="./assets/img/player/customize/BtnClothes.png" class="base">
+                <img src="./assets/img/player/customize/Clt_FST001.png" class="item" data-toggle="modal" data-target="#modalClt">
+              </div>
+              <div class="CstContainer">
+                <img src="./assets/img/player/customize/BtnShoes.png" class="base">
+                <img src="./assets/img/player/customize/Shs_SHI000.png" class="item" data-toggle="modal" data-target="#modalShs">
+              </div>
               <div class="anim">
                 <br><p>Animation</p>
                 <select id="dropdown"></select>
@@ -229,30 +229,6 @@
         </button>
       </div>
       <div class="modal-body">
-        <img src="" id="modal-image" class="img-fluid">
-        <div class="image-gallery_map">
-          <img src="https://github.com/Leanny/leanny.github.io/blob/master/splat3/images/stageL/Vss_Yunohana.webp?raw=true" alt="Scorch Gorge" class="gallery-image_map" width="160" height="90" class="close" data-dismiss="modal">
-          <img src="https://github.com/Leanny/leanny.github.io/blob/master/splat3/images/stageL/Vss_District.webp?raw=true" alt="Eeltail Alley" class="gallery-image_map" width="160" height="90" class="close" data-dismiss="modal">
-          <img src="https://github.com/Leanny/leanny.github.io/blob/master/splat3/images/stageL/Vss_Yagara.webp?raw=true" alt="Hagglefish Market" class="gallery-image_map" width="160" height="90" class="close" data-dismiss="modal">
-          <img src="https://github.com/Leanny/leanny.github.io/blob/master/splat3/images/stageL/Vss_Temple.webp?raw=true" alt="Undertow Spillway" class="gallery-image_map" width="160" height="90" class="close" data-dismiss="modal">
-        </div>
-        <div class="image-gallery_map">
-          <img src="https://github.com/Leanny/leanny.github.io/blob/master/splat3/images/stageL/Vss_Scrap.webp?raw=true" alt="Mincemeat Metalworks" class="gallery-image_map" width="160" height="90" class="close" data-dismiss="modal">
-          <img src="https://github.com/Leanny/leanny.github.io/blob/master/splat3/images/stageL/Vss_Kaisou.webp?raw=true" alt="Hammerhead Bridge" class="gallery-image_map" width="160" height="90" class="close" data-dismiss="modal">
-          <img src="https://github.com/Leanny/leanny.github.io/blob/master/splat3/images/stageL/Vss_Pivot.webp?raw=true" alt="Museum d'Alfonsino" class="gallery-image_map" width="160" height="90" class="close" data-dismiss="modal">
-          <img src="https://github.com/Leanny/leanny.github.io/blob/master/splat3/images/stageL/Vss_Hiagari.webp?raw=true" alt="Mahi-Mahi Resort" class="gallery-image_map" width="160" height="90" class="close" data-dismiss="modal">
-        <div class="image-gallery_map">
-          <img src="https://github.com/Leanny/leanny.github.io/blob/master/splat3/images/stageL/Vss_Upland.webp?raw=true" alt="Inkblot Art Academy" class="gallery-image_map" width="160" height="90" class="close" data-dismiss="modal">
-          <img src="https://github.com/Leanny/leanny.github.io/blob/master/splat3/images/stageL/Vss_Nagasaki.webp?raw=true" alt="Sturgeon Shipyard" class="gallery-image_map" width="160" height="90" class="close" data-dismiss="modal">
-          <img src="https://github.com/Leanny/leanny.github.io/blob/master/splat3/images/stageL/Vss_Line.webp?raw=true" alt="MakoMart" class="gallery-image_map" width="160" height="90" class="close" data-dismiss="modal">
-          <img src="https://github.com/Leanny/leanny.github.io/blob/master/splat3/images/stageL/Vss_Carousel.webp?raw=true" alt="Wahoo World" class="gallery-image_map" width="160" height="90" class="close" data-dismiss="modal">
-        </div>
-        <div class="image-gallery_map">
-          <img src="https://github.com/Leanny/leanny.github.io/blob/master/splat3/images/stageL/Vss_Jyoheki.webp?raw=true" alt="Flounder Heights" class="gallery-image_map" width="160" height="90" class="close" data-dismiss="modal">
-          <img src="https://github.com/Leanny/leanny.github.io/blob/master/splat3/images/stageL/Vss_BigSlope.webp?raw=true" alt="Brinewater Springs" class="gallery-image_map" width="160" height="90" class="close" data-dismiss="modal">
-          <img src="https://github.com/Leanny/leanny.github.io/blob/master/splat3/images/stageL/Vss_Pillar.webp?raw=true" alt="Manta Maria" class="gallery-image_map" width="160" height="90" class="close" data-dismiss="modal">
-          <img src="https://github.com/Leanny/leanny.github.io/blob/master/splat3/images/stageL/Vss_Factory.webp?raw=true" alt="Um'ami Ruins" class="gallery-image_map" width="160" height="90" class="close" data-dismiss="modal">
-        </div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -260,13 +236,14 @@
     </div>
   </div>
 </div>
+</div>
 
 <!-- Save Scene -->
 <div class="modal fade" id="modalSaveScene" tabindex="-1" role="dialog" aria-labelledby="modalSaveScene" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
-    <div class="modal-content">
+    <div class="modal-content" style="width: 165%; margin-left: -30%;">
       <div class="modal-header">
-        <h5 class="modal-title" id="modalSaveScene">Save Scene</h5>
+        <h5 class="modal-title" id="modalSaveSceneTitle">Save Scene</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -286,15 +263,15 @@
 <!-- Wpn modal -->
 <div class="modal fade" id="modalWpn" tabindex="-1" role="dialog" aria-labelledby="modalWpn" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
-    <div class="modal-content">
+    <div class="modal-content" style="width: 165%; margin-left: -30%;">
       <div class="modal-header">
-        <h5 class="modal-title" id="modalWpn">Weapon</h5>
+        <h5 class="modal-title" id="modalWpnTitle">Weapon</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
-        Work in progress.
+        
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -307,7 +284,7 @@
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="modalHed">Headgear</h5>
+        <h5 class="modal-title" id="modalHedTitle">Headgear</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -327,7 +304,7 @@
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="modalClt">Clothing</h5>
+        <h5 class="modal-title" id="modalCltTitle">Clothing</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -347,7 +324,7 @@
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="modalShs">Shoes</h5>
+        <h5 class="modal-title" id="modalShsTitle">Shoes</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>

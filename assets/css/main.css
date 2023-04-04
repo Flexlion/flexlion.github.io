@@ -222,3 +222,26 @@
   .gallery-image_map:hover {
     border: 2px solid cyan;
   }
+
+  .image-gallery_weapon {
+    display: flex;
+    flex-wrap: wrap;
+    width: 1500px;
+  }
+  
+  .gallery-image_weapon {
+    border: 2px solid white;
+    cursor: pointer;
+    transition: 0.5s;
+    margin: 20px 20px; 
+    border-radius: 23.5px;
+    scale: 120%;
+  }
+
+  .gallery-image_weapon[selected="true"]{
+    border: 2px solid blue;
+  }
+  
+  .gallery-image_weapon:hover {
+    border: 2px solid cyan;
+  }
