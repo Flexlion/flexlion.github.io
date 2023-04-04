@@ -29,6 +29,7 @@
     border: 2px solid white;
     cursor: pointer;
     transition: 0.5s;
+    border-radius: 23.5px;
   }
 
   .gallery-image[selected="true"]{
@@ -51,6 +52,7 @@
     margin: -70px -80px; 
     scale: 35%;
     flex-shrink: 0;
+    border-radius: 23.5px;
     transition: 0.5s;
   }
 
@@ -74,6 +76,7 @@
     margin: -80px -80px; 
     scale: 35%;
     flex-shrink: 0;
+    border-radius: 23.5px;
     transition: 0.5s;
   }
 
@@ -99,6 +102,7 @@
     cursor: pointer;
     margin: -50px -20px; 
     scale: 50%;
+    border-radius: 23.5px;
     flex-shrink: 0;
   }
 
@@ -128,6 +132,7 @@
     margin: -25px -25px;
     scale: 70%;
     flex-shrink: 0;
+    border-radius: 23.5px;
     transition: 0.5s;
   }
 
@@ -152,6 +157,7 @@
     margin: -55px -55px; 
     scale: 40%;
     flex-shrink: 0;
+    border-radius: 23.5px;
     transition: 0.5s;
   }
 

@@ -8,7 +8,7 @@ function click_img(event)
   target.setAttribute("selected", "true");
 };
 
-const loadAnims = url => {
+function loadAnims(url){
   dropdown = document.getElementById("dropdown");
   jQuery.get(url, data => {
         var lines = data.split("\n");
@@ -20,6 +20,16 @@ const loadAnims = url => {
         }
       },
   );
+};
+
+function loadGalleryImgs(){
+  galleryImages = document.querySelectorAll('.gallery-image_map');
+  galleryImages.forEach(image => {
+    image.addEventListener('click', () => {
+      document.querySelector('map img').setAttribute('src', image.src);
+      document.querySelector('#mapName').textContent = image.alt;
+    });
+  });
 };
 
 $(document).ready(function () {
@@ -45,17 +55,5 @@ $(document).ready(function () {
   $('.gallery-image_map').click(function(event) {
     click_img(event);
   });
+  loadGalleryImgs();
 });
-  const galleryImages = document.querySelectorAll('.gallery-image_map');
-  galleryImages.forEach(image => {
-    image.addEventListener('click', () => {
-
-      const mapButton = document.querySelector('map img');
-      mapButton.setAttribute('src', image.src);
-
-      const mapName = image.alt;
-
-      const mapNameElement = document.querySelector('#mapName');
-      mapNameElement.textContent = mapName;
-    });
-  });
