@@ -135,15 +135,10 @@ function loadWeapons(){
 };
 
 function loadGear(modalName, GearInfo, langFileName, resultImg, resultInfo){
-  var validInfos = [];
-  for(var i = 0; i < GearInfo.length; i++){
-    if(GearInfo[i]["HowToGet"] == "Impossible") continue; // Only add obtainable gear
-    validInfos.push(GearInfo[i]);
-  }
   var gearNames = langEUen[langFileName];
   buildRsdbSelector(
     modalName, 
-    validInfos, 
+    GearInfo, 
     6, 
     info => {
       return info["__RowId"];
