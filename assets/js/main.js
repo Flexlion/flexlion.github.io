@@ -149,8 +149,9 @@ function loadGear(modalName, GearInfo, langFileName, resultImg, resultInfo){
       return info["__RowId"];
     },
     codeName => {
-      if(codeName in gearNames) return gearNames[codeName];
-      return codeName;
+      var name = codeName.slice(4);
+      if(name in gearNames) return gearNames[name];
+      return name;
     },
     "image-gallery_gear",
     "gallery-image_gear",
