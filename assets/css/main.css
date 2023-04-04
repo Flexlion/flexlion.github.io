@@ -71,7 +71,7 @@
   .gallery-image_eyecolor {
     border: 2px solid white;
     cursor: pointer;
-    margin: -70px -80px; 
+    margin: -80px -80px; 
     scale: 35%;
     flex-shrink: 0;
     transition: 0.5s;
@@ -192,4 +192,27 @@
     transform: translate(-50%, -50%);
     z-index: 2;
     cursor: pointer;
+  }
+  
+  .image-gallery_map {
+    display: flex;
+    flex-wrap: wrap;
+    width: 1500px;
+  }
+  
+  .gallery-image_map {
+    border: 2px solid white;
+    cursor: pointer;
+    transition: 0.5s;
+    margin: 20px 20px; 
+    border-radius: 23.5px;
+    scale: 120%;
+  }
+
+  .gallery-image_map[selected="true"]{
+    border: 2px solid blue;
+  }
+  
+  .gallery-image_map:hover {
+    border: 2px solid cyan;
   }
