@@ -1,3 +1,8 @@
+  @font-face {
+    font-family: Splatfont2;
+    src:
+    url("../font/Splatfont2.ttf");
+  }
   body {
     display: flex;
     min-height: 100vh;
@@ -200,6 +205,74 @@
     cursor: pointer;
   }
   
+  .chosenWpn {
+    position: absolute;
+    transform: translate(33px, 245px);
+    z-index: 2;
+    color: #fff;
+    font-family: 'Splatfont2';
+    font-size: 17px;
+    white-space: nowrap;
+    text-shadow:
+    -1px -1px 0 black,
+     1px -1px 0 black,
+    -1px  1px 0 black,
+     1px  1px 0 black;
+     text-align: center;
+     justify-content: center;
+  }
+
+  .chosenHed {
+    position: absolute;
+    transform: translate(33px, 245px);
+    z-index: 2;
+    color: #fff;
+    font-family: 'Splatfont2';
+    font-size: 17px;
+    white-space: nowrap;
+    text-shadow:
+    -1px -1px 0 black,
+     1px -1px 0 black,
+    -1px  1px 0 black,
+     1px  1px 0 black;
+     text-align: center;
+     justify-content: center;
+  }
+
+  .chosenClt {
+    position: absolute;
+    transform: translate(33px, 245px);
+    z-index: 2;
+    color: #fff;
+    font-family: 'Splatfont2';
+    font-size: 17px;
+    white-space: nowrap;
+    text-shadow:
+    -1px -1px 0 black,
+     1px -1px 0 black,
+    -1px  1px 0 black,
+     1px  1px 0 black;
+     text-align: center;
+     justify-content: center;
+  }
+
+  .chosenShs {
+    position: absolute;
+    transform: translate(33px, 245px);
+    z-index: 2;
+    color: #fff;
+    font-family: 'Splatfont2';
+    font-size: 17px;
+    white-space: nowrap;
+    text-shadow:
+    -1px -1px 0 black,
+     1px -1px 0 black,
+    -1px  1px 0 black,
+     1px  1px 0 black;
+     text-align: center;
+     justify-content: center;
+  }
+
   .image-gallery_map {
     display: flex;
     flex-wrap: wrap;
