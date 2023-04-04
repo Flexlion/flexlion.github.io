@@ -1,4 +1,7 @@
 var WeaponInfoMain;
+var GearInfoHead;
+var GearInfoClothes;
+var GearInfoShoes;
 var VersusSceneInfo;
 var langEUen;
 
@@ -25,114 +28,149 @@ function loadAnims(url){
   );
 };
 
-function onVsMapSelect(target){
-  document.getElementById('chosenMapImg').setAttribute('src', target.src);
-  var mapInfo = document.getElementById('chosenMapInfo');
-  mapInfo.setAttribute("map_id", target.getAttribute("map_id"));
-  mapInfo.textContent = target.alt;
+function onRsdbEntrySelect(target){
+  document.getElementById(target.getAttribute('resultImg')).setAttribute('src', target.src);
+  var info = document.getElementById(target.getAttribute('resultInfo'));
+  info.setAttribute("rsdb_id", target.getAttribute("rsdb_id"));
+  info.textContent = target.alt;
+}
+
+function buildRsdbSelector(modalName, rsdbInfos, entryPerLine, getCodeNameFunc, getNameFunc, classNameGallery, classNameImg, getImgUrlFunc, defaultImgUrl, width, height, resultImg, resultInfo){
+  var modalBody = document.getElementById(modalName).getElementsByClassName("modal-body")[0];
+
+  for(var i = 0; i < rsdbInfos.length / entryPerLine; i++){
+
+    var gallery = document.createElement("div");
+    gallery.setAttribute("class", classNameGallery);
+
+    for(var idx = i * entryPerLine; idx < Math.min((i + 1) * entryPerLine, rsdbInfos.length); idx++){
+      var entry = new Image();
+
+      var codeName = getCodeNameFunc(rsdbInfos[idx]);
+      entry.alt = getNameFunc(codeName);
+      entry.src = getImgUrlFunc(codeName);
+
+      entry.setAttribute("rsdb_id", rsdbInfos[idx]["Id"]);
+      entry.setAttribute("default_url", defaultImgUrl);
+
+      entry.onerror = function(event){
+        var target = event.target || event.srcElement;
+        target.src = target.getAttribute("default_url"); // No Icon
+      };
+      entry.addEventListener('click', (event) => {
+        var target = event.target;
+        onRsdbEntrySelect(target);
+      });
+      entry.setAttribute("width", width);
+      entry.setAttribute("height", height);
+      entry.setAttribute("resultImg", resultImg);
+      entry.setAttribute("resultInfo", resultInfo);
+      entry.setAttribute("class", classNameImg);
+      entry.setAttribute("data-dismiss", "modal");
+      gallery.appendChild(entry);
+
+      if(idx == 0) onRsdbEntrySelect(entry);
+    }
+    modalBody.appendChild(gallery);
+  }
 }
 
 function loadMaps(){
-  const mapPerLine = 4;
-
   var mapNames = langEUen["CommonMsg/VS/VSStageName"];
-
-  var modalMapBody = document.getElementById("modalMap").getElementsByClassName("modal-body")[0];
-
-  for(var i = 0; i < VersusSceneInfo.length / mapPerLine; i++){
-
-    var mapGallery = document.createElement("div");
-    mapGallery.setAttribute("class", "image-gallery_weapon");
-
-    for(var mapId = i * mapPerLine; mapId < Math.min((i + 1) * mapPerLine, VersusSceneInfo.length); mapId++){
-      var versusMap = new Image();
-
-      var mapName = VersusSceneInfo[mapId]["__RowId"].slice(4);
+  buildRsdbSelector(
+    "modalMap", 
+    VersusSceneInfo, 
+    4, 
+    info => {
+      var mapName = info["__RowId"].slice(4);
       if(/\d$/.test(mapName)) mapName = mapName.slice(0, mapName.length - 2);
-
-      
-      if(mapName in mapNames) versusMap.alt = mapNames[mapName];
-      else versusMap.alt = mapName;
-      
-      versusMap.src = "https://raw.githubusercontent.com/Leanny/leanny.github.io/master/splat3/images/stage/Vss_" + mapName + ".png";
-      versusMap.setAttribute("map_id", VersusSceneInfo[mapId]["Id"]);
-
-      versusMap.onerror = function(event){
-        var target = event.target || event.srcElement;
-        target.src = 'https://raw.githubusercontent.com/Leanny/leanny.github.io/master/splat3/images/stage/Dummy.png'; // No Icon
-      };
-      versusMap.addEventListener('click', (event) => {
-        var target = event.target;
-        onVsMapSelect(target);
-      });
-      versusMap.setAttribute("width", "160");
-      versusMap.setAttribute("height", "90");
-      versusMap.setAttribute("class", "gallery-image_map");
-      versusMap.setAttribute("data-dismiss", "modal");
-      mapGallery.appendChild(versusMap);
-
-      if(mapId == 0) onVsMapSelect(versusMap);
-    }
-    modalMapBody.appendChild(mapGallery);
-  }
+      return mapName;
+    },
+    codeName => {
+      if(codeName in mapNames) return mapNames[codeName];
+      return codeName;
+    },
+    "image-gallery_map",
+    "gallery-image_map",
+    codeName => {
+      return "https://raw.githubusercontent.com/Leanny/leanny.github.io/master/splat3/images/stage/Vss_" + codeName + ".png";
+    },
+    'https://raw.githubusercontent.com/Leanny/leanny.github.io/master/splat3/images/stage/Dummy.png',
+    160,
+    90,
+    "chosenMapImg",
+    "chosenMapInfo"
+  )
 };
 
-function onWeaponSelect(target){
-  document.getElementById('chosenWeaponImg').setAttribute('src', target.src);
-  var weaponInfo = document.getElementById('chosenWeaponInfo');
-  weaponInfo.setAttribute("weapon_id", target.getAttribute("weapon_id"));
-  weaponInfo.textContent = target.alt;
-}
-
 function loadWeapons(){
-  const weapPerLine = 6;
-
-  var weaponNames = langEUen["CommonMsg/Weapon/WeaponName_Main"];
-
-  var modalWpnBody = document.getElementById("modalWpn").getElementsByClassName("modal-body")[0];
   var validInfos = [];
   for(var i = 0; i < WeaponInfoMain.length; i++){
     if(WeaponInfoMain[i]["Type"] != "Versus") continue; // Only add obtainable weapons
     validInfos.push(WeaponInfoMain[i]);
   }
-  for(var i = 0; i < validInfos.length / weapPerLine; i++){
+  var weaponNames = langEUen["CommonMsg/Weapon/WeaponName_Main"];
+  buildRsdbSelector(
+    "modalWpn", 
+    validInfos, 
+    6, 
+    info => {
+      return info["__RowId"];
+    },
+    codeName => {
+      if(codeName in weaponNames) return weaponNames[codeName];
+      return codeName;
+    },
+    "image-gallery_weapon",
+    "gallery-image_weapon",
+    codeName => {
+      return "https://raw.githubusercontent.com/Leanny/leanny.github.io/master/splat3/images/weapon/Wst_" + codeName + ".png"
+    },
+    'https://raw.githubusercontent.com/Leanny/leanny.github.io/master/splat3/images/weapon/Dummy.png',
+    90,
+    90,
+    "chosenWeaponImg",
+    "chosenWeaponInfo"
+  )
+};
 
-    var weapGallery = document.createElement("div");
-    weapGallery.setAttribute("class", "image-gallery_weapon");
-
-    for(var weapId = i * weapPerLine; weapId < Math.min((i + 1) * weapPerLine, validInfos.length); weapId++){
-      var weapon = new Image();
-      var codeName = validInfos[weapId]["__RowId"];
-      
-      if(codeName in weaponNames) weapon.alt = weaponNames[codeName];
-      else weapon.alt = codeName;
-      
-      weapon.src = "https://raw.githubusercontent.com/Leanny/leanny.github.io/master/splat3/images/weapon/Wst_" + validInfos[weapId]["__RowId"] + ".png";
-      weapon.setAttribute("weapon_id", validInfos[weapId]["Id"]);
-
-      weapon.onerror = function(event){
-        var target = event.target || event.srcElement;
-        target.src = 'https://raw.githubusercontent.com/Leanny/leanny.github.io/master/splat3/images/weapon/Dummy.png'; // No Icon
-      };
-      weapon.addEventListener('click', (event) => {
-        var target = event.target;
-        onWeaponSelect(target);
-      });
-      weapon.setAttribute("width", "90");
-      weapon.setAttribute("height", "90");
-      weapon.setAttribute("class", "gallery-image_weapon");
-      weapon.setAttribute("data-dismiss", "modal");
-      weapGallery.appendChild(weapon);
-
-      if(weapId == 0) onWeaponSelect(weapon);
-    }
-    modalWpnBody.appendChild(weapGallery);
+function loadGear(modalName, GearInfo, langFileName, resultImg, resultInfo){
+  var validInfos = [];
+  for(var i = 0; i < GearInfo.length; i++){
+    if(GearInfo[i]["HowToGet"] == "Impossible") continue; // Only add obtainable gear
+    validInfos.push(GearInfo[i]);
   }
+  var gearNames = langEUen[langFileName];
+  buildRsdbSelector(
+    modalName, 
+    validInfos, 
+    6, 
+    info => {
+      return info["__RowId"];
+    },
+    codeName => {
+      if(codeName in gearNames) return gearNames[codeName];
+      return codeName;
+    },
+    "image-gallery_gear",
+    "gallery-image_gear",
+    codeName => {
+      return "https://raw.githubusercontent.com/Leanny/leanny.github.io/master/splat3/images/gear/" + codeName + ".png"
+    },
+    'https://raw.githubusercontent.com/Leanny/leanny.github.io/master/splat3/images/gear/Dummy.png',
+    90,
+    90,
+    resultImg,
+    resultInfo
+  )
 };
 
 function load_options(){
   loadMaps();
   loadWeapons();
+  loadGear("modalHed", GearInfoHead, "CommonMsg/Gear/GearName_Head", "chosenHedImg", "chosenHedInfo")
+  loadGear("modalClt", GearInfoClothes, "CommonMsg/Gear/GearName_Clothes", "chosenCltImg", "chosenCltInfo")
+  loadGear("modalShs", GearInfoShoes, "CommonMsg/Gear/GearName_Shoes", "chosenShsImg", "chosenShsInfo")
 };
 
 function load_options_run(){
@@ -142,7 +180,16 @@ function load_options_run(){
       VersusSceneInfo = data;
       jQuery.getJSON("https://raw.githubusercontent.com/Leanny/leanny.github.io/master/splat3/data/language/EUen.json", data => {
         langEUen = data;
-        load_options();
+        jQuery.getJSON("https://flexlion3.herokuapp.com/RSDB/GearInfoHead", data => {
+          GearInfoHead = data;
+          jQuery.getJSON("https://flexlion3.herokuapp.com/RSDB/GearInfoClothes", data => {
+            GearInfoClothes = data;
+            jQuery.getJSON("https://flexlion3.herokuapp.com/RSDB/GearInfoShoes", data => {
+              GearInfoShoes = data;
+              load_options();
+            });
+          });
+        });
       });
     });
   });
