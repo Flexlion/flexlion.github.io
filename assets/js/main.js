@@ -5,24 +5,38 @@ var GearInfoShoes;
 var VersusSceneInfo;
 var langEUen;
 
-function click_img(event)
+var playerInfos = [];
+var defaultPlayerInfo = {"sett_rsdb": {}, "sett_clickable": {}, "name": "", "anim": "Tstance"};
+var curPlayer = -1;
+var playerNum = 1;
+const maxPlayerNum = 10;
+
+function click_player_sett(target)
 {
-  var target = event.target;
-  var elements = document.getElementsByClassName(target.getAttribute("class"));
+  var className = target.getAttribute("class");
+  var elements = document.getElementsByClassName(className);
   for (var i = 0; i < elements.length; i++) {
     elements[i].setAttribute("selected", "false");
   }
   target.setAttribute("selected", "true");
+  
+  if(curPlayer != -1) playerInfos[curPlayer]["sett_clickable"][className] = target;
+  else defaultPlayerInfo["sett_clickable"][className] = target;
+};
+
+function click_player_sett_event(event)
+{
+  click_player_sett(event.target);
 };
 
 function loadAnims(url){
-  var dropdown = document.getElementById("dropdown");
+  var player_anim_list = document.getElementById("player_anim_list");
   jQuery.get(url, data => {
         var lines = data.split("\n");
         for (var i = 0; i < lines.length; i++) {
           var option = document.createElement("option");
           option.text = lines[i];
-          dropdown.add(option);
+          player_anim_list.add(option);
         }
       },
   );
@@ -33,6 +47,28 @@ function onRsdbEntrySelect(target){
   var info = document.getElementById(target.getAttribute('resultInfo'));
   info.setAttribute("rsdb_id", target.getAttribute("rsdb_id"));
   info.textContent = target.alt;
+  if(info.getAttribute("player_specific") == "true"){
+    if(curPlayer != -1) playerInfos[curPlayer]["sett_rsdb"][info.id] = target;
+    else defaultPlayerInfo["sett_rsdb"][info.id] = target;
+  }
+}
+
+function onPlayerChange(id){
+  if(id >= maxPlayerNum) console.error("wtf");
+  curPlayer = id;
+  document.getElementById('player_id_holder').value = curPlayer + 1;
+  for (const [key, value] of Object.entries(playerInfos[curPlayer]["sett_rsdb"])) onRsdbEntrySelect(value);
+  for (const [key, value] of Object.entries(playerInfos[curPlayer]["sett_clickable"])) click_player_sett(value);
+  document.getElementById('player_name_holder').value = playerInfos[curPlayer]["name"];
+  document.getElementById("player_anim_list").value = playerInfos[curPlayer]["anim"];
+}
+
+function onPlayersCreate(){
+  for(var i = 0; i < maxPlayerNum; i++){
+    playerInfos.push({"sett_rsdb": {}, "sett_clickable": {}, "name": defaultPlayerInfo["name"], "anim": defaultPlayerInfo["anim"]});
+    for (const [key, value] of Object.entries(defaultPlayerInfo["sett_rsdb"])) playerInfos[i]["sett_rsdb"][key] = value.cloneNode(true);
+    for (const [key, value] of Object.entries(defaultPlayerInfo["sett_clickable"])) playerInfos[i]["sett_clickable"][key] = value;
+  }
 }
 
 function buildRsdbSelector(modalName, rsdbInfos, entryPerLine, getCodeNameFunc, getNameFunc, classNameGallery, classNameImg, getImgUrlFunc, defaultImgUrl, width, height, resultImg, resultInfo){
@@ -167,6 +203,21 @@ function load_options(){
   loadGear("modalHed", GearInfoHead, "CommonMsg/Gear/GearName_Head", "chosenHedImg", "chosenHedInfo");
   loadGear("modalClt", GearInfoClothes, "CommonMsg/Gear/GearName_Clothes", "chosenCltImg", "chosenCltInfo");
   loadGear("modalShs", GearInfoShoes, "CommonMsg/Gear/GearName_Shoes", "chosenShsImg", "chosenShsInfo");
+  onPlayersCreate();
+  onPlayerChange(0);
+  
+  $('.player_num_holder').on("propertychange change click keyup input paste", function(event){
+    var num_holder = event.target;
+    if(num_holder.value != playerNum){
+      playerNum = num_holder.value;
+      document.getElementById('player_id_holder').setAttribute("max", playerNum);
+      if(curPlayer >= playerNum) onPlayerChange(playerNum - 1);
+    };
+  });
+  $('.player_id_holder').on("propertychange change click keyup input paste", function(event){
+    var id_holder = event.target;
+    if(id_holder.value - 1 != curPlayer) onPlayerChange(id_holder.value - 1);
+  });
 };
 
 function load_options_run(){
@@ -192,27 +243,26 @@ function load_options_run(){
 };
 
 $(document).ready(function () {
-  $('.gallery-image').click(function(event) {
-    click_img(event);
+  $('.gallery-image').click(click_player_sett_event);
+  $('.gallery-image_skin').click(click_player_sett_event);
+  $('.gallery-image_eyecolor').click(click_player_sett_event);
+  $('.gallery-image_hair').click(click_player_sett_event);
+  $('.gallery-image_eyebrow').click(click_player_sett_event);
+  $('.gallery-image_pants').click(click_player_sett_event);
+  $('.player_name_holder').on("propertychange change click keyup input paste", function(event){
+    var name_holder = event.target;
+    if(name_holder.value != playerInfos[curPlayer]["name"]) playerInfos[curPlayer]["name"] = name_holder.value;
   });
-  $('.gallery-image_skin').click(function(event) {
-    click_img(event);
+  $('.player_anim_list').on("propertychange change click keyup input paste", function(event){
+    var anim_holder = event.target;
+    if(anim_holder.value != playerInfos[curPlayer]["anim"]) playerInfos[curPlayer]["anim"] = anim_holder.value;
   });
-  $('.gallery-image_eyecolor').click(function(event) {
-    click_img(event);
-  });
-  $('.gallery-image_hair').click(function(event) {
-    click_img(event);
-  });
-  $('.gallery-image_eyebrow').click(function(event) {
-    click_img(event);
-  });
-  $('.gallery-image_pants').click(function(event) {
-    click_img(event);
-  });
-  $('.gallery-image_map').click(function(event) {
-    click_img(event);
-  });
+  click_player_sett(document.getElementsByClassName('gallery-image')[0]);
+  click_player_sett(document.getElementsByClassName('gallery-image_skin')[0]);
+  click_player_sett(document.getElementsByClassName('gallery-image_eyecolor')[0]);
+  click_player_sett(document.getElementsByClassName('gallery-image_hair')[0]);
+  click_player_sett(document.getElementsByClassName('gallery-image_eyebrow')[0]);
+  click_player_sett(document.getElementsByClassName('gallery-image_pants')[0]);
   loadAnims("https://raw.githubusercontent.com/Flexlion/flexlion.github.io/master/assets/animations.txt");
   load_options_run();
 });

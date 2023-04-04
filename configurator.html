@@ -58,16 +58,17 @@
       <div class="">
         <p class="display-6 fw-bold">Player Config</p>
         <div>
-          <label for="player-num">Number of players:</label>
-          <input type="number" id="player-num" min="1" max="10" value="0"/>
+          <label for="player_num_holder">Number of players:</label>
+          <input class="player_num_holder" type="number" id="player_num_holder" min="1" max="10" value="1"/>
+          <label for="player_id_holder">Current Player:</label>
+          <input class="player_id_holder" type="number" id="player_id_holder" min="1" max="1" value="1"/>
         </div><br> 
         <!-- TODO: mostrar X configuraciones dependiendo de los jugadores añadidos -->
         <div id="player-configurations">
           <div class="player_cst">
-            <p class="fw-bold">PlayerX</p>
             <div>
-              <label for="player-num">Name:</label>
-              <input type="text" id="player-name" min="1" max="10"/>
+              <label class="fw-bold" for="player-name">Name:</label>
+              <input class = "player_name_holder" id= "player_name_holder" type="text" id="player-name" min="1" max="10"/>
             </div><br>
             <p>Player Type.</p>
             <div class="image-gallery">
@@ -192,26 +193,26 @@
               <div class="CstContainer">
                 <img src="./assets/img/player/customize/BtnWeapon.png" class="base">
                 <img src="https://raw.githubusercontent.com/Leanny/leanny.github.io/master/splat3/images/weapon/Dummy.png" class="item" data-toggle="modal" data-target="#modalWpn" id="chosenWeaponImg">
-                <p class="" id="chosenWeaponInfo" ></p>
+                <p class="" id="chosenWeaponInfo" player_specific="true" ></p>
               </div>
               <div class="CstContainer">
                 <img src="./assets/img/player/customize/BtnHeadgear.png" class="base">
                 <img src="https://raw.githubusercontent.com/Leanny/leanny.github.io/master/splat3/images/gear/Dummy.png" class="item" data-toggle="modal" data-target="#modalHed" id="chosenHedImg">
-                <p class="" id="chosenHedInfo" ></p>
+                <p class="" id="chosenHedInfo" player_specific="true" ></p>
               </div>
               <div class="CstContainer">
                 <img src="./assets/img/player/customize/BtnClothes.png" class="base">
                 <img src="https://raw.githubusercontent.com/Leanny/leanny.github.io/master/splat3/images/gear/Dummy.png" class="item" data-toggle="modal" data-target="#modalClt" id="chosenCltImg">
-                <p class="" id="chosenCltInfo" ></p>
+                <p class="" id="chosenCltInfo" player_specific="true" ></p>
               </div>
               <div class="CstContainer">
                 <img src="./assets/img/player/customize/BtnShoes.png" class="base">
                 <img src="https://raw.githubusercontent.com/Leanny/leanny.github.io/master/splat3/images/gear/Dummy.png" class="item" data-toggle="modal" data-target="#modalShs" id="chosenShsImg">
-                <p class="" id="chosenShsInfo" ></p>
+                <p class="" id="chosenShsInfo" player_specific="true" ></p>
               </div>
               <div class="anim">
                 <br><p>Animation</p>
-                <select id="dropdown"></select>
+                <select class = "player_anim_list" id="player_anim_list"></select>
               </div>
             </div>
           </div>
