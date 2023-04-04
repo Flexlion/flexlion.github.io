@@ -32,7 +32,7 @@ function onVsMapSelect(target){
   mapInfo.textContent = target.alt;
 }
 
-function loadGalleryImgs(){
+function loadMaps(){
   const mapPerLine = 4;
 
   var mapNames = langEUen["CommonMsg/VS/VSStageName"];
@@ -131,7 +131,7 @@ function loadWeapons(){
 };
 
 function load_options(){
-  loadGalleryImgs();
+  loadMaps();
   loadWeapons();
 };
 
