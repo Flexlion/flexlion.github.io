@@ -168,9 +168,9 @@ function loadGear(modalName, GearInfo, langFileName, resultImg, resultInfo){
 function load_options(){
   loadMaps();
   loadWeapons();
-  loadGear("modalHed", GearInfoHead, "CommonMsg/Gear/GearName_Head", "chosenHedImg", "chosenHedInfo")
-  loadGear("modalClt", GearInfoClothes, "CommonMsg/Gear/GearName_Clothes", "chosenCltImg", "chosenCltInfo")
-  loadGear("modalShs", GearInfoShoes, "CommonMsg/Gear/GearName_Shoes", "chosenShsImg", "chosenShsInfo")
+  loadGear("modalHed", GearInfoHead, "CommonMsg/Gear/GearName_Head", "chosenHedImg", "chosenHedInfo");
+  loadGear("modalClt", GearInfoClothes, "CommonMsg/Gear/GearName_Clothes", "chosenCltImg", "chosenCltInfo");
+  loadGear("modalShs", GearInfoShoes, "CommonMsg/Gear/GearName_Shoes", "chosenShsImg", "chosenShsInfo");
 };
 
 function load_options_run(){
