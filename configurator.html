@@ -21,7 +21,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-    
+    <script type="text/javascript" src="./assets/js/jszip.min.js"></script>
 </head>
 <body>
   <div class="container">
@@ -53,7 +53,7 @@
               <img id="chosenMapImg" src="https://raw.githubusercontent.com/Leanny/leanny.github.io/master/splat3/images/stage/Dummy.png" data-toggle="modal" data-target="#modalMap" width="320" height="180" alt="">
             </map>
             <p class="" id="chosenMapInfo" ></p>
-            <p class="">Nightime <input type="checkbox"></p> 
+            <p class="">Nightime <input id="chosenEnvTime" type="checkbox"></p> 
           </div><hr>
     </div>
     
@@ -77,10 +77,10 @@
             <p>Player Type.</p>
             <div id="image_gallery_playertype">
             <div class="image_gallery_playertype">
-              <img src="./assets/img/player/playertype/InkGirl.png" rsdb_id="0" class="gallery_image_playertype">
-              <img src="./assets/img/player/playertype/InkBoy.png" rsdb_id="1" class="gallery_image_playertype">
-              <img src="./assets/img/player/playertype/OctGirl.png" rsdb_id="2" class="gallery_image_playertype">
-              <img src="./assets/img/player/playertype/OctBoy.png" rsdb_id="3" class="gallery_image_playertype">
+              <img src="./assets/img/player/playertype/InkGirl.png" rsdb_id="0" class="player_playertype">
+              <img src="./assets/img/player/playertype/InkBoy.png" rsdb_id="1" class="player_playertype">
+              <img src="./assets/img/player/playertype/OctGirl.png" rsdb_id="2" class="player_playertype">
+              <img src="./assets/img/player/playertype/OctBoy.png" rsdb_id="3" class="player_playertype">
             </div>   
             </div>
             <p>Skintone.</p>       
@@ -165,7 +165,7 @@
         </button>
       </div>
       <div class="modal-body">
-        Work in progress.
+        <button type="button" onclick="downloadConfig()" class="btn btn-primary" data-dismiss="modal">Save</button>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

@@ -8,6 +8,7 @@ var EyebrowInfo;
 var VersusSceneInfo;
 var langEUen;
 
+var sessionInfo = {};
 var playerInfos = [];
 var defaultPlayerInfo = {"sett_rsdb": {}, "sett_clickable": {}, "name": "", "anim": "Tstance"};
 var curPlayer = -1;
@@ -21,6 +22,55 @@ function getRsdbInfoById(rsdbData, id){
   }
 }
 
+function getElementByRsdbId(className, rsdbId){
+  rsdbId = String(rsdbId);
+  var elements = document.getElementsByClassName(className);
+  for(var i = 0; i < elements.length; i++){
+    if(elements[i].getAttribute("rsdb_id") == rsdbId) return elements[i];
+  }
+}
+
+function downloadFile(content, fileName, contentType) {
+  var a = document.createElement("a");
+  var file = new Blob([content], {type: contentType});
+  a.href = URL.createObjectURL(file);
+  a.download = fileName;
+  a.click();
+}
+
+function downloadConfig(){
+  var zip = new JSZip();
+
+  var sessionConfig = {"map_name": getRsdbInfoById(VersusSceneInfo, sessionInfo["vs_map"])["__RowId"], "env_time": Number(document.getElementById("chosenEnvTime").checked) * 2};
+  zip.file('PhotoForCalico/SessionConfig.json', JSON.stringify(sessionConfig, null, 2));
+
+  var playerConfig = {};
+  for(var i = 0; i < playerNum; i++){
+    var info = playerInfos[i];
+    while(info["name"] in playerConfig) info["name"]+="0";
+    playerConfig[info["name"]] = {
+      "player_type": Number(info["sett_clickable"]["player_playertype"]), 
+      "hair": Number(info["sett_clickable"]["player_hair"]),
+      "bottom": Number(info["sett_clickable"]["player_bottom"]),
+      "skin_tone": Number(info["sett_clickable"]["player_skintone"]),
+      "eye_brows": Number(info["sett_clickable"]["player_eyebrow"]),
+      "eye_color": Number(info["sett_clickable"]["player_eyecolor"]),
+      "gear_head": Number(info["sett_rsdb"]["player_headgear"]),
+      "gear_cloth": Number(info["sett_rsdb"]["player_clothes"]),
+      "gear_shoes": Number(info["sett_rsdb"]["player_shoes"]),
+      "weapon_main": Number(info["sett_rsdb"]["player_weapon"]),
+      "anim_name": info["anim"],
+      "color_name": "NULL"
+    }
+  }
+  zip.file('PhotoForCalico/PlayerConfig.json', JSON.stringify(playerConfig, null, 2));
+  zip.generateAsync({
+    type: "base64"
+  }).then(function(content) {
+      window.location.href = "data:application/zip;base64," + content;
+  });  
+}
+
 function click_player_sett(target)
 {
   var className = target.getAttribute("class");
@@ -30,10 +80,10 @@ function click_player_sett(target)
   }
   target.setAttribute("selected", "true");
   
-  if(curPlayer != -1) playerInfos[curPlayer]["sett_clickable"][className] = target;
-  else defaultPlayerInfo["sett_clickable"][className] = target;
+  if(curPlayer != -1) playerInfos[curPlayer]["sett_clickable"][className] = target.getAttribute("rsdb_id");
+  else defaultPlayerInfo["sett_clickable"][className] = target.getAttribute("rsdb_id");
 
-  if(className == "gallery_image_playertype") onChangePlayerType(target.getAttribute("rsdb_id"));
+  if(className == "player_playertype") onChangePlayerType(target.getAttribute("rsdb_id"));
 };
 
 function click_player_sett_event(event)
@@ -55,22 +105,26 @@ function loadAnims(url){
 };
 
 function onRsdbEntrySelect(target){
+  var className = target.getAttribute("class");
+  
   document.getElementById(target.getAttribute('resultImg')).setAttribute('src', target.src);
   var info = document.getElementById(target.getAttribute('resultInfo'));
   info.setAttribute("rsdb_id", target.getAttribute("rsdb_id"));
   info.textContent = target.alt;
+
+  var rsdb_id = target.getAttribute("rsdb_id");
   if(info.getAttribute("player_specific") == "true"){
-    if(curPlayer != -1) playerInfos[curPlayer]["sett_rsdb"][info.id] = target;
-    else defaultPlayerInfo["sett_rsdb"][info.id] = target;
-  }
+    if(curPlayer != -1) playerInfos[curPlayer]["sett_rsdb"][className] = rsdb_id;
+    else defaultPlayerInfo["sett_rsdb"][className] = rsdb_id;
+  } else sessionInfo[className] = rsdb_id;
 }
 
 function onPlayerChange(id){
   if(id >= maxPlayerNum) console.error("wtf");
   curPlayer = id;
   document.getElementById('player_id_holder').value = curPlayer + 1;
-  for (const [key, value] of Object.entries(playerInfos[curPlayer]["sett_rsdb"])) onRsdbEntrySelect(value);
-  for (const [key, value] of Object.entries(playerInfos[curPlayer]["sett_clickable"])) click_player_sett(value);
+  for (const [key, value] of Object.entries(playerInfos[curPlayer]["sett_rsdb"])) onRsdbEntrySelect(getElementByRsdbId(key, value));
+  for (const [key, value] of Object.entries(playerInfos[curPlayer]["sett_clickable"])) click_player_sett(getElementByRsdbId(key, value));
   document.getElementById('player_name_holder').value = playerInfos[curPlayer]["name"];
   document.getElementById("player_anim_list").value = playerInfos[curPlayer]["anim"];
 }
@@ -78,7 +132,7 @@ function onPlayerChange(id){
 function onPlayersCreate(){
   for(var i = 0; i < maxPlayerNum; i++){
     playerInfos.push({"sett_rsdb": {}, "sett_clickable": {}, "name": defaultPlayerInfo["name"], "anim": defaultPlayerInfo["anim"]});
-    for (const [key, value] of Object.entries(defaultPlayerInfo["sett_rsdb"])) playerInfos[i]["sett_rsdb"][key] = value.cloneNode(true);
+    for (const [key, value] of Object.entries(defaultPlayerInfo["sett_rsdb"])) playerInfos[i]["sett_rsdb"][key] = value;
     for (const [key, value] of Object.entries(defaultPlayerInfo["sett_clickable"])) playerInfos[i]["sett_clickable"][key] = value;
   }
 }
@@ -139,7 +193,7 @@ function loadMaps(){
       return codeName;
     },
     "image_gallery_map",
-    "gallery_image_map",
+    "vs_map",
     codeName => {
       return "https://raw.githubusercontent.com/Leanny/leanny.github.io/master/splat3/images/stage/Vss_" + codeName + ".png";
     },
@@ -170,7 +224,7 @@ function loadWeapons(){
       return codeName;
     },
     "image_gallery_weapon",
-    "gallery_image_weapon",
+    "player_weapon",
     codeName => {
       return "https://raw.githubusercontent.com/Leanny/leanny.github.io/master/splat3/images/weapon/Wst_" + codeName + ".png"
     },
@@ -182,7 +236,7 @@ function loadWeapons(){
   )
 };
 
-function loadGear(modalName, GearInfo, langFileName, resultImg, resultInfo){
+function loadGear(modalName, GearInfo, langFileName, className, resultImg, resultInfo){
   var gearNames = langEUen[langFileName];
   buildRsdbSelector(
     modalName, 
@@ -197,7 +251,7 @@ function loadGear(modalName, GearInfo, langFileName, resultImg, resultInfo){
       return name;
     },
     "image_gallery_gear",
-    "gallery_image_gear",
+    className,
     codeName => {
       return "https://raw.githubusercontent.com/Leanny/leanny.github.io/master/splat3/images/gear/" + codeName + ".png"
     },
@@ -228,7 +282,7 @@ function loadClickableIdOptions(galleryId, galleryClassName, imgClassName, total
 };
 
 function loadSkinTones(){
-  loadClickableIdOptions("image_gallery_skin", "image_gallery_skin", "gallery_image_skin", 9, 9, 
+  loadClickableIdOptions("image_gallery_skin", "image_gallery_skin", "player_skintone", 9, 9, 
   idx => {
     return "./assets/img/player/skin_color/" + String(idx) + ".png";
   }, 
@@ -238,7 +292,7 @@ function loadSkinTones(){
 };
 
 function loadEyeColors(){
-  loadClickableIdOptions("image_gallery_eyecolor", "image_gallery_eyecolor", "gallery_image_eyecolor", 21, 7, 
+  loadClickableIdOptions("image_gallery_eyecolor", "image_gallery_eyecolor", "player_eyecolor", 21, 7, 
   idx => {
     return "./assets/img/player/eye_color/" + String(idx) + ".png";
   }, 
@@ -248,14 +302,14 @@ function loadEyeColors(){
 };
 
 function loadHairs(){
-  loadClickableIdOptions("image_gallery_hair", "image_gallery_hair", "gallery_image_hair", HairInfo.length, 8, 
+  loadClickableIdOptions("image_gallery_hair", "image_gallery_hair", "player_hair", HairInfo.length, 8, 
   idx => {
     return "./assets/img/player/hair/" + HairInfo[idx]["__RowId"] + ".png";
   }, 
   idx => {
     return HairInfo[idx]["Id"];
   });
-  hairOpts = document.getElementsByClassName("gallery_image_hair");
+  hairOpts = document.getElementsByClassName("player_hair");
   for(var i = 0; i < hairOpts.length; i++){
     if(hairOpts[i].getAttribute("rsdb_id") == "500"){
       hairOpts[i].src = "./assets/img/player/hair/" + getRsdbInfoById(HairInfo, 500) + "_F.png";
@@ -265,7 +319,7 @@ function loadHairs(){
 };
 
 function loadEyebrows(){
-  loadClickableIdOptions("image_gallery_eyebrow", "image_gallery_eyebrow", "gallery_image_eyebrow", EyebrowInfo.length, 4, 
+  loadClickableIdOptions("image_gallery_eyebrow", "image_gallery_eyebrow", "player_eyebrow", EyebrowInfo.length, 4, 
   idx => {
     return "./assets/img/player/eyebrow/" + EyebrowInfo[idx]["__RowId"] + "_F.png";
   },
@@ -280,7 +334,7 @@ function loadPants(){
     if(BottomInfo[i]["Order"] == -1) continue;
     validInfos.push(BottomInfo[i]);
   }
-  loadClickableIdOptions("image_gallery_pants", "image_gallery_pants", "gallery_image_pants", validInfos.length, validInfos.length, 
+  loadClickableIdOptions("image_gallery_pants", "image_gallery_pants", "player_bottom", validInfos.length, validInfos.length, 
   idx => {
     return "./assets/img/player/pants/" + validInfos[idx]["__RowId"] + ".png";
   },
@@ -295,7 +349,7 @@ function onChangePlayerType(playerType){
   var suffix = "_F.png";
   if(playerType & 1) suffix = "_M.png";
 
-  eyebrowOpts = document.getElementsByClassName("gallery_image_eyebrow");
+  eyebrowOpts = document.getElementsByClassName("player_eyebrow");
   for(var i = 0; i < eyebrowOpts.length; i++) eyebrowOpts[i].src = "./assets/img/player/eyebrow/" + getRsdbInfoById(EyebrowInfo, eyebrowOpts[i].getAttribute("rsdb_id"))["__RowId"] + suffix;
 
   document.getElementById("hair_msn310").src = "./assets/img/player/hair/" + getRsdbInfoById(HairInfo, 500)["__RowId"] + suffix;;
@@ -304,9 +358,9 @@ function onChangePlayerType(playerType){
 function load_options(){
   loadMaps();
   loadWeapons();
-  loadGear("modalHed", GearInfoHead, "CommonMsg/Gear/GearName_Head", "chosenHedImg", "chosenHedInfo");
-  loadGear("modalClt", GearInfoClothes, "CommonMsg/Gear/GearName_Clothes", "chosenCltImg", "chosenCltInfo");
-  loadGear("modalShs", GearInfoShoes, "CommonMsg/Gear/GearName_Shoes", "chosenShsImg", "chosenShsInfo");
+  loadGear("modalHed", GearInfoHead, "CommonMsg/Gear/GearName_Head", "player_headgear", "chosenHedImg", "chosenHedInfo");
+  loadGear("modalClt", GearInfoClothes, "CommonMsg/Gear/GearName_Clothes", "player_clothes", "chosenCltImg", "chosenCltInfo");
+  loadGear("modalShs", GearInfoShoes, "CommonMsg/Gear/GearName_Shoes", "player_shoes", "chosenShsImg", "chosenShsInfo");
   loadAnims("https://raw.githubusercontent.com/Flexlion/flexlion.github.io/master/assets/animations.txt");
   loadSkinTones();
   loadEyeColors();
@@ -314,12 +368,12 @@ function load_options(){
   loadEyebrows();
   loadPants();
 
-  $('.gallery_image_playertype').click(click_player_sett_event);
-  $('.gallery_image_skin').click(click_player_sett_event);
-  $('.gallery_image_eyecolor').click(click_player_sett_event);
-  $('.gallery_image_hair').click(click_player_sett_event);
-  $('.gallery_image_eyebrow').click(click_player_sett_event);
-  $('.gallery_image_pants').click(click_player_sett_event);
+  $('.player_playertype').click(click_player_sett_event);
+  $('.player_skintone').click(click_player_sett_event);
+  $('.player_eyecolor').click(click_player_sett_event);
+  $('.player_hair').click(click_player_sett_event);
+  $('.player_eyebrow').click(click_player_sett_event);
+  $('.player_bottom').click(click_player_sett_event);
   $('.player_name_holder').on("propertychange change click keyup input paste", function(event){
     var name_holder = event.target;
     if(name_holder.value != playerInfos[curPlayer]["name"]) playerInfos[curPlayer]["name"] = name_holder.value;
@@ -328,12 +382,12 @@ function load_options(){
     var anim_holder = event.target;
     if(anim_holder.value != playerInfos[curPlayer]["anim"]) playerInfos[curPlayer]["anim"] = anim_holder.value;
   });
-  click_player_sett(document.getElementsByClassName('gallery_image_playertype')[0]);
-  click_player_sett(document.getElementsByClassName('gallery_image_skin')[0]);
-  click_player_sett(document.getElementsByClassName('gallery_image_eyecolor')[0]);
-  click_player_sett(document.getElementsByClassName('gallery_image_hair')[0]);
-  click_player_sett(document.getElementsByClassName('gallery_image_eyebrow')[0]);
-  click_player_sett(document.getElementsByClassName('gallery_image_pants')[0]);
+  click_player_sett(document.getElementsByClassName('player_playertype')[0]);
+  click_player_sett(document.getElementsByClassName('player_skintone')[0]);
+  click_player_sett(document.getElementsByClassName('player_eyecolor')[0]);
+  click_player_sett(document.getElementsByClassName('player_hair')[0]);
+  click_player_sett(document.getElementsByClassName('player_eyebrow')[0]);
+  click_player_sett(document.getElementsByClassName('player_bottom')[0]);
 
   onPlayersCreate();
   onPlayerChange(0);

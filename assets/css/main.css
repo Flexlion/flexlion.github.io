@@ -30,18 +30,18 @@
     flex-wrap: wrap;
   }
   
-  .gallery_image_playertype {
+  .player_playertype {
     border: 2px solid white;
     cursor: pointer;
     transition: 0.5s;
     border-radius: 23.5px;
   }
 
-  .gallery_image_playertype[selected="true"]{
+  .player_playertype[selected="true"]{
     border: 2px solid blue;
   }
   
-  .gallery_image_playertype:hover {
+  .player_playertype:hover {
     border: 2px solid cyan;
   }
   
@@ -51,7 +51,7 @@
     overflow-x: auto;
   }
   
-  .gallery_image_skin {
+  .player_skintone {
     border: 2px solid white;
     cursor: pointer;
     margin: -70px -80px; 
@@ -61,11 +61,11 @@
     transition: 0.5s;
   }
 
-  .gallery_image_skin[selected="true"]{
+  .player_skintone[selected="true"]{
     border: 2px solid blue;
   }
   
-  .gallery_image_skin:hover {
+  .player_skintone:hover {
     border: 2px solid cyan;
   }
 
@@ -75,7 +75,7 @@
     overflow-x: auto;
   }
   
-  .gallery_image_eyecolor {
+  .player_eyecolor {
     border: 2px solid white;
     cursor: pointer;
     margin: -80px -80px; 
@@ -85,11 +85,11 @@
     transition: 0.5s;
   }
 
-  .gallery_image_eyecolor[selected="true"]{
+  .player_eyecolor[selected="true"]{
     border: 2px solid blue;
   }
   
-  .gallery_image_eyecolor:hover {
+  .player_eyecolor:hover {
     border: 2px solid cyan;
   }
 
@@ -101,7 +101,7 @@
     width: fit-content;
   }
   
-  .gallery_image_hair {
+  .player_hair {
     border: 2px solid rgba(255, 255, 255, 0);
     transition: 0.5s;
     cursor: pointer;
@@ -111,11 +111,11 @@
     flex-shrink: 0;
   }
 
-  .gallery_image_hair[selected="true"]{
+  .player_hair[selected="true"]{
     border: 2px solid blue;
   }
   
-  .gallery_image_hair:hover {
+  .player_hair:hover {
     border: 2px solid cyan;
   }
   
@@ -131,7 +131,7 @@
     width: fit-content;
   }
   
-  .gallery_image_eyebrow {
+  .player_eyebrow {
     border: 2px solid rgba(255, 255, 255, 0);
     cursor: pointer;
     margin: -25px -25px;
@@ -141,11 +141,11 @@
     transition: 0.5s;
   }
 
-  .gallery_image_eyebrow[selected="true"]{
+  .player_eyebrow[selected="true"]{
     border: 2px solid blue;
   }
   
-  .gallery_image_eyebrow:hover {
+  .player_eyebrow:hover {
     border: 2px solid cyan;
   }
   
@@ -156,7 +156,7 @@
     width: fit-content;
   }
   
-  .gallery_image_pants {
+  .player_bottom {
     border: 2px solid rgba(255, 255, 255, 0);
     cursor: pointer;
     margin: -55px -55px; 
@@ -166,11 +166,11 @@
     transition: 0.5s;
   }
 
-  .gallery_image_pants[selected="true"]{
+  .player_bottom[selected="true"]{
     border: 2px solid blue;
   }
   
-  .gallery_image_pants:hover {
+  .player_bottom:hover {
     border: 2px solid cyan;
   }
   .customize {
@@ -279,7 +279,7 @@
     width: 1500px;
   }
   
-  .gallery_image_map {
+  .vs_map {
     border: 2px solid white;
     cursor: pointer;
     transition: 0.5s;
@@ -288,11 +288,11 @@
     scale: 120%;
   }
 
-  .gallery_image_map[selected="true"]{
+  .vs_map[selected="true"]{
     border: 2px solid blue;
   }
   
-  .gallery_image_map:hover {
+  .vs_map:hover {
     border: 2px solid cyan;
   }
 
@@ -302,7 +302,7 @@
     width: 1500px;
   }
   
-  .gallery_image_weapon {
+  .player_weapon {
     border: 2px solid white;
     cursor: pointer;
     transition: 0.5s;
@@ -311,11 +311,11 @@
     scale: 120%;
   }
 
-  .gallery_image_weapon[selected="true"]{
+  .player_weapon[selected="true"]{
     border: 2px solid blue;
   }
   
-  .gallery_image_weapon:hover {
+  .player_weapon:hover {
     border: 2px solid cyan;
   }
 
@@ -325,7 +325,7 @@
     width: 1500px;
   }
   
-  .gallery_image_gear {
+  .player_headgear {
     border: 2px solid white;
     cursor: pointer;
     transition: 0.5s;
@@ -334,10 +334,44 @@
     scale: 120%;
   }
 
-  .gallery_image_gear[selected="true"]{
+  .player_headgear[selected="true"]{
     border: 2px solid blue;
   }
   
-  .gallery_image_gear:hover {
+  .player_headgear:hover {
+    border: 2px solid cyan;
+  }
+
+  .player_clothes {
+    border: 2px solid white;
+    cursor: pointer;
+    transition: 0.5s;
+    margin: 20px 20px; 
+    border-radius: 23.5px;
+    scale: 120%;
+  }
+
+  .player_clothes[selected="true"]{
+    border: 2px solid blue;
+  }
+  
+  .player_clothes:hover {
+    border: 2px solid cyan;
+  }
+
+  .player_shoes {
+    border: 2px solid white;
+    cursor: pointer;
+    transition: 0.5s;
+    margin: 20px 20px; 
+    border-radius: 23.5px;
+    scale: 120%;
+  }
+
+  .player_shoes[selected="true"]{
+    border: 2px solid blue;
+  }
+  
+  .player_shoes:hover {
     border: 2px solid cyan;
   }
