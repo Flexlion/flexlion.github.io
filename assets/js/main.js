@@ -277,7 +277,7 @@ function loadEyebrows(){
 function loadPants(){
   var validInfos = [];
   for(var i = 0; i < BottomInfo.length; i++){
-    if(validInfos[i]["Order"] != -1) continue;
+    if(BottomInfo[i]["Order"] != -1) continue;
     validInfos.push(BottomInfo[i]);
   }
   loadClickableIdOptions("image_gallery_pants", "image_gallery_pants", "gallery_image_pants", validInfos.length, validInfos.length, 
