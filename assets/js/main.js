@@ -96,6 +96,16 @@ function click_player_sett_event(event)
   click_player_sett(event.target);
 };
 
+function updateAnimIcon(select, anim_icon){
+  anim_icon.src = "./assets/img/player/animations/" + select.value + '.png';
+}
+
+const select = document.getElementById('player_anim_list');
+const anim_icon = document.getElementById('player_anim_icon');
+select.addEventListener('change', () => {
+  updateAnimIcon(select, anim_icon);
+});
+
 async function loadAnims(url) {
   var player_anim_list = document.getElementById("player_anim_list");
   let response = await fetch(url);
@@ -107,14 +117,8 @@ async function loadAnims(url) {
     option.text = lines[i];
     player_anim_list.add(option);
   }
+  updateAnimIcon(select, anim_icon);
 };
-
-const select = document.getElementById('player_anim_list');
-const anim_icon = document.getElementById('player_anim_icon');
-select.addEventListener('change', () => {
-  const player_anim = select.value;
-  anim_icon.src = "./assets/img/player/animations/" + player_anim + '.png';
-});
 
 
 
