@@ -104,6 +104,15 @@ function loadAnims(url){
   );
 };
 
+const select = document.getElementById('player_anim_list');
+const anim_icon = document.getElementById('player_anim_icon');
+select.addEventListener('change', () => {
+  const player_anim = select.value;
+  anim_icon.src = "./assets/img/player/animations/" + player_anim + '.png';
+});
+
+
+
 function onRsdbEntrySelect(target){
   var className = target.getAttribute("class");
   
