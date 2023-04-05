@@ -25,33 +25,33 @@
   map img{
     border-radius: 45px;
   }
-  .image-gallery {
+  .image_gallery_playertype {
     display: flex;
     flex-wrap: wrap;
   }
   
-  .gallery-image {
+  .gallery_image_playertype {
     border: 2px solid white;
     cursor: pointer;
     transition: 0.5s;
     border-radius: 23.5px;
   }
 
-  .gallery-image[selected="true"]{
+  .gallery_image_playertype[selected="true"]{
     border: 2px solid blue;
   }
   
-  .gallery-image:hover {
+  .gallery_image_playertype:hover {
     border: 2px solid cyan;
   }
   
-  .image-gallery_skin {
+  .image_gallery_skin {
     display: flex;
     flex-wrap: nowrap;
     overflow-x: auto;
   }
   
-  .gallery-image_skin {
+  .gallery_image_skin {
     border: 2px solid white;
     cursor: pointer;
     margin: -70px -80px; 
@@ -61,21 +61,21 @@
     transition: 0.5s;
   }
 
-  .gallery-image_skin[selected="true"]{
+  .gallery_image_skin[selected="true"]{
     border: 2px solid blue;
   }
   
-  .gallery-image_skin:hover {
+  .gallery_image_skin:hover {
     border: 2px solid cyan;
   }
 
-  .image-gallery_eyecolor {
+  .image_gallery_eyecolor {
     display: flex;
     flex-wrap: nowrap;
     overflow-x: auto;
   }
   
-  .gallery-image_eyecolor {
+  .gallery_image_eyecolor {
     border: 2px solid white;
     cursor: pointer;
     margin: -80px -80px; 
@@ -85,15 +85,15 @@
     transition: 0.5s;
   }
 
-  .gallery-image_eyecolor[selected="true"]{
+  .gallery_image_eyecolor[selected="true"]{
     border: 2px solid blue;
   }
   
-  .gallery-image_eyecolor:hover {
+  .gallery_image_eyecolor:hover {
     border: 2px solid cyan;
   }
 
-  .image-gallery_hair {
+  .image_gallery_hair {
     background-color: grey;
     display: flex;
     flex-wrap: nowrap;
@@ -101,7 +101,7 @@
     width: fit-content;
   }
   
-  .gallery-image_hair {
+  .gallery_image_hair {
     border: 2px solid rgba(255, 255, 255, 0);
     transition: 0.5s;
     cursor: pointer;
@@ -111,11 +111,11 @@
     flex-shrink: 0;
   }
 
-  .gallery-image_hair[selected="true"]{
+  .gallery_image_hair[selected="true"]{
     border: 2px solid blue;
   }
   
-  .gallery-image_hair:hover {
+  .gallery_image_hair:hover {
     border: 2px solid cyan;
   }
   
@@ -123,7 +123,7 @@
     cursor: pointer;
   }
 
-  .image-gallery_eyebrow {
+  .image_gallery_eyebrow {
     background-color: grey;
     display: flex;
     flex-wrap: nowrap;
@@ -131,7 +131,7 @@
     width: fit-content;
   }
   
-  .gallery-image_eyebrow {
+  .gallery_image_eyebrow {
     border: 2px solid rgba(255, 255, 255, 0);
     cursor: pointer;
     margin: -25px -25px;
@@ -141,22 +141,22 @@
     transition: 0.5s;
   }
 
-  .gallery-image_eyebrow[selected="true"]{
+  .gallery_image_eyebrow[selected="true"]{
     border: 2px solid blue;
   }
   
-  .gallery-image_eyebrow:hover {
+  .gallery_image_eyebrow:hover {
     border: 2px solid cyan;
   }
   
-  .image-gallery_pants {
+  .image_gallery_pants {
     display: flex;
     flex-wrap: nowrap;
     overflow-x: auto;
     width: fit-content;
   }
   
-  .gallery-image_pants {
+  .gallery_image_pants {
     border: 2px solid rgba(255, 255, 255, 0);
     cursor: pointer;
     margin: -55px -55px; 
@@ -166,11 +166,11 @@
     transition: 0.5s;
   }
 
-  .gallery-image_pants[selected="true"]{
+  .gallery_image_pants[selected="true"]{
     border: 2px solid blue;
   }
   
-  .gallery-image_pants:hover {
+  .gallery_image_pants:hover {
     border: 2px solid cyan;
   }
   .customize {
@@ -273,13 +273,13 @@
      justify-content: center;
   }
 
-  .image-gallery_map {
+  .image_gallery_map {
     display: flex;
     flex-wrap: wrap;
     width: 1500px;
   }
   
-  .gallery-image_map {
+  .gallery_image_map {
     border: 2px solid white;
     cursor: pointer;
     transition: 0.5s;
@@ -288,21 +288,21 @@
     scale: 120%;
   }
 
-  .gallery-image_map[selected="true"]{
+  .gallery_image_map[selected="true"]{
     border: 2px solid blue;
   }
   
-  .gallery-image_map:hover {
+  .gallery_image_map:hover {
     border: 2px solid cyan;
   }
 
-  .image-gallery_weapon {
+  .image_gallery_weapon {
     display: flex;
     flex-wrap: wrap;
     width: 1500px;
   }
   
-  .gallery-image_weapon {
+  .gallery_image_weapon {
     border: 2px solid white;
     cursor: pointer;
     transition: 0.5s;
@@ -311,21 +311,21 @@
     scale: 120%;
   }
 
-  .gallery-image_weapon[selected="true"]{
+  .gallery_image_weapon[selected="true"]{
     border: 2px solid blue;
   }
   
-  .gallery-image_weapon:hover {
+  .gallery_image_weapon:hover {
     border: 2px solid cyan;
   }
 
-  .image-gallery_gear {
+  .image_gallery_gear {
     display: flex;
     flex-wrap: wrap;
     width: 1500px;
   }
   
-  .gallery-image_gear {
+  .gallery_image_gear {
     border: 2px solid white;
     cursor: pointer;
     transition: 0.5s;
@@ -334,10 +334,10 @@
     scale: 120%;
   }
 
-  .gallery-image_gear[selected="true"]{
+  .gallery_image_gear[selected="true"]{
     border: 2px solid blue;
   }
   
-  .gallery-image_gear:hover {
+  .gallery_image_gear:hover {
     border: 2px solid cyan;
   }

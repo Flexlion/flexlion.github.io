@@ -2,6 +2,9 @@ var WeaponInfoMain;
 var GearInfoHead;
 var GearInfoClothes;
 var GearInfoShoes;
+var BottomInfo;
+var HairInfo;
+var EyebrowInfo;
 var VersusSceneInfo;
 var langEUen;
 
@@ -10,6 +13,13 @@ var defaultPlayerInfo = {"sett_rsdb": {}, "sett_clickable": {}, "name": "", "ani
 var curPlayer = -1;
 var playerNum = 1;
 const maxPlayerNum = 10;
+
+function getRsdbInfoById(rsdbData, id){
+  id = Number(id);
+  for(var i = 0; i < rsdbData.length; i++){
+    if(rsdbData[i]["Id"] == id) return rsdbData[i];
+  }
+}
 
 function click_player_sett(target)
 {
@@ -22,6 +32,8 @@ function click_player_sett(target)
   
   if(curPlayer != -1) playerInfos[curPlayer]["sett_clickable"][className] = target;
   else defaultPlayerInfo["sett_clickable"][className] = target;
+
+  if(className == "gallery_image_playertype") onChangePlayerType(target.getAttribute("rsdb_id"));
 };
 
 function click_player_sett_event(event)
@@ -126,8 +138,8 @@ function loadMaps(){
       if(codeName in mapNames) return mapNames[codeName];
       return codeName;
     },
-    "image-gallery_map",
-    "gallery-image_map",
+    "image_gallery_map",
+    "gallery_image_map",
     codeName => {
       return "https://raw.githubusercontent.com/Leanny/leanny.github.io/master/splat3/images/stage/Vss_" + codeName + ".png";
     },
@@ -157,8 +169,8 @@ function loadWeapons(){
       if(codeName in weaponNames) return weaponNames[codeName];
       return codeName;
     },
-    "image-gallery_weapon",
-    "gallery-image_weapon",
+    "image_gallery_weapon",
+    "gallery_image_weapon",
     codeName => {
       return "https://raw.githubusercontent.com/Leanny/leanny.github.io/master/splat3/images/weapon/Wst_" + codeName + ".png"
     },
@@ -184,8 +196,8 @@ function loadGear(modalName, GearInfo, langFileName, resultImg, resultInfo){
       if(name in gearNames) return gearNames[name];
       return name;
     },
-    "image-gallery_gear",
-    "gallery-image_gear",
+    "image_gallery_gear",
+    "gallery_image_gear",
     codeName => {
       return "https://raw.githubusercontent.com/Leanny/leanny.github.io/master/splat3/images/gear/" + codeName + ".png"
     },
@@ -197,12 +209,132 @@ function loadGear(modalName, GearInfo, langFileName, resultImg, resultInfo){
   )
 };
 
+function loadClickableIdOptions(galleryId, galleryClassName, imgClassName, totalNum, entryPerLine, getImgUrlFunc, getRsdbIdFunc){
+  gallery_root = document.getElementById(galleryId);
+
+  for(var i = 0; i < totalNum / entryPerLine; i++){
+    gallery = document.createElement("div");
+    gallery.setAttribute("class", galleryClassName)
+    for(var idx = i * entryPerLine; idx < Math.min((i + 1) * entryPerLine, totalNum); idx++){
+      option = new Image();
+      option.src = getImgUrlFunc(idx);
+      option.setAttribute("rsdb_id", getRsdbIdFunc(idx));
+      option.setAttribute("class", imgClassName);
+      gallery.appendChild(option);
+    }
+
+    gallery_root.appendChild(gallery);
+  }
+};
+
+function loadSkinTones(){
+  loadClickableIdOptions("image_gallery_skin", "image_gallery_skin", "gallery_image_skin", 9, 9, 
+  idx => {
+    return "./assets/img/player/skin_color/" + String(idx) + ".png";
+  }, 
+  idx => {
+    return idx;
+  });
+};
+
+function loadEyeColors(){
+  loadClickableIdOptions("image_gallery_eyecolor", "image_gallery_eyecolor", "gallery_image_eyecolor", 21, 7, 
+  idx => {
+    return "./assets/img/player/eye_color/" + String(idx) + ".png";
+  }, 
+  idx => {
+    return idx;
+  });
+};
+
+function loadHairs(){
+  loadClickableIdOptions("image_gallery_hair", "image_gallery_hair", "gallery_image_hair", HairInfo.length, 8, 
+  idx => {
+    return "./assets/img/player/hair/" + HairInfo[idx]["__RowId"] + ".png";
+  }, 
+  idx => {
+    return HairInfo[idx]["Id"];
+  });
+  hairOpts = document.getElementsByClassName("gallery_image_hair");
+  for(var i = 0; i < hairOpts.length; i++){
+    if(hairOpts[i].getAttribute("rsdb_id") == "500"){
+      hairOpts[i].src = "./assets/img/player/hair/" + getRsdbInfoById(HairInfo, 500) + "_F.png";
+      hairOpts[i].setAttribute("id", "hair_msn310");
+    }
+  }
+};
+
+function loadEyebrows(){
+  loadClickableIdOptions("image_gallery_eyebrow", "image_gallery_eyebrow", "gallery_image_eyebrow", EyebrowInfo.length, 4, 
+  idx => {
+    return "./assets/img/player/eyebrow/" + EyebrowInfo[idx]["__RowId"] + "_F.png";
+  },
+  idx => {
+    return EyebrowInfo[idx]["Id"];
+  });
+};
+
+function loadPants(){
+  var validInfos = [];
+  for(var i = 0; i < BottomInfo.length; i++){
+    if(validInfos[i]["Order"] != -1) continue;
+    validInfos.push(BottomInfo[i]);
+  }
+  loadClickableIdOptions("image_gallery_pants", "image_gallery_pants", "gallery_image_pants", validInfos.length, validInfos.length, 
+  idx => {
+    return "./assets/img/player/pants/" + validInfos[idx]["__RowId"] + ".png";
+  },
+  idx => {
+    return validInfos[idx]["Id"];
+  });
+};
+
+function onChangePlayerType(playerType){
+  playerType = Number(playerType);
+
+  var suffix = "_F.png";
+  if(playerType & 1) suffix = "_M.png";
+
+  eyebrowOpts = document.getElementsByClassName("gallery_image_eyebrow");
+  for(var i = 0; i < eyebrowOpts.length; i++) eyebrowOpts[i].src = "./assets/img/player/eyebrow/" + getRsdbInfoById(EyebrowInfo, eyebrowOpts[i].getAttribute("rsdb_id"))["__RowId"] + suffix;
+
+  document.getElementById("hair_msn310").src = "./assets/img/player/hair/" + getRsdbInfoById(HairInfo, 500)["__RowId"] + suffix;;
+};
+
 function load_options(){
   loadMaps();
   loadWeapons();
   loadGear("modalHed", GearInfoHead, "CommonMsg/Gear/GearName_Head", "chosenHedImg", "chosenHedInfo");
   loadGear("modalClt", GearInfoClothes, "CommonMsg/Gear/GearName_Clothes", "chosenCltImg", "chosenCltInfo");
   loadGear("modalShs", GearInfoShoes, "CommonMsg/Gear/GearName_Shoes", "chosenShsImg", "chosenShsInfo");
+  loadAnims("https://raw.githubusercontent.com/Flexlion/flexlion.github.io/master/assets/animations.txt");
+  loadSkinTones();
+  loadEyeColors();
+  loadHairs();
+  loadEyebrows();
+  loadPants();
+
+  $('.gallery_image_playertype').click(click_player_sett_event);
+  $('.gallery_image_skin').click(click_player_sett_event);
+  $('.gallery_image_eyecolor').click(click_player_sett_event);
+  $('.gallery_image_hair').click(click_player_sett_event);
+  $('.gallery_image_eyebrow').click(click_player_sett_event);
+  $('.gallery_image_pants').click(click_player_sett_event);
+  $('.player_name_holder').on("propertychange change click keyup input paste", function(event){
+    var name_holder = event.target;
+    if(name_holder.value != playerInfos[curPlayer]["name"]) playerInfos[curPlayer]["name"] = name_holder.value;
+  });
+  $('.player_anim_list').on("propertychange change click keyup input paste", function(event){
+    var anim_holder = event.target;
+    if(anim_holder.value != playerInfos[curPlayer]["anim"]) playerInfos[curPlayer]["anim"] = anim_holder.value;
+  });
+  click_player_sett(document.getElementsByClassName('gallery_image_playertype')[0]);
+  click_player_sett(document.getElementsByClassName('gallery_image_skin')[0]);
+  click_player_sett(document.getElementsByClassName('gallery_image_eyecolor')[0]);
+  click_player_sett(document.getElementsByClassName('gallery_image_hair')[0]);
+  click_player_sett(document.getElementsByClassName('gallery_image_eyebrow')[0]);
+  click_player_sett(document.getElementsByClassName('gallery_image_pants')[0]);
+
   onPlayersCreate();
   onPlayerChange(0);
   
@@ -220,49 +352,33 @@ function load_options(){
   });
 };
 
-function load_options_run(){
-  jQuery.getJSON("https://flexlion3.herokuapp.com/RSDB/WeaponInfoMain", data => {
+$(document).ready(function () {
+  jQuery.getJSON("https://raw.githubusercontent.com/Leanny/leanny.github.io/master/splat3/data/language/EUen.json", data => {
+  langEUen = data;
+  jQuery.getJSON("https://raw.githubusercontent.com/Flexlion/flexlion.github.io/master/assets/RSDB/WeaponInfoMain.json", data => {
     WeaponInfoMain = data;
-    jQuery.getJSON("https://flexlion3.herokuapp.com/RSDB/VersusSceneInfo", data => {
+    jQuery.getJSON("https://raw.githubusercontent.com/Flexlion/flexlion.github.io/master/assets/RSDB/VersusSceneInfo.json", data => {
       VersusSceneInfo = data;
-      jQuery.getJSON("https://raw.githubusercontent.com/Leanny/leanny.github.io/master/splat3/data/language/EUen.json", data => {
-        langEUen = data;
-        jQuery.getJSON("https://flexlion3.herokuapp.com/RSDB/GearInfoHead", data => {
+        jQuery.getJSON("https://raw.githubusercontent.com/Flexlion/flexlion.github.io/master/assets/RSDB/GearInfoHead.json", data => {
           GearInfoHead = data;
-          jQuery.getJSON("https://flexlion3.herokuapp.com/RSDB/GearInfoClothes", data => {
+          jQuery.getJSON("https://raw.githubusercontent.com/Flexlion/flexlion.github.io/master/assets/RSDB/GearInfoClothes.json", data => {
             GearInfoClothes = data;
-            jQuery.getJSON("https://flexlion3.herokuapp.com/RSDB/GearInfoShoes", data => {
+            jQuery.getJSON("https://raw.githubusercontent.com/Flexlion/flexlion.github.io/master/assets/RSDB/GearInfoShoes.json", data => {
               GearInfoShoes = data;
-              load_options();
+              jQuery.getJSON("https://raw.githubusercontent.com/Flexlion/flexlion.github.io/master/assets/RSDB/HairInfo.json", data => {
+                HairInfo = data;
+                jQuery.getJSON("https://raw.githubusercontent.com/Flexlion/flexlion.github.io/master/assets/RSDB/EyebrowInfo.json", data => {
+                  EyebrowInfo = data;
+                  jQuery.getJSON("https://raw.githubusercontent.com/Flexlion/flexlion.github.io/master/assets/RSDB/BottomInfo.json", data => {
+                    BottomInfo = data;
+                    load_options();
+                  });
+                });
+              });
             });
           });
         });
       });
     });
   });
-};
-
-$(document).ready(function () {
-  $('.gallery-image').click(click_player_sett_event);
-  $('.gallery-image_skin').click(click_player_sett_event);
-  $('.gallery-image_eyecolor').click(click_player_sett_event);
-  $('.gallery-image_hair').click(click_player_sett_event);
-  $('.gallery-image_eyebrow').click(click_player_sett_event);
-  $('.gallery-image_pants').click(click_player_sett_event);
-  $('.player_name_holder').on("propertychange change click keyup input paste", function(event){
-    var name_holder = event.target;
-    if(name_holder.value != playerInfos[curPlayer]["name"]) playerInfos[curPlayer]["name"] = name_holder.value;
-  });
-  $('.player_anim_list').on("propertychange change click keyup input paste", function(event){
-    var anim_holder = event.target;
-    if(anim_holder.value != playerInfos[curPlayer]["anim"]) playerInfos[curPlayer]["anim"] = anim_holder.value;
-  });
-  click_player_sett(document.getElementsByClassName('gallery-image')[0]);
-  click_player_sett(document.getElementsByClassName('gallery-image_skin')[0]);
-  click_player_sett(document.getElementsByClassName('gallery-image_eyecolor')[0]);
-  click_player_sett(document.getElementsByClassName('gallery-image_hair')[0]);
-  click_player_sett(document.getElementsByClassName('gallery-image_eyebrow')[0]);
-  click_player_sett(document.getElementsByClassName('gallery-image_pants')[0]);
-  loadAnims("https://raw.githubusercontent.com/Flexlion/flexlion.github.io/master/assets/animations.txt");
-  load_options_run();
 });
