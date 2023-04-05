@@ -15,6 +15,11 @@ var curPlayer = -1;
 var playerNum = 1;
 const maxPlayerNum = 10;
 
+async function fetchJson(url) {
+  const response = await fetch(url);
+  return await response.json();
+}
+
 function getRsdbInfoById(rsdbData, id){
   id = Number(id);
   for(var i = 0; i < rsdbData.length; i++){
@@ -91,17 +96,17 @@ function click_player_sett_event(event)
   click_player_sett(event.target);
 };
 
-function loadAnims(url){
+async function loadAnims(url) {
   var player_anim_list = document.getElementById("player_anim_list");
-  jQuery.get(url, data => {
-        var lines = data.split("\n");
-        for (var i = 0; i < lines.length; i++) {
-          var option = document.createElement("option");
-          option.text = lines[i];
-          player_anim_list.add(option);
-        }
-      },
-  );
+  let response = await fetch(url);
+  let data = await response.text();
+
+  var lines = data.split("\n");
+  for (var i = 0; i < lines.length; i++) {
+    var option = document.createElement("option");
+    option.text = lines[i];
+    player_anim_list.add(option);
+  }
 };
 
 const select = document.getElementById('player_anim_list');
@@ -415,33 +420,17 @@ function load_options(){
   });
 };
 
-$(document).ready(function () {
-  jQuery.getJSON("https://raw.githubusercontent.com/Leanny/leanny.github.io/master/splat3/data/language/EUen.json", data => {
-  langEUen = data;
-  jQuery.getJSON("https://raw.githubusercontent.com/Flexlion/flexlion.github.io/master/assets/RSDB/WeaponInfoMain.json", data => {
-    WeaponInfoMain = data;
-    jQuery.getJSON("https://raw.githubusercontent.com/Flexlion/flexlion.github.io/master/assets/RSDB/VersusSceneInfo.json", data => {
-      VersusSceneInfo = data;
-        jQuery.getJSON("https://raw.githubusercontent.com/Flexlion/flexlion.github.io/master/assets/RSDB/GearInfoHead.json", data => {
-          GearInfoHead = data;
-          jQuery.getJSON("https://raw.githubusercontent.com/Flexlion/flexlion.github.io/master/assets/RSDB/GearInfoClothes.json", data => {
-            GearInfoClothes = data;
-            jQuery.getJSON("https://raw.githubusercontent.com/Flexlion/flexlion.github.io/master/assets/RSDB/GearInfoShoes.json", data => {
-              GearInfoShoes = data;
-              jQuery.getJSON("https://raw.githubusercontent.com/Flexlion/flexlion.github.io/master/assets/RSDB/HairInfo.json", data => {
-                HairInfo = data;
-                jQuery.getJSON("https://raw.githubusercontent.com/Flexlion/flexlion.github.io/master/assets/RSDB/EyebrowInfo.json", data => {
-                  EyebrowInfo = data;
-                  jQuery.getJSON("https://raw.githubusercontent.com/Flexlion/flexlion.github.io/master/assets/RSDB/BottomInfo.json", data => {
-                    BottomInfo = data;
-                    load_options();
-                  });
-                });
-              });
-            });
-          });
-        });
-      });
-    });
-  });
+$(document).ready(async () => {
+  await Promise.all([
+    (async () => { langEUen = await fetchJson("https://raw.githubusercontent.com/Leanny/leanny.github.io/master/splat3/data/language/EUen.json") })(),
+    (async () => { WeaponInfoMain = await fetchJson("https://raw.githubusercontent.com/Flexlion/flexlion.github.io/master/assets/RSDB/WeaponInfoMain.json") })(),
+    (async () => { VersusSceneInfo =  await fetchJson("https://raw.githubusercontent.com/Flexlion/flexlion.github.io/master/assets/RSDB/VersusSceneInfo.json") })(),
+    (async () => { GearInfoHead = await fetchJson("https://raw.githubusercontent.com/Flexlion/flexlion.github.io/master/assets/RSDB/GearInfoHead.json") })(),
+    (async () => { GearInfoClothes = await fetchJson("https://raw.githubusercontent.com/Flexlion/flexlion.github.io/master/assets/RSDB/GearInfoClothes.json") })(),
+    (async () => { GearInfoShoes = await fetchJson("https://raw.githubusercontent.com/Flexlion/flexlion.github.io/master/assets/RSDB/GearInfoShoes.json") })(),
+    (async () => { HairInfo = await fetchJson("https://raw.githubusercontent.com/Flexlion/flexlion.github.io/master/assets/RSDB/HairInfo.json") })(),
+    (async () => { EyebrowInfo = await fetchJson("https://raw.githubusercontent.com/Flexlion/flexlion.github.io/master/assets/RSDB/EyebrowInfo.json") })(),
+    (async () => { BottomInfo = await fetchJson("https://raw.githubusercontent.com/Flexlion/flexlion.github.io/master/assets/RSDB/BottomInfo.json") })(),
+  ]);
+  await load_options();
 });
