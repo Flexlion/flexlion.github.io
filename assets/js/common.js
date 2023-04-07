@@ -9,6 +9,12 @@ function getRsdbInfoById(rsdbData, id){
       if(rsdbData[i]["Id"] == id) return rsdbData[i];
     }
 }
+
+function getRsdbInfoByName(rsdbData, name){
+    for(var i = 0; i < rsdbData.length; i++){
+      if(rsdbData[i]["__RowId"] == name) return rsdbData[i];
+    }
+}
   
 function getElementByRsdbId(className, rsdbId){
     rsdbId = String(rsdbId);
