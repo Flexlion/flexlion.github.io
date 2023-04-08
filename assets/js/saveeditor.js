@@ -34,3 +34,22 @@ $(document).ready(async () => {
     ]);
     //await load_options();
 });
+
+$(document).ready(function() {
+    var chosenOption = Cookies.get('option');
+    if (chosenOption === 'accept') {
+      return;
+    }
+    $('#warningModal').modal({
+      backdrop: 'static',
+      keyboard: false
+    });
+    $('#acceptModal').click(function() {
+      $('#warningModal').modal('hide');
+      Cookies.set('option', 'accept');
+    });
+    $('.modal-footer .btn-secondary').click(function() {
+      window.location.href = './index.html';
+    });
+  });
+  

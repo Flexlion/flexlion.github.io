@@ -20,6 +20,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     <script type="text/javascript" src="./assets/js/jszip.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.1/dist/js.cookie.min.js"></script>
 </head>
 <body>
   <div class="container">
@@ -38,9 +39,9 @@
   </div>
   <div class="container">
     <img class="d-block mx-auto mb-4" src="./assets/img/save-editor-logo.png" alt="" width="765" height="277">
-    <div class="col-lg-6 mx-auto">
+    <!-- <div class="col-lg-6 mx-auto">
       <strong class="lead mb-4" style="color:red">USING SAVE EDITS IS NOT SAFE ONLINE AND YOU WILL GET BANNED IF YOU USE IT ONLINE. PLEASE ONLY USE OFFLINE/EMULATOR.</strong>
-    </div>
+    </div> -->
     <br>
     <p>Upload Save:</p>
     <input id ="save_upload" type="file" onchange="onUploadSave()" />
@@ -81,6 +82,26 @@
           </div>
         </div>
       </div>
+
+      <div class="modal fade" id="warningModal" tabindex="-1" role="dialog" aria-labelledby="warningModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="warningModalLabel">Warning!</h5>
+            </div>
+            <div class="modal-body">
+              <p>Using <strong>save edits</strong> is <strong class="lead mb-4" style="color:red">NOT SAFE ONLINE</strong> and you <strong>will</strong> <strong class="lead mb-4" style="color:red">GET BANNED</strong> if you <strong class="lead mb-4" style="color:red">USE</strong> it <strong class="lead mb-4" style="color:red">ONLINE</strong>. <strong>Please</strong>, only use <strong class="lead mb-4" style="color:red">OFFLINE</strong> or <strong class="lead mb-4" style="color:red">EMULATOR</strong>.</p>
+              <!-- <strong class="lead mb-4" style="color:red">Using save edits is NOT SAFE ONLINE and you will GET BANNED if you USE it ONLINE. Please, only use OFFLINE or EMULATOR.</strong> -->
+              <p>By clicking <strong>"Accept"</strong>, you <strong>confirm</strong> that you have read the warning and that I am <strong>not</strong> responsible for any <strong>ban</strong> that this tool may cause.</p>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Go Back</button>
+              <button type="button" class="btn btn-primary" id="acceptModal">Accept</button>
+            </div>
+          </div>
+        </div>
+      </div>      
+
     <script src="./assets/js/common.js"></script>
     <script src="./assets/js/saveeditor.js"></script>
 </body>
