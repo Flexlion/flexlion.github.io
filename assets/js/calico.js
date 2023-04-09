@@ -366,11 +366,11 @@ function load_options(){
     $('.player_bottom').click(click_player_sett_event);
     $('.player_name_holder').on("propertychange change click keyup input paste", function(event){
         var name_holder = event.target;
-        if(name_holder.value != playerInfos[curPlayer]["name"]) playerInfos[curPlayer]["name"] = name_holder.value;
+        playerInfos[curPlayer]["name"] = name_holder.value;
     });
     $('.player_anim_list').on("propertychange change click keyup input paste", function(event){
         var anim_holder = event.target;
-        if(anim_holder.value != playerInfos[curPlayer]["anim"]) playerInfos[curPlayer]["anim"] = anim_holder.value;
+        playerInfos[curPlayer]["anim"] = anim_holder.value;
     });
     click_player_sett(document.getElementsByClassName('player_playertype')[0]);
     click_player_sett(document.getElementsByClassName('player_skintone')[0]);
