@@ -52,7 +52,7 @@
               <img id="chosenMapImg" src="https://raw.githubusercontent.com/Leanny/leanny.github.io/master/splat3/images/stage/Dummy.png" data-toggle="modal" data-target="#modalMap" width="320" height="180" alt="">
             </map>
             <p class="" id="chosenMapInfo" ></p>
-            <p class="">Nightime <input id="chosenEnvTime" type="checkbox"></p> 
+            <p class=""><label for="chosenEnvTime">Nightime</label> <input id="chosenEnvTime" class="form-check-input" type="checkbox"></p> 
           </div><hr>
     </div>
     
@@ -60,17 +60,17 @@
     <div class="ext-left">
       <div class="">
         <p class="display-6 fw-bold">Player Config</p>
-        <div>
+        <div class="mb-3">
           <label for="player_num_holder">Number of players:</label>
-          <input class="player_num_holder" type="number" id="player_num_holder" min="1" max="10" value="1"/>
+          <input class="form-control player_num_holder d-inline-block w-auto" type="number" id="player_num_holder" min="1" max="10" value="1"/>
           <label for="player_id_holder">Current Player:</label>
-          <input class="player_id_holder" type="number" id="player_id_holder" min="1" max="1" value="1"/>
-        </div><br> 
+          <input class="form-control player_id_holder d-inline-block w-auto" type="number" id="player_id_holder" min="1" max="1" value="1"/>
+        </div> 
         <div id="player-configurations">
           <div class="player_cst">
             <div>
               <label class="fw-bold" for="player-name">Name:</label>
-              <input class = "player_name_holder" id= "player_name_holder" type="text" id="player-name" min="1" max="10"/>
+              <input class="form-control player_name_holder d-inline-block w-auto" id="player_name_holder" type="text" id="player-name" min="1" max="10"/>
             </div>
             <br>
             <p>Player Type.</p>
@@ -121,9 +121,9 @@
                 <img src="https://raw.githubusercontent.com/Leanny/leanny.github.io/master/splat3/images/gear/Dummy.png" class="item" data-toggle="modal" data-target="#modalShs" id="chosenShsImg">
                 <p class="chosenShs" id="chosenShsInfo" player_specific="true"></p>
               </div>
-              <div class="anim">
+              <div class="anim pe-1">
                 <br><p>Animation</p>
-                <select class = "player_anim_list" id="player_anim_list"></select>
+                <select class="form-select player_anim_list" id="player_anim_list"></select>
                 <div class="anim_icon">
                   <img id="player_anim_icon" src="">
                 </div>
