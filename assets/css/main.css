@@ -177,6 +177,7 @@
     display: flex;
     flex-wrap: nowrap;
     overflow-x: auto;
+    overflow-y: hidden;
     width: fit-content;
   }
   
