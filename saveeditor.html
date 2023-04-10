@@ -43,13 +43,17 @@
       <strong class="lead mb-4" style="color:red">USING SAVE EDITS IS NOT SAFE ONLINE AND YOU WILL GET BANNED IF YOU USE IT ONLINE. PLEASE ONLY USE OFFLINE/EMULATOR.</strong>
     </div> -->
     <br>
-    <p>Decrypt Save:</p>
+    <p class="fw-bold" >Decrypt Save:</p>
     <input id ="save_decrypt" type="file" onchange="onDecryptSave()" />
-    <p id="decrypt_error" style="color:red"></p>
+    <p id="decrypt_error" class="fw-bold" style="color:red"></p>
+    <br><br>
     <a href="#" type="button" class="btn btn-outline-primary btn-lg px-4" data-toggle="modal" data-target="#modalPlayerSett">Player Settings</a>
-    <div class="modal fade" id="modalPlayerSett" tabindex="-1" role="dialog" aria-labelledby="modalHed" aria-hidden="true">
+    <br><br><br>
+    <button type="button" onclick="onEditSave()" class="btn btn-primary" id="edit_save_btn">Save</button>
+    <p id="edit_error" class="fw-bold" style="color:red"></p>
+    <div class="modal fade" id="modalPlayerSett" tabindex="-1" role="dialog" aria-labelledby="modalPlayerSett" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
-          <div class="modal-content" style="width: 165%; margin-left: -30%;">
+          <div class="modal-content" style="width: 200%; margin-left: -30%;">
             <div class="modal-header">
               <h5 class="modal-title" id="modalPlayerSettTitle">Player Settings</h5>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -62,12 +66,18 @@
               <label class="fw-bold" for="player_identifier_holder">Identifier:</label>
               <input class="form-control player_identifier_holder d-inline-block w-auto" id="player_identifier_holder" type="text"/>
               <br><br>
-              <label class="fw-bold" for="player_rank_holder">Level:</label>
+              <label style="color:lime" class="fw-bold" for="player_rank_holder">Level:</label>
               <input class="form-control player_rank_holder d-inline-block w-auto" type="number" id="player_rank_holder" min="1" max="99" value="1"/>
-              <label class="fw-bold" for="player_rank_exp_holder">Level XP:</label>
+              <label style="color:lime" class="fw-bold" for="player_rank_exp_holder">Level XP:</label>
               <input class="form-control player_rank_exp_holder d-inline-block w-auto" type="number" id="player_rank_exp_holder" value="0"/>
               <br><br>
-              <p>Player Type:</p>
+              <img src="./assets/img/ui/money.png" width="50" height="50">
+              <label class="fw-bold" for="money_holder">Money:</label>
+              <input class="form-control money_holder d-inline-block w-auto" type="number" id="money_holder" min="0" max="9999999" value="0"/>
+              <img src="./assets/img/ui/snail.png" width="50" height="50">
+              <label class="fw-bold" for="snail_holder">Snails:</label>
+              <input class="form-control snail_holder d-inline-block w-auto" type="number" id="snail_holder" min="0" max="999" value="0"/>
+              <p class="fw-bold">Player Type:</p>
               <div id="image_gallery_playertype">
               <div class="image_gallery_playertype">
                 <img src="./assets/img/player/playertype/InkGirl.png" rsdb_id="0" class="player_playertype">
@@ -76,6 +86,22 @@
                 <img src="./assets/img/player/playertype/OctBoy.png" rsdb_id="3" class="player_playertype">
                 <img src="./assets/img/player/playertype/Rival.png" rsdb_id="4" class="player_playertype">
               </div>   
+              <p class="fw-bold">Skintone:</p>       
+              <div id="image_gallery_skin">
+              </div>
+              <p class="fw-bold">Eye color:</p> 
+              <div id="image_gallery_eyecolor">
+              </div>
+              <p class="fw-bold">Hairstyle:</p> 
+              <div id="image_gallery_hair">
+              </div>
+              <p class="fw-bold">Eyebrows:</p> 
+              <div id="image_gallery_eyebrow">
+              </div>
+              <br>
+              <p class="fw-bold">Legwear:</p> 
+              <div id="image_gallery_pants">
+              </div>
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
