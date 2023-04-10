@@ -163,9 +163,15 @@ $(document).ready(async () => {
 });
 
 $(document).ready(function() {
-    var chosenOption = Cookies.get('option');
-    if (chosenOption === 'accept') {
-      return;
-    }
+    var chosenOption = Cookies.get('accept_warning');
+    if (chosenOption === 'true') return;
+    $('#warningModal').modal({
+        backdrop: 'static',
+        keyboard: false
+    });
+    $('#acceptModal').click(function() {
+        $('#warningModal').modal('hide');
+        Cookies.set('accept_warning', 'true');
+    });
   });
   

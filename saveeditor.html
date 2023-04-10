@@ -51,7 +51,7 @@
     <br><br><br>
     <button type="button" onclick="onEditSave()" class="btn btn-primary" id="edit_save_btn">Save</button>
     <p id="edit_error" class="fw-bold" style="color:red"></p>
-    <div class="modal fade" id="modalPlayerSett" tabindex="-1" role="dialog" aria-labelledby="modalPlayerSett" aria-hidden="true">
+    <div class="modal fade" id="modalPlayerSett" tabindex="-1" role="dialog" aria-labelledby="modalPlayerSettTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
           <div class="modal-content" style="width: 200%; margin-left: -30%;">
             <div class="modal-header">
@@ -109,25 +109,25 @@
           </div>
         </div>
       </div>
-
-      <div class="modal fade" id="warningModal" tabindex="-1" role="dialog" aria-labelledby="warningModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="warningModalLabel">Warning!</h5>
-            </div>
-            <div class="modal-body">
-              <p>Using <strong>save edits</strong> is <strong class="lead mb-4" style="color:red">NOT SAFE ONLINE</strong> and you <strong>will</strong> <strong class="lead mb-4" style="color:red">GET BANNED</strong> if you <strong class="lead mb-4" style="color:red">USE</strong> it <strong class="lead mb-4" style="color:red">ONLINE</strong>. <strong>Please</strong>, only use <strong class="lead mb-4" style="color:red">OFFLINE</strong> or <strong class="lead mb-4" style="color:red">EMULATOR</strong>.</p>
-              <!-- <strong class="lead mb-4" style="color:red">Using save edits is NOT SAFE ONLINE and you will GET BANNED if you USE it ONLINE. Please, only use OFFLINE or EMULATOR.</strong> -->
-              <p>By clicking <strong>"Accept"</strong>, you <strong>confirm</strong> that you have read the warning and that I am <strong>not</strong> responsible for any <strong>ban</strong> that this tool may cause.</p>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">Go Back</button>
-              <button type="button" class="btn btn-primary" id="acceptModal">Accept</button>
-            </div>
+    </div>
+    <div class="modal fade" id="warningModal" tabindex="-1" role="dialog" aria-labelledby="warningModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="warningModalLabel">Warning!</h5>
+          </div>
+          <div class="modal-body">
+            <p>Using <strong>save edits</strong> is <strong class="lead mb-4" style="color:red">NOT SAFE ONLINE</strong> and you <strong>will</strong> <strong class="lead mb-4" style="color:red">GET BANNED</strong> if you <strong class="lead mb-4" style="color:red">USE</strong> it <strong class="lead mb-4" style="color:red">ONLINE</strong>. <strong>Please</strong>, only use <strong class="lead mb-4" style="color:red">OFFLINE</strong> or <strong class="lead mb-4" style="color:red">EMULATOR</strong>.</p>
+            <!-- <strong class="lead mb-4" style="color:red">Using save edits is NOT SAFE ONLINE and you will GET BANNED if you USE it ONLINE. Please, only use OFFLINE or EMULATOR.</strong> -->
+            <p>By clicking <strong>"Accept"</strong>, you <strong>confirm</strong> that you have read the warning and that I am <strong>not</strong> responsible for any <strong>ban</strong> that this tool may cause.</p>
+          </div>
+          <div class="modal-footer">
+            <a class="btn btn-secondary" href="./index.html">Go Back</a>
+            <button type="button" class="btn btn-primary" id="acceptModal">Accept</button>
           </div>
         </div>
-      </div>      
+      </div>
+    </div>   
 
     <script src="./assets/js/common.js"></script>
     <script src="./assets/js/saveeditor.js"></script>
