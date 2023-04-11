@@ -98,7 +98,7 @@
   }
 
   .image_gallery_hair {
-    background-color: grey;
+    background-color: #999;
     display: flex;
     flex-wrap: nowrap;
     overflow-x: auto;
@@ -129,7 +129,7 @@
   }
 
   .image_gallery_eyebrow {
-    background-color: grey;
+    background-color: #999;
     display: flex;
     flex-wrap: nowrap;
     overflow-x: auto;
