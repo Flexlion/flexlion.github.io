@@ -39,7 +39,7 @@
 
     
   <div class="container">
-    <img class="d-block mx-auto mb-4" src="./assets/img/calico-logo.png" alt="" width="765" height="277">
+    <img class="d-block mx-auto mb-4 mw-100 h-auto" src="./assets/img/calico-logo.png" alt="" width="765" height="277">
     <div class="col-lg-6 mx-auto">
       <p class="lead mb-4">This page is meant for creating and configure scenes made for the "PhotoForCalico" module found in the <a target="_blank" href="https://gamebanana.com/wips/70362">Splatoon 3 Flexlion Mod Menu</a></p>
     </div>
@@ -99,33 +99,35 @@
             <div id="image_gallery_pants">
             </div>
             <br>
-            <p>Weapon, gear and animation.</p> 
-            <div class="customize">
-              <div class="CstContainer">
-                <img src="./assets/img/player/customize/BtnWeapon.png" class="base">
-                <img src="https://raw.githubusercontent.com/Leanny/leanny.github.io/master/splat3/images/weapon/Dummy.png" class="item" data-bs-toggle="modal" data-bs-target="#modalWpn" id="chosenWeaponImg">
-                <p class="chosenWpn" id="chosenWeaponInfo" player_specific="true"></p>
-              </div>
-              <div class="CstContainer">
-                <img src="./assets/img/player/customize/BtnHeadgear.png" class="base">
-                <img src="https://raw.githubusercontent.com/Leanny/leanny.github.io/master/splat3/images/gear/Dummy.png" class="item" data-bs-toggle="modal" data-bs-target="#modalHed" id="chosenHedImg">
-                <p class="chosenHed" id="chosenHedInfo" player_specific="true"></p>
-              </div>
-              <div class="CstContainer">
-                <img src="./assets/img/player/customize/BtnClothes.png" class="base">
-                <img src="https://raw.githubusercontent.com/Leanny/leanny.github.io/master/splat3/images/gear/Dummy.png" class="item" data-bs-toggle="modal" data-bs-target="#modalClt" id="chosenCltImg">
-                <p class="chosenClt" id="chosenCltInfo" player_specific="true"></p>
-              </div>
-              <div class="CstContainer">
-                <img src="./assets/img/player/customize/BtnShoes.png" class="base">
-                <img src="https://raw.githubusercontent.com/Leanny/leanny.github.io/master/splat3/images/gear/Dummy.png" class="item" data-bs-toggle="modal" data-bs-target="#modalShs" id="chosenShsImg">
-                <p class="chosenShs" id="chosenShsInfo" player_specific="true"></p>
-              </div>
-              <div class="anim pe-1">
-                <br><p>Animation</p>
-                <select class="form-select player_anim_list" id="player_anim_list"></select>
-                <div class="anim_icon">
-                  <img id="player_anim_icon" src="">
+            <p>Weapon, gear and animation.</p>
+            <div class="customize-container">
+              <div class="customize">
+                <div class="CstContainer">
+                  <img src="./assets/img/player/customize/BtnWeapon.png" class="base">
+                  <img src="https://raw.githubusercontent.com/Leanny/leanny.github.io/master/splat3/images/weapon/Dummy.png" class="item" data-bs-toggle="modal" data-bs-target="#modalWpn" id="chosenWeaponImg">
+                  <p class="chosenWpn" id="chosenWeaponInfo" player_specific="true"></p>
+                </div>
+                <div class="CstContainer">
+                  <img src="./assets/img/player/customize/BtnHeadgear.png" class="base">
+                  <img src="https://raw.githubusercontent.com/Leanny/leanny.github.io/master/splat3/images/gear/Dummy.png" class="item" data-bs-toggle="modal" data-bs-target="#modalHed" id="chosenHedImg">
+                  <p class="chosenHed" id="chosenHedInfo" player_specific="true"></p>
+                </div>
+                <div class="CstContainer">
+                  <img src="./assets/img/player/customize/BtnClothes.png" class="base">
+                  <img src="https://raw.githubusercontent.com/Leanny/leanny.github.io/master/splat3/images/gear/Dummy.png" class="item" data-bs-toggle="modal" data-bs-target="#modalClt" id="chosenCltImg">
+                  <p class="chosenClt" id="chosenCltInfo" player_specific="true"></p>
+                </div>
+                <div class="CstContainer">
+                  <img src="./assets/img/player/customize/BtnShoes.png" class="base">
+                  <img src="https://raw.githubusercontent.com/Leanny/leanny.github.io/master/splat3/images/gear/Dummy.png" class="item" data-bs-toggle="modal" data-bs-target="#modalShs" id="chosenShsImg">
+                  <p class="chosenShs" id="chosenShsInfo" player_specific="true"></p>
+                </div>
+                <div class="anim pe-1">
+                  <br><p>Animation</p>
+                  <select class="form-select player_anim_list" id="player_anim_list"></select>
+                  <div class="anim_icon">
+                    <img id="player_anim_icon" src="">
+                  </div>
                 </div>
               </div>
             </div>
@@ -138,7 +140,7 @@
 
 <!-- Map Modal -->
 <div class="modal fade" id="modalMap" tabindex="-1" role="dialog" aria-labelledby="modalMapTitle" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered" role="document" style="max-width: 830px;">
+  <div class="modal-dialog modal-dialog-centered" role="document" style="max-width: 840px;">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="modalMapTitle">Choose a map</h5>

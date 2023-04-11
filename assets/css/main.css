@@ -103,6 +103,7 @@
     flex-wrap: nowrap;
     overflow-x: auto;
     width: fit-content;
+    max-width: 100%;
   }
   
   .player_hair {
@@ -134,6 +135,7 @@
     flex-wrap: nowrap;
     overflow-x: auto;
     width: fit-content;
+    max-width: 100%;
   }
   
   .player_eyebrow {
@@ -161,6 +163,7 @@
     flex-wrap: nowrap;
     overflow-x: auto;
     width: fit-content;
+    max-width: 100%;
   }
   
   .player_bottom {
@@ -182,10 +185,15 @@
     border: 2px solid var(--bs-primary);
   }
 
+  .customize-container {
+    max-width: 100%;
+    overflow-x: auto;
+  }
+
   .customize {
     display: flex;
     flex-wrap: nowrap;
-    gap: 20px;
+    gap: 15px;
     overflow-x: auto;
     overflow-y: hidden;
     width: fit-content;
@@ -285,7 +293,6 @@
   .image_gallery_map {
     display: flex;
     flex-wrap: wrap;
-    width: 1500px;
   }
   
   .vs_map {
@@ -308,7 +315,6 @@
   .image_gallery_weapon {
     display: flex;
     flex-wrap: wrap;
-    width: 1500px;
   }
   
   .player_weapon {
@@ -331,7 +337,6 @@
   .image_gallery_gear {
     display: flex;
     flex-wrap: wrap;
-    width: 1500px;
   }
   
   .player_headgear {
