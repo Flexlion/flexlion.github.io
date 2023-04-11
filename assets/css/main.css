@@ -35,16 +35,16 @@
     cursor: pointer;
     width: 100px;
     margin: 1px 5px;
-    transition: 0.5s;
+    transition: 0.2s;
     border-radius: 23.5px;
-  }
-
-  .player_playertype[selected="true"]{
-    border: 2px solid blue;
   }
   
   .player_playertype:hover {
-    border: 2px solid cyan;
+    border: 2px solid var(--bs-gray-500);
+  }
+
+  .player_playertype[selected="true"]{
+    border: 2px solid var(--bs-primary);
   }
   
   .image_gallery_skin {
@@ -57,19 +57,19 @@
     border: 2px solid white;
     cursor: pointer;
     width: 95px;
-    padding-top: 5px;
+    padding-top: 10px;
     margin: 2px 5px;
     flex-shrink: 0;
     border-radius: 23.5px;
-    transition: 0.5s;
-  }
-
-  .player_skintone[selected="true"]{
-    border: 2px solid blue;
+    transition: 0.2s;
   }
   
   .player_skintone:hover {
-    border: 2px solid cyan;
+    border: 2px solid var(--bs-gray-500);
+  }
+
+  .player_skintone[selected="true"]{
+    border: 2px solid var(--bs-primary);
   }
 
   .image_gallery_eyecolor {
@@ -82,19 +82,19 @@
     border: 2px solid white;
     cursor: pointer;
     width: 95px;
-    padding-top: 5px;
+    padding-top: 10px;
     margin: 2px 5px;
     flex-shrink: 0;
     border-radius: 23.5px;
-    transition: 0.5s;
-  }
-
-  .player_eyecolor[selected="true"]{
-    border: 2px solid blue;
+    transition: 0.2s;
   }
   
   .player_eyecolor:hover {
-    border: 2px solid cyan;
+    border: 2px solid var(--bs-gray-500);
+  }
+
+  .player_eyecolor[selected="true"]{
+    border: 2px solid var(--bs-primary);
   }
 
   .image_gallery_hair {
@@ -107,20 +107,21 @@
   
   .player_hair {
     border: 2px solid rgba(255, 255, 255, 0);
-    transition: 0.5s;
+    transition: 0.2s;
     cursor: pointer;
-    width: 85px;
-    margin: 5px 15px;
+    width: 95px;
+    padding: 0 5px;
+    margin: 5px 5px;
     border-radius: 23.5px;
     flex-shrink: 0;
   }
-
-  .player_hair[selected="true"]{
-    border: 2px solid blue;
-  }
   
   .player_hair:hover {
-    border: 2px solid cyan;
+    border: 2px solid var(--bs-gray-500);
+  }
+
+  .player_hair[selected="true"]{
+    border: 2px solid var(--bs-primary-text);
   }
   
   map{
@@ -138,21 +139,23 @@
   .player_eyebrow {
     border: 2px solid rgba(255, 255, 255, 0);
     cursor: pointer;
-    width: 120px;
+    width: 95px;
+    height: 100px;
+    object-fit: cover;
     margin: 5px 5px;
     flex-shrink: 0;
     border-radius: 23.5px;
-    transition: 0.5s;
+    transition: 0.2s;
   }
 
-  .player_eyebrow[selected="true"]{
-    border: 2px solid blue;
-  }
-  
   .player_eyebrow:hover {
-    border: 2px solid cyan;
+    border: 2px solid var(--bs-gray-500);
   }
   
+  .player_eyebrow[selected="true"]{
+    border: 2px solid var(--bs-primary-text);
+  }
+
   .image_gallery_pants {
     display: flex;
     flex-wrap: nowrap;
@@ -163,20 +166,22 @@
   .player_bottom {
     border: 2px solid rgba(255, 255, 255, 0);
     cursor: pointer;
-    width: 90px;
+    width: 95px;
     padding: 5px;
+    margin: 1px 5px;
     flex-shrink: 0;
     border-radius: 23.5px;
-    transition: 0.5s;
-  }
-
-  .player_bottom[selected="true"]{
-    border: 2px solid blue;
+    transition: 0.2s;
   }
   
   .player_bottom:hover {
-    border: 2px solid cyan;
+    border: 2px solid var(--bs-gray-500);
   }
+
+  .player_bottom[selected="true"]{
+    border: 2px solid var(--bs-primary);
+  }
+
   .customize {
     display: flex;
     flex-wrap: nowrap;
@@ -287,18 +292,18 @@
   .vs_map {
     border: 2px solid white;
     cursor: pointer;
-    transition: 0.5s;
+    transition: 0.2s;
     margin: 20px 20px; 
     border-radius: 23.5px;
     scale: 120%;
   }
 
-  .vs_map[selected="true"]{
-    border: 2px solid blue;
-  }
-  
   .vs_map:hover {
-    border: 2px solid cyan;
+    border: 2px solid var(--bs-gray-500);
+  }
+
+  .vs_map[selected="true"]{
+    border: 2px solid var(--bs-primary);
   }
 
   .image_gallery_weapon {
@@ -310,18 +315,18 @@
   .player_weapon {
     border: 2px solid white;
     cursor: pointer;
-    transition: 0.5s;
+    transition: 0.2s;
     margin: 20px 20px; 
     border-radius: 23.5px;
     scale: 120%;
   }
-
-  .player_weapon[selected="true"]{
-    border: 2px solid blue;
-  }
   
   .player_weapon:hover {
-    border: 2px solid cyan;
+    border: 2px solid var(--bs-gray-500);
+  }
+
+  .player_weapon[selected="true"]{
+    border: 2px solid var(--bs-primary);
   }
 
   .image_gallery_gear {
@@ -333,50 +338,50 @@
   .player_headgear {
     border: 2px solid white;
     cursor: pointer;
-    transition: 0.5s;
+    transition: 0.2s;
     margin: 20px 20px; 
     border-radius: 23.5px;
     scale: 120%;
   }
 
-  .player_headgear[selected="true"]{
-    border: 2px solid blue;
-  }
-  
   .player_headgear:hover {
-    border: 2px solid cyan;
+    border: 2px solid var(--bs-gray-500);
+  }
+
+  .player_headgear[selected="true"]{
+    border: 2px solid var(--bs-primary);
   }
 
   .player_clothes {
     border: 2px solid white;
     cursor: pointer;
-    transition: 0.5s;
+    transition: 0.2s;
     margin: 20px 20px; 
     border-radius: 23.5px;
     scale: 120%;
   }
 
-  .player_clothes[selected="true"]{
-    border: 2px solid blue;
-  }
-  
   .player_clothes:hover {
-    border: 2px solid cyan;
+    border: 2px solid var(--bs-gray-500);
+  }
+
+  .player_clothes[selected="true"]{
+    border: 2px solid var(--bs-primary);
   }
 
   .player_shoes {
     border: 2px solid white;
     cursor: pointer;
-    transition: 0.5s;
+    transition: 0.2s;
     margin: 20px 20px; 
     border-radius: 23.5px;
     scale: 120%;
   }
-
-  .player_shoes[selected="true"]{
-    border: 2px solid blue;
-  }
   
   .player_shoes:hover {
-    border: 2px solid cyan;
+    border: 2px solid var(--bs-gray-500);
+  }
+
+  .player_shoes[selected="true"]{
+    border: 2px solid var(--bs-primary);
   }
