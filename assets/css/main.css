@@ -185,6 +185,7 @@
   .customize {
     display: flex;
     flex-wrap: nowrap;
+    gap: 20px;
     overflow-x: auto;
     overflow-y: hidden;
     width: fit-content;
@@ -194,7 +195,6 @@
     position: relative;
     width: 250px; 
     height: 300px; 
-    margin-right: 20px;
     display: inline-block; 
     vertical-align: top; 
   }
@@ -208,9 +208,8 @@
   
   .item {
     position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    top: 88px;
+    left: 59px;
     z-index: 2;
     cursor: pointer;
   }
