@@ -165,12 +165,13 @@ $(document).ready(async () => {
 $(document).ready(function() {
     var chosenOption = Cookies.get('accept_warning');
     if (chosenOption === 'true') return;
-    $('#warningModal').modal({
+    var warningModal = new bootstrap.Modal(document.getElementById('warningModal'), {
         backdrop: 'static',
         keyboard: false
-    });
+    })
+    warningModal.show();
     $('#acceptModal').click(function() {
-        $('#warningModal').modal('hide');
+        warningModal.hide();
         Cookies.set('accept_warning', 'true');
     });
   });
