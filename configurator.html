@@ -13,12 +13,12 @@
     <link rel="stylesheet" href="./assets/css/master.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Flexlion</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js" integrity="sha384-zYPOMqeu1DAVkHiLqWBUTcbYfZ8osu1Nd6Z89ify25QV9guujx43ITvfi12/QExE" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.min.js" integrity="sha384-Y4oOpwW3duJdCWv5ly8SCFYWqFDsfob/3GkgExXKV4idmbt98QcxXYs9UoXAB7BZ" crossorigin="anonymous"></script>
     <script type="text/javascript" src="./assets/js/jszip.min.js"></script>
 </head>
 <body>
@@ -49,7 +49,7 @@
           <div>
             <p class="lead">Map:</p>
             <map>
-              <img id="chosenMapImg" src="https://raw.githubusercontent.com/Leanny/leanny.github.io/master/splat3/images/stage/Dummy.png" data-toggle="modal" data-target="#modalMap" width="320" height="180" alt="">
+              <img id="chosenMapImg" src="https://raw.githubusercontent.com/Leanny/leanny.github.io/master/splat3/images/stage/Dummy.png" data-bs-toggle="modal" data-bs-target="#modalMap" width="320" height="180" alt="">
             </map>
             <p class="" id="chosenMapInfo" ></p>
             <p class=""><label for="chosenEnvTime">Nightime</label> <input id="chosenEnvTime" class="form-check-input" type="checkbox"></p> 
@@ -103,22 +103,22 @@
             <div class="customize">
               <div class="CstContainer">
                 <img src="./assets/img/player/customize/BtnWeapon.png" class="base">
-                <img src="https://raw.githubusercontent.com/Leanny/leanny.github.io/master/splat3/images/weapon/Dummy.png" class="item" data-toggle="modal" data-target="#modalWpn" id="chosenWeaponImg">
+                <img src="https://raw.githubusercontent.com/Leanny/leanny.github.io/master/splat3/images/weapon/Dummy.png" class="item" data-bs-toggle="modal" data-bs-target="#modalWpn" id="chosenWeaponImg">
                 <p class="chosenWpn" id="chosenWeaponInfo" player_specific="true"></p>
               </div>
               <div class="CstContainer">
                 <img src="./assets/img/player/customize/BtnHeadgear.png" class="base">
-                <img src="https://raw.githubusercontent.com/Leanny/leanny.github.io/master/splat3/images/gear/Dummy.png" class="item" data-toggle="modal" data-target="#modalHed" id="chosenHedImg">
+                <img src="https://raw.githubusercontent.com/Leanny/leanny.github.io/master/splat3/images/gear/Dummy.png" class="item" data-bs-toggle="modal" data-bs-target="#modalHed" id="chosenHedImg">
                 <p class="chosenHed" id="chosenHedInfo" player_specific="true"></p>
               </div>
               <div class="CstContainer">
                 <img src="./assets/img/player/customize/BtnClothes.png" class="base">
-                <img src="https://raw.githubusercontent.com/Leanny/leanny.github.io/master/splat3/images/gear/Dummy.png" class="item" data-toggle="modal" data-target="#modalClt" id="chosenCltImg">
+                <img src="https://raw.githubusercontent.com/Leanny/leanny.github.io/master/splat3/images/gear/Dummy.png" class="item" data-bs-toggle="modal" data-bs-target="#modalClt" id="chosenCltImg">
                 <p class="chosenClt" id="chosenCltInfo" player_specific="true"></p>
               </div>
               <div class="CstContainer">
                 <img src="./assets/img/player/customize/BtnShoes.png" class="base">
-                <img src="https://raw.githubusercontent.com/Leanny/leanny.github.io/master/splat3/images/gear/Dummy.png" class="item" data-toggle="modal" data-target="#modalShs" id="chosenShsImg">
+                <img src="https://raw.githubusercontent.com/Leanny/leanny.github.io/master/splat3/images/gear/Dummy.png" class="item" data-bs-toggle="modal" data-bs-target="#modalShs" id="chosenShsImg">
                 <p class="chosenShs" id="chosenShsInfo" player_specific="true"></p>
               </div>
               <div class="anim pe-1">
@@ -132,7 +132,7 @@
           </div>
         </div><br><hr>
         </div>
-      <a href="#" type="button" class="btn btn-outline-primary btn-lg px-4" data-toggle="modal" data-target="#modalSaveScene">Download Scene</a>
+      <a href="#" type="button" class="btn btn-outline-primary btn-lg px-4" data-bs-toggle="modal" data-bs-target="#modalSaveScene">Download Scene</a>
     </div><br><br>
 
 
@@ -142,14 +142,12 @@
     <div class="modal-content" style="width: 165%; margin-left: -30%;">
       <div class="modal-header">
         <h5 class="modal-title" id="modalMapTitle">Choose a map</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
       </div>
     </div>
   </div>
@@ -162,15 +160,13 @@
     <div class="modal-content" style="width: 165%; margin-left: -30%;">
       <div class="modal-header">
         <h5 class="modal-title" id="modalSaveSceneTitle">Save Scene</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <button type="button" onclick="downloadConfig()" class="btn btn-primary" data-dismiss="modal">Save</button>
+        <button type="button" onclick="downloadConfig()" class="btn btn-primary" data-bs-dismiss="modal">Save</button>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
       </div>
     </div>
   </div>
@@ -180,15 +176,13 @@
     <div class="modal-content" style="width: 165%; margin-left: -30%;">
       <div class="modal-header">
         <h5 class="modal-title" id="modalWpnTitle">Weapon</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
         
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
       </div>
     </div>
   </div>
@@ -199,15 +193,13 @@
     <div class="modal-content" style="width: 165%; margin-left: -30%;">
       <div class="modal-header">
         <h5 class="modal-title" id="modalHedTitle">Headgear</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
         
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
       </div>
     </div>
   </div>
@@ -219,15 +211,13 @@
     <div class="modal-content" style="width: 165%; margin-left: -30%;">
       <div class="modal-header">
         <h5 class="modal-title" id="modalCltTitle">Clothing</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
         
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
       </div>
     </div>
   </div>
@@ -239,15 +229,13 @@
     <div class="modal-content" style="width: 165%; margin-left: -30%;">
       <div class="modal-header">
         <h5 class="modal-title" id="modalShsTitle">Shoes</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
         
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
       </div>
     </div>
   </div>

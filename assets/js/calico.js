@@ -158,7 +158,7 @@ function buildRsdbSelector(modalName, rsdbInfos, entryPerLine, getCodeNameFunc, 
             entry.setAttribute("resultImg", resultImg);
             entry.setAttribute("resultInfo", resultInfo);
             entry.setAttribute("class", classNameImg);
-            entry.setAttribute("data-dismiss", "modal");
+            entry.setAttribute("data-bs-dismiss", "modal");
             gallery.appendChild(entry);
 
             if(idx == 0) onRsdbEntrySelect(entry);
