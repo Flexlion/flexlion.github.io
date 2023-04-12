@@ -433,3 +433,29 @@
   .gear_ability:hover {
     border: 2px solid rgb(30, 155, 255);
   }
+
+  .nameplate_bg {
+    border: 2px solid white;
+    cursor: pointer;
+    transition: 0.2s;
+    margin: 10px 10px; 
+    border-radius: 15px;
+  }
+
+  .nameplate_bg[obtainable_state="no"]{
+    filter:brightness(0.2);
+  }
+  
+  .nameplate_bg:hover {
+    border: 2px solid var(--bs-gray-500);
+  }
+
+  .nameplate_bg[selected="true"]{
+    border: 2px solid var(--bs-primary);
+  }
+
+  .nameplate_bg_sel {
+    border-radius: 15px;
+    width: 700px;
+    height: 200px;
+  }

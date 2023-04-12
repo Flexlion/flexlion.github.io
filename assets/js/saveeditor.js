@@ -34,6 +34,10 @@ function resetEdits(){
             "gear_shoes": {
                 "edit": {},
                 "remove": new Set()
+            },
+            "nameplate_bg": {
+                "edit": {},
+                "remove": new Set()
             }
         }
     };
@@ -103,6 +107,7 @@ function loadSave(){
     resetObtainableItems("player_headgear");
     resetObtainableItems("player_clothes");
     resetObtainableItems("player_shoes");
+    resetObtainableItems("nameplate_bg");
 
     for(var rsdb_id in SaveJson["server"]["HaveWeaponMap"]) setHaveObtainableItemById("player_weapon", rsdb_id);
 
@@ -131,6 +136,14 @@ function loadSave(){
     for(var rsdb_id in SaveJson["server"]["HaveGearShoesMap"]) setHaveObtainableItemById("player_shoes", rsdb_id);
 
     element = getElementByRsdbId("player_shoes", playerInfo["GearShoesId"]);
+    if(element != null){
+        setEquippedObtainableItem(element);
+        element.click();
+    }
+
+    for(var rsdb_id in SaveJson["server"]["HaveNamePlateBgMap"]) setHaveObtainableItemById("nameplate_bg", rsdb_id);
+
+    element = getElementByRsdbId("nameplate_bg", SaveJson["client"]["NamePlateEditor"]["NamePlate"]["Background"]);
     if(element != null){
         setEquippedObtainableItem(element);
         element.click();
@@ -203,6 +216,21 @@ function loadWeapons(){
         };
     }
     resetObtainableItems("player_weapon");
+};
+
+function loadNameplates(){
+    loadClickableIdOptions(
+        "image_gallery_nameplate_bg", "image_gallery_nameplate_bg", "nameplate_bg", NameplateInfo.length, 4, 
+        idx => {
+            return "https://raw.githubusercontent.com/Leanny/leanny.github.io/master/splat3/images/npl/" + NameplateInfo[idx]["__RowId"] + ".png"
+        }, 
+        idx => {
+            return NameplateInfo[idx]["Id"];
+        },
+        210,
+        60
+    );
+    resetObtainableItems("nameplate_bg");
 };
 
 function loadGear(galleryId, galleryClassName, imgClassName, GearInfo){
@@ -357,16 +385,33 @@ function updateShoesObtainable(element){
     document.getElementById("equip_shoes_button").disabled = (obtainable_state != "yes");
 };
 
-function clickObtainable(element, chosenImgId, chosenInfoId, RsdbInfo, langFileName, updateObtainableF, parseCodeNameF = null){
+function updateNplBgObtainable(element){
+    obtainable_state = element.getAttribute("obtainable_state");
+    document.getElementById("get_npl_bg_button").disabled = !(obtainable_state == "no");
+    document.getElementById("remove_npl_bg_button").disabled = (obtainable_state == "no");
+    document.getElementById("equip_npl_bg_button").disabled = (obtainable_state != "yes");
+};
+function obtainNplBg(element){
+    var rsdb_id = element.getAttribute("rsdb_id");
+    SaveEdits["dict_edits"]["nameplate_bg"]["remove"].delete(rsdb_id);
+    SaveEdits["dict_edits"]["nameplate_bg"]["edit"][rsdb_id] = {
+        "AcquiredDateTimeUtc": 0
+    };
+    setHaveObtainableItem(element);
+};
+
+function clickObtainable(element, updateObtainableF, chosenImgId = null, chosenInfoId = null, RsdbInfo = null, langFileName = null, parseCodeNameF = null){
     click_clickable_sett(element);
 
-    document.getElementById(chosenImgId).src = element.src;
+    if(chosenImgId != null) document.getElementById(chosenImgId).src = element.src;
 
-    var name = getRsdbInfoById(RsdbInfo, element.getAttribute("rsdb_id"))["__RowId"];
-    if(parseCodeNameF != null) name = parseCodeNameF(name);
-    if(name in langEUen[langFileName]) name = langEUen[langFileName][name];
 
-    document.getElementById(chosenInfoId).textContent = name;
+    if(chosenInfoId != null){
+        var name = getRsdbInfoById(RsdbInfo, element.getAttribute("rsdb_id"))["__RowId"];
+        if(parseCodeNameF != null) name = parseCodeNameF(name);
+        if(name in langEUen[langFileName]) name = langEUen[langFileName][name];
+        document.getElementById(chosenInfoId).textContent = name;
+    }
 
     updateObtainableF(element);
 }
@@ -456,6 +501,7 @@ async function load_options(){
     loadHairs();
     loadEyebrows();
     loadPants();
+    loadNameplates();
     loadWeapons();
     loadGear("image_gallery_gear_head", "image_gallery_gear_head", "player_headgear", GearInfoHead);
     loadGear("image_gallery_gear_clothes", "image_gallery_gear_clothes", "player_clothes", GearInfoClothes);
@@ -518,8 +564,29 @@ async function load_options(){
         click_clickable_sett(event.target);
         SaveEdits["default_edits"]["player_bottom"] = event.target.getAttribute("rsdb_id");
     });
+    $('.nameplate_bg').click( function(event){
+        clickObtainable(event.target, updateNplBgObtainable, "chosenNameplateBg");
+    });
+    $('.get_npl_bg_button').click( function(event){
+        var element = getSelectedElement("nameplate_bg");
+        obtainNplBg(element);
+        updateNplBgObtainable(element);
+    });
+    $('.bulk_get_npl_bg_button').click( function(event){
+        bulkGetObtainable("nameplate_bg", obtainNplBg);
+    });
+    $('.equip_npl_bg_button').click( function(event){
+        equipObtainable("nameplate_bg", "nameplate_bg", updateNplBgObtainable);
+        document.getElementById("nameplate_bg_player").src = getSelectedElement("nameplate_bg").src;
+    });
+    $('.remove_npl_bg_button').click( function(event){
+        removeObtainable("nameplate_bg", "nameplate_bg", updateNplBgObtainable);
+    });
+    $('.nameplate_bg_player').click( function(event){
+        $('#modalNameplateBg').modal('show');
+    });
     $('.player_weapon').click( function(event){
-        clickObtainable(event.target, "chosenWeaponImg", "chosenWeaponInfo", WeaponInfoMain, "CommonMsg/Weapon/WeaponName_Main", updateWeaponObtainable);
+        clickObtainable(event.target, updateWeaponObtainable, "chosenWeaponImg", "chosenWeaponInfo", WeaponInfoMain, "CommonMsg/Weapon/WeaponName_Main");
         var rsdb_id = event.target.getAttribute("rsdb_id");
         var curInfo = getObtainableJson(rsdb_id, "weapon", "HaveWeaponMap");
 
@@ -556,7 +623,7 @@ async function load_options(){
         SaveEdits["dict_edits"]["weapon"]["edit"][rsdb_id]["Level"] = freshness_holder.value;
     });
     $('.player_headgear').click( function(event){
-        clickObtainable(event.target, "chosenHedImg", "chosenHedInfo", GearInfoHead, "CommonMsg/Gear/GearName_Head", updateHeadgearObtainable, 
+        clickObtainable(event.target, updateHeadgearObtainable, "chosenHedImg", "chosenHedInfo", GearInfoHead, "CommonMsg/Gear/GearName_Head", 
         codeName => {
             return codeName.slice(4);
         });
@@ -573,7 +640,7 @@ async function load_options(){
         
     });
     $('.player_clothes').click( function(event){
-        clickObtainable(event.target, "chosenCltImg", "chosenCltInfo", GearInfoClothes, "CommonMsg/Gear/GearName_Clothes", updateClothesObtainable, 
+        clickObtainable(event.target, updateClothesObtainable, "chosenCltImg", "chosenCltInfo", GearInfoClothes, "CommonMsg/Gear/GearName_Clothes", 
         codeName => {
             return codeName.slice(4);
         });
@@ -590,7 +657,7 @@ async function load_options(){
         
     });
     $('.player_shoes').click( function(event){
-        clickObtainable(event.target, "chosenShsImg", "chosenShsInfo", GearInfoShoes, "CommonMsg/Gear/GearName_Shoes", updateShoesObtainable,
+        clickObtainable(event.target, updateShoesObtainable, "chosenShsImg", "chosenShsInfo", GearInfoShoes, "CommonMsg/Gear/GearName_Shoes",
         codeName => {
             return codeName.slice(4);
         });
@@ -695,8 +762,8 @@ $(document).ready(async () => {
         (async () => { GearInfoShoes = await fetchJson("https://raw.githubusercontent.com/Flexlion/flexlion.github.io/master/assets/RSDB/GearInfoShoes.json") })(),
         (async () => { HairInfo = await fetchJson("https://raw.githubusercontent.com/Flexlion/flexlion.github.io/master/assets/RSDB/HairInfo.json") })(),
         (async () => { EyebrowInfo = await fetchJson("https://raw.githubusercontent.com/Flexlion/flexlion.github.io/master/assets/RSDB/EyebrowInfo.json") })(),
-        (async () => { BottomInfo = await fetchJson("https://raw.githubusercontent.com/Flexlion/flexlion.github.io/master/assets/RSDB/BottomInfo.json") })()//,
-        //(async () => { NameplateInfo = await fetchJson("https://raw.githubusercontent.com/Flexlion/flexlion.github.io/master/assets/RSDB/NamePlateBgInfo.json") })(),
+        (async () => { BottomInfo = await fetchJson("https://raw.githubusercontent.com/Flexlion/flexlion.github.io/master/assets/RSDB/BottomInfo.json") })(),
+        (async () => { NameplateInfo = await fetchJson("https://raw.githubusercontent.com/Flexlion/flexlion.github.io/master/assets/RSDB/NamePlateBgInfo.json") })()
     ]);
     await load_options();
 });

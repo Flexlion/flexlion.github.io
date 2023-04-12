@@ -73,6 +73,8 @@
             <label style="color:lime" class="fw-bold" for="player_rank_exp_holder">Level XP:</label>
             <input class="form-control player_rank_exp_holder d-inline-block w-auto" type="number" id="player_rank_exp_holder" value="0"/>
             <br><br>
+            <img class="nameplate_bg_sel nameplate_bg_player" id ="nameplate_bg_player" src="https://raw.githubusercontent.com/Leanny/leanny.github.io/master/splat3/images/npl/Npl_Tutorial00.png"></img>
+            <br><br>
             <img src="./assets/img/ui/money.png" width="35" height="35" style="margin-bottom: 10px;">
             <label class="fw-bold" for="money_holder">Money:</label>
             <input class="form-control money_holder d-inline-block w-auto" type="number" id="money_holder" min="0" max="9999999" value="0"/>
@@ -112,6 +114,33 @@
       </div>
     </div>
   </div>
+  <div class="modal fade" id="modalNameplateBg" tabindex="-1" role="dialog" aria-labelledby="modalNameplateBgTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document" style="max-width: 1000px;">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalNameplateBgTitle">Splashtag Banner</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-header">
+          <div class="CstContainer">
+            <img src="https://raw.githubusercontent.com/Leanny/leanny.github.io/master/splat3/images/npl/Npl_Tutorial00.png" class="item nameplate_bg_sel" id="chosenNameplateBg">
+          </div>
+          <button type="button" class="btn btn-primary get_npl_bg_button" style="translate: 300px -120px;position: absolute;" disabled="true" id="get_npl_bg_button">Obtain</button>
+          <button type="button" class="btn btn-primary remove_npl_bg_button" style="translate: 400px -120px;position: absolute;" disabled="true" id="remove_npl_bg_button">Remove</button>
+          <button type="button" class="btn btn-primary equip_npl_bg_button" style="translate: 500px -120px;position: absolute;" disabled="true" id="equip_npl_bg_button">Equip</button>
+          <button type="button" class="btn btn-primary bulk_get_npl_bg_button" id="bulk_get_npl_bg_button">Bulk Obtain</button>
+        </div>
+        <div class="modal-body">
+          <div id="image_gallery_nameplate_bg">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
   <div class="modal fade" id="modalWeaponSett" tabindex="-1" role="dialog" aria-labelledby="modalWeaponSettTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document" style="max-width: 850px;">
       <div class="modal-content">
