@@ -146,7 +146,7 @@ function buildRsdbSelector(modalName, rsdbInfos, entryPerLine, getCodeNameFunc, 
             entry.setAttribute("default_url", defaultImgUrl);
 
             entry.onerror = function(event){
-                var target = event.target || event.srcElement;
+                var target = event.target;
                 target.src = target.getAttribute("default_url"); // No Icon
             };
             entry.addEventListener('click', (event) => {

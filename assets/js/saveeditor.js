@@ -195,26 +195,40 @@ function loadWeapons(){
         90,
         90
     );
+    var elements = document.getElementsByClassName("player_weapon");
+    for(var i = 0; i < elements.length; i++){
+        elements[i].onerror = function(event){
+            var target = event.target;
+            target.src = "https://raw.githubusercontent.com/Leanny/leanny.github.io/master/splat3/images/weapon/Dummy.png"; // No Icon
+        };
+    }
     resetObtainableItems("player_weapon");
 };
 
 function loadGear(galleryId, galleryClassName, imgClassName, GearInfo){
-    var validInfos = [];
+    /*var validInfos = [];
     for(var i = 0; i < GearInfo.length; i++){
         if(GearInfo[i]["HowToGet"] == "Impossible") continue; // Only add obtainable gear
         validInfos.push(GearInfo[i]);
-    }
+    }*/
     loadClickableIdOptions(
-        galleryId, galleryClassName, imgClassName, validInfos.length, 6, 
+        galleryId, galleryClassName, imgClassName, GearInfo.length, 6, 
         idx => {
-            return "https://raw.githubusercontent.com/Leanny/leanny.github.io/master/splat3/images/gear/" + validInfos[idx]["__RowId"] + ".png"
+            return "https://raw.githubusercontent.com/Leanny/leanny.github.io/master/splat3/images/gear/" + GearInfo[idx]["__RowId"] + ".png"
         }, 
         idx => {
-            return validInfos[idx]["Id"];
+            return GearInfo[idx]["Id"];
         },
         90,
         90
     );
+    var elements = document.getElementsByClassName(imgClassName);
+    for(var i = 0; i < elements.length; i++){
+        elements[i].onerror = function(event){
+            var target = event.target;
+            target.src = "https://raw.githubusercontent.com/Leanny/leanny.github.io/master/splat3/images/gear/Dummy.png"; // No Icon
+        };
+    }
     resetObtainableItems(imgClassName);
 };
 
@@ -247,15 +261,26 @@ function getObtainableJson(rsdb_id, editType, mapName){
 }
 
 function obtainGear(element, gear_name){
+    var RsdbData = null;
+
+    if(gear_name == "gear_head") RsdbData = GearInfoHead;
+    else if(gear_name == "gear_clothes") RsdbData = GearInfoClothes;
+    else if(gear_name == "gear_shoes") RsdbData = GearInfoShoes;
+
     var rsdb_id = element.getAttribute("rsdb_id");
+    var rsdbInfo = getRsdbInfoById(RsdbData, rsdb_id);
+
+    var skillId = 0;
+    if(rsdbInfo != null && rsdbInfo["Skill"] in GEAR_ABILITY_NAME_MAP) skillId = Math.max(GEAR_ABILITY_NAME_MAP[rsdbInfo["Skill"]], 0);
+
     SaveEdits["dict_edits"][gear_name]["remove"].delete(rsdb_id);
-    SaveEdits["dict_edits"][gear_name]["edit"][element.getAttribute("rsdb_id")] = {
+    SaveEdits["dict_edits"][gear_name]["edit"][rsdb_id] = {
         "Exp": 0,
         "TotalExp": 0,
-        "Rarity": 0,
-        "MainSkill": 0,
+        "Rarity": 5,
+        "MainSkill": skillId,
         "ExSkillArray": [
-            -1
+            skillId, skillId, skillId
         ],
         "LastPlayDateTimeUtc": 0,
         "RandomContext": 0
@@ -266,13 +291,13 @@ function obtainGear(element, gear_name){
 function obtainWeapon(element){
     var rsdb_id = element.getAttribute("rsdb_id");
     SaveEdits["dict_edits"]["weapon"]["remove"].delete(rsdb_id);
-    SaveEdits["dict_edits"]["weapon"]["edit"][element.getAttribute("rsdb_id")] = {
+    SaveEdits["dict_edits"]["weapon"]["edit"][rsdb_id] = {
         "TotalPaintTubo": 0,
         "LastPlayDateTimeUtc": 0,
         "RegularWinPoint": 0,
         "RegularWinHighGrade": 0,
         "Exp": 0,
-        "Level": 0,
+        "Level": 5,
         "RewardAcceptLevel": 0,
         "WinCount": 0
     };
