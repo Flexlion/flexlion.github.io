@@ -218,10 +218,26 @@ function loadGear(galleryId, galleryClassName, imgClassName, GearInfo){
     resetObtainableItems(imgClassName);
 };
 
+function loadAbilities(){
+    var ability_ids = Object.keys(GEAR_ABILITY_ID_MAP);
+    loadClickableIdOptions(
+        "image_gallery_ability", "image_gallery_ability", "gear_ability", ability_ids.length, ability_ids.length, 
+        idx => {
+            return "./assets/img/skill/" + GEAR_ABILITY_ID_MAP[ability_ids[idx]] + ".png"
+        }, 
+        idx => {
+            return ability_ids[idx];
+        },
+        90,
+        90
+    );
+}
+
 function ensureObtainableInDictEdits(element, editType, mapName){
     var rsdb_id = element.getAttribute("rsdb_id");
-    if(!(rsdb_id in SaveEdits["dict_edits"][editType]["edit"])) 
-        SaveEdits["dict_edits"][editType]["edit"][rsdb_id] = JSON.parse(JSON.stringify(SaveJson["server"][mapName][rsdb_id]));
+    var edit_info = SaveEdits["dict_edits"][editType]["edit"];
+    if(!(rsdb_id in edit_info)) 
+        edit_info[rsdb_id] = JSON.parse(JSON.stringify(SaveJson["server"][mapName][rsdb_id]));
 };
 
 function getObtainableJson(rsdb_id, editType, mapName){
@@ -330,6 +346,85 @@ function clickObtainable(element, chosenImgId, chosenInfoId, RsdbInfo, langFileN
     updateObtainableF(element);
 }
 
+function openAbilityModal(event){
+    var target_id = event.target.getAttribute("id");
+
+    var element_type = null;
+    if(target_id.startsWith('hed')) element_type ="player_headgear";
+    else if(target_id.startsWith('clt')) element_type ="player_clothes";
+    else if(target_id.startsWith('shs')) element_type ="player_shoes";
+
+    if(element_type == null) return;
+
+    var element = getSelectedElement(element_type);
+    if(element.getAttribute("obtainable_state") == "no") return;
+    
+    $('#modalGearAbility').modal('show');
+    document.getElementById('modalGearAbility').target_id = event.target.getAttribute("id");
+}
+
+function selectAbilityModal(event){
+    var target = event.target;
+    var new_rsdb_id = Number(target.getAttribute("rsdb_id"));
+
+    $('#modalGearAbility').modal('hide');
+    var target_id = document.getElementById('modalGearAbility').target_id;
+    document.getElementById(target_id).src = "./assets/img/skill/" + GEAR_ABILITY_ID_MAP[new_rsdb_id] + '.png';
+
+    var edit_type = null;
+    var map_type = null;
+    var element_type = null;
+    if(target_id.startsWith('hed')){
+        edit_type = "gear_head";
+        map_type = "HaveGearHeadMap";
+        element_type ="player_headgear";
+    } else if(target_id.startsWith('clt')){
+        edit_type = "gear_clothes";
+        map_type = "HaveGearClothesMap";
+        element_type ="player_clothes";
+    }
+    else if(target_id.startsWith('shs')){
+        edit_type = "gear_shoes";
+        map_type = "HaveGearShoesMap";
+        element_type ="player_shoes";
+    }
+
+    if(edit_type == null || map_type == null || element_type == null) return;
+
+    var element = getSelectedElement(element_type);
+    var rsdb_id = element.getAttribute("rsdb_id");
+
+    ensureObtainableInDictEdits(element, edit_type, map_type);
+    var editInfo = SaveEdits["dict_edits"][edit_type]["edit"][rsdb_id];
+
+    if(target_id.slice(4).startsWith("ability_main")){
+        editInfo["MainSkill"] = new_rsdb_id;
+        return
+    }
+    var exSkillId = Number(target_id.slice(target_id.length - 1, target_id.length));
+    if(exSkillId < 0 || exSkillId >= 3 || exSkillId == NaN) return;
+
+    for(var i = editInfo["ExSkillArray"].length; i < exSkillId; i++) editInfo["ExSkillArray"][i] = -1;
+    editInfo["ExSkillArray"][exSkillId] = new_rsdb_id;
+}
+
+function initGearAbilityIcons(curInfo, classAbilityMain, classAbilitySub){
+    var ability_id = 0;
+    if(curInfo != null) ability_id = curInfo["MainSkill"];
+
+    var sub_abilities = [];
+    if(curInfo != null) sub_abilities = curInfo["ExSkillArray"];
+    
+    var ability_main = document.getElementById(classAbilityMain);
+    ability_main.src = "./assets/img/skill/" + GEAR_ABILITY_ID_MAP[ability_id] + '.png';
+    ability_main.onclick = openAbilityModal;
+
+    var head_abilities_sub = document.getElementsByClassName(classAbilitySub);
+    for(var i = 0; i < sub_abilities.length; i++) head_abilities_sub[i].src = "./assets/img/skill/" + GEAR_ABILITY_ID_MAP[sub_abilities[i]] + '.png';
+    for(var i = sub_abilities.length; i < 3; i++) head_abilities_sub[i].src = "./assets/img/skill/None.png";
+    for(var i = 0; i < 3; i++) head_abilities_sub[i].onclick = openAbilityModal;
+}
+
 async function load_options(){
     loadSkinTones();
     loadEyeColors();
@@ -340,6 +435,7 @@ async function load_options(){
     loadGear("image_gallery_gear_head", "image_gallery_gear_head", "player_headgear", GearInfoHead);
     loadGear("image_gallery_gear_clothes", "image_gallery_gear_clothes", "player_clothes", GearInfoClothes);
     loadGear("image_gallery_gear_shoes", "image_gallery_gear_shoes", "player_shoes", GearInfoShoes);
+    loadAbilities();
 
 	$('.player_name_holder').on("propertychange change click keyup input paste", function(event){
         var name_holder = event.target;
@@ -401,12 +497,11 @@ async function load_options(){
         clickObtainable(event.target, "chosenWeaponImg", "chosenWeaponInfo", WeaponInfoMain, "CommonMsg/Weapon/WeaponName_Main", updateWeaponObtainable);
         var rsdb_id = event.target.getAttribute("rsdb_id");
         var curInfo = getObtainableJson(rsdb_id, "weapon", "HaveWeaponMap");
+
         var freshness = document.getElementById("weapon_freshness_holder");
-        if(curInfo != null){
-            freshness.value = curInfo["Level"];
-        } else{
-            freshness.value = 0;
-        }
+
+        if(curInfo != null) freshness.value = curInfo["Level"];
+        else freshness.value = 0;
     });
     $('.get_weapon_button').click( function(event){
         var element = getSelectedElement("player_weapon");
@@ -428,6 +523,8 @@ async function load_options(){
         if(freshness_holder.value < 0) freshness_holder.value = 0;
 
         var element = getSelectedElement("player_weapon");
+        if(element.getAttribute("obtainable_state") == "no") return;
+
         var rsdb_id = element.getAttribute("rsdb_id");
 
         ensureObtainableInDictEdits(element, "weapon", "HaveWeaponMap");
@@ -438,6 +535,16 @@ async function load_options(){
         codeName => {
             return codeName.slice(4);
         });
+
+        var rsdb_id = event.target.getAttribute("rsdb_id");
+        var curInfo = getObtainableJson(rsdb_id, "gear_head", "HaveGearHeadMap");
+        
+        initGearAbilityIcons(curInfo, "hed_ability_main", "hed_ability_sub");
+
+        var rarity = document.getElementById("hed_rarity_holder");
+
+        if(curInfo != null) rarity.value = curInfo["Rarity"];
+        else rarity.value = 0;
         
     });
     $('.player_clothes').click( function(event){
@@ -445,6 +552,16 @@ async function load_options(){
         codeName => {
             return codeName.slice(4);
         });
+
+        var rsdb_id = event.target.getAttribute("rsdb_id");
+        var curInfo = getObtainableJson(rsdb_id, "gear_clothes", "HaveGearClothesMap");
+        
+        initGearAbilityIcons(curInfo, "clt_ability_main", "clt_ability_sub");
+
+        var rarity = document.getElementById("clt_rarity_holder");
+
+        if(curInfo != null) rarity.value = curInfo["Rarity"];
+        else rarity.value = 0;
         
     });
     $('.player_shoes').click( function(event){
@@ -452,8 +569,54 @@ async function load_options(){
         codeName => {
             return codeName.slice(4);
         });
+
+        var rsdb_id = event.target.getAttribute("rsdb_id");
+        var curInfo = getObtainableJson(rsdb_id, "gear_shoes", "HaveGearShoesMap");
+        
+        initGearAbilityIcons(curInfo, "shs_ability_main", "shs_ability_sub");
+
+        var rarity = document.getElementById("shs_rarity_holder");
+
+        if(curInfo != null) rarity.value = curInfo["Rarity"];
+        else rarity.value = 0;
         
     });
+    $('.gear_rarity_holder').on("propertychange change click keyup input paste", function(event){
+        var rarity_holder = event.target;
+        if(rarity_holder.value > 5) rarity_holder.value = 5;
+        if(rarity_holder.value < 0) rarity_holder.value = 0;
+
+        var target_id = event.target.getAttribute("id");
+
+        var edit_type = null;
+        var map_type = null;
+        var element_type = null;
+        if(target_id.startsWith('hed')){
+            edit_type = "gear_head";
+            map_type = "HaveGearHeadMap";
+            element_type ="player_headgear";
+        } else if(target_id.startsWith('clt')){
+            edit_type = "gear_clothes";
+            map_type = "HaveGearClothesMap";
+            element_type ="player_clothes";
+        }
+        else if(target_id.startsWith('shs')){
+            edit_type = "gear_shoes";
+            map_type = "HaveGearShoesMap";
+            element_type ="player_shoes";
+        }
+
+        if(edit_type == null || map_type == null || element_type == null) return;
+
+        var element = getSelectedElement(element_type);
+        if(element.getAttribute("obtainable_state") == "no") return;
+
+        var rsdb_id = element.getAttribute("rsdb_id");
+
+        ensureObtainableInDictEdits(element, edit_type, map_type);
+        SaveEdits["dict_edits"][edit_type]["edit"][rsdb_id]["Rarity"] = rarity_holder.value;
+    });
+    $('.gear_ability').click(selectAbilityModal);
     $('.get_headgear_button').click( function(event){
         var element = getSelectedElement("player_headgear");
         obtainGear(element, "gear_head");

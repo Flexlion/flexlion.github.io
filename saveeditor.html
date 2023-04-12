@@ -129,7 +129,7 @@
           <button type="button" class="btn btn-primary remove_weapon_button" style="translate: 400px 120px;position: absolute;" disabled="true" id="remove_weapon_button">Remove</button>
           <button type="button" class="btn btn-primary equip_weapon_button" style="translate: 500px 120px;position: absolute;" disabled="true" id="equip_weapon_button">Equip</button>
           <button type="button" class="btn btn-primary bulk_get_weapon_button" id="bulk_get_weapon_button">Bulk Obtain</button>
-          <p class="fw-bold" for="weapon_freshness_holder" style="translate: 300px 0px;position: absolute;" >Freshness:</p>
+          <p class="fw-bold" style="translate: 300px 0px;position: absolute;" >Freshness:</p>
           <input class="form-control weapon_freshness_holder w-auto" type="number" style="translate: 300px 30px;position: absolute;" id="weapon_freshness_holder" min="0" max="5" value="0"/>
         </div>
         <div class="modal-body">
@@ -159,6 +159,12 @@
           <button type="button" class="btn btn-primary remove_headgear_button" style="translate: 400px 120px;position: absolute;" disabled="true" id="remove_headgear_button">Remove</button>
           <button type="button" class="btn btn-primary equip_headgear_button" style="translate: 500px 120px;position: absolute;" disabled="true" id="equip_headgear_button">Equip</button>
           <button type="button" class="btn btn-primary bulk_get_headgear_button" id="bulk_get_headgear_button">Bulk Obtain</button>
+          <p class="fw-bold" style="translate: 300px -50px;position: absolute;" >Rarity:</p>
+          <input class="form-control gear_rarity_holder w-auto" type="number" style="translate: 300px -20px;position: absolute;" id="hed_rarity_holder" min="0" max="5" value="0"/>
+          <img class="ability_main hed_ability_main" id="hed_ability_main" style="translate: 300px 50px;position: absolute;" src="./assets/img/skill/None.png"></img>
+          <img class="ability_sub hed_ability_sub" id ="hed_ability_sub0" style="translate: 370px 50px;position: absolute;" src="./assets/img/skill/None.png"></img>
+          <img class="ability_sub hed_ability_sub" id ="hed_ability_sub1" style="translate: 415px 50px;position: absolute;" src="./assets/img/skill/None.png"></img>
+          <img class="ability_sub hed_ability_sub" id ="hed_ability_sub2" style="translate: 460px 50px;position: absolute;" src="./assets/img/skill/None.png"></img>
         </div>
         <div class="modal-body">
           <div id="image_gallery_gear_head">
@@ -187,6 +193,12 @@
           <button type="button" class="btn btn-primary remove_clothes_button" style="translate: 400px 120px;position: absolute;" disabled="true" id="remove_clothes_button">Remove</button>
           <button type="button" class="btn btn-primary equip_clothes_button" style="translate: 500px 120px;position: absolute;" disabled="true" id="equip_clothes_button">Equip</button>
           <button type="button" class="btn btn-primary bulk_get_clothes_button" id="bulk_get_clothes_button">Bulk Obtain</button>
+          <p class="fw-bold" style="translate: 300px -50px;position: absolute;" >Rarity:</p>
+          <input class="form-control gear_rarity_holder w-auto" type="number" style="translate: 300px -20px;position: absolute;" id="clt_rarity_holder" min="0" max="5" value="0"/>
+          <img class="ability_main clt_ability_main" id="clt_ability_main" style="translate: 300px 50px;position: absolute;" src="./assets/img/skill/None.png"></img>
+          <img class="ability_sub clt_ability_sub" id ="clt_ability_sub0" style="translate: 370px 50px;position: absolute;" src="./assets/img/skill/None.png"></img>
+          <img class="ability_sub clt_ability_sub" id ="clt_ability_sub1" style="translate: 415px 50px;position: absolute;" src="./assets/img/skill/None.png"></img>
+          <img class="ability_sub clt_ability_sub" id ="clt_ability_sub2" style="translate: 460px 50px;position: absolute;" src="./assets/img/skill/None.png"></img>
         </div>
         <div class="modal-body">
           <div id="image_gallery_gear_clothes">
@@ -215,6 +227,12 @@
           <button type="button" class="btn btn-primary remove_shoes_button" style="translate: 400px 120px;position: absolute;" disabled="true" id="remove_shoes_button">Remove</button>
           <button type="button" class="btn btn-primary equip_shoes_button" style="translate: 500px 120px;position: absolute;" disabled="true" id="equip_shoes_button">Equip</button>
           <button type="button" class="btn btn-primary bulk_get_shoes_button" id="bulk_get_shoes_button">Bulk Obtain</button>
+          <p class="fw-bold" style="translate: 300px -50px;position: absolute;" >Rarity:</p>
+          <input class="form-control gear_rarity_holder w-auto" type="number" style="translate: 300px -20px;position: absolute;" id="shs_rarity_holder" min="0" max="5" value="0"/>
+          <img class="ability_main shs_ability_main" id="shs_ability_main" style="translate: 300px 50px;position: absolute;" src="./assets/img/skill/None.png"></img>
+          <img class="ability_sub shs_ability_sub" id ="shs_ability_sub0" style="translate: 370px 50px;position: absolute;" src="./assets/img/skill/None.png"></img>
+          <img class="ability_sub shs_ability_sub" id ="shs_ability_sub1" style="translate: 415px 50px;position: absolute;" src="./assets/img/skill/None.png"></img>
+          <img class="ability_sub shs_ability_sub" id ="shs_ability_sub2" style="translate: 460px 50px;position: absolute;" src="./assets/img/skill/None.png"></img>
         </div>
         <div class="modal-body">
           <div id="image_gallery_gear_shoes">
@@ -226,7 +244,23 @@
       </div>
     </div>
   </div>
-
+  <div class="modal fade" id="modalGearAbility" target_id = "" tabindex="-1" role="dialog" aria-labelledby="modalGearAbilityTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document" style="max-width: 850px;">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalGearAbilityTitle">Select Ability</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div id="image_gallery_ability">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
     <div class="modal modal-lg fade" id="warningModal" tabindex="-1" role="dialog" aria-labelledby="warningModalLabel" aria-hidden="true">
       <div class="modal-dialog" role="document">
         <div class="modal-content">

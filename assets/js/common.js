@@ -136,3 +136,63 @@ function onChangePlayerType(playerType){
 
   document.getElementById("hair_msn310").src = "./assets/img/player/hair/" + getRsdbInfoById(HairInfo, 500)["__RowId"] + suffix;
 };
+
+GEAR_ABILITY_ID_MAP = {
+  0: "MainInk_Save",
+  1: "SubInk_Save",
+  2: "InkRecovery_Up",
+  3: "HumanMove_Up",
+  4: "SquidMove_Up",
+  5: "SpecialIncrease_Up",
+  6: "RespawnSpecialGauge_Save",
+  7: "SpecialSpec_Up",
+  8: "RespawnTime_Save",
+  9: "JumpTime_Save",
+  10: "SubSpec_Up",
+  11: "OpInkEffect_Reduction",
+  12: "SubEffect_Reduction",
+  13: "Action_Up",
+  100: "StartAllUp",
+  101: "EndAllUp",
+  102: "MinorityUp",
+  103: "ComeBack",
+  104: "SquidMoveSpatter_Reduction",
+  105: "DeathMarking",
+  106: "ThermalInk",
+  107: "Exorcist",
+  108: "ExSkillDouble",
+  109: "SuperJumpSign_Hide",
+  110: "ObjectEffect_Up",
+  111: "SomersaultLanding"
+};
+GEAR_ABILITY_ID_MAP[-1] = "None";
+
+GEAR_ABILITY_NAME_MAP = {
+  "MainInk_Save": 0,
+  "SubInk_Save": 1,
+  "InkRecovery_Up": 2,
+  "HumanMove_Up": 3,
+  "SquidMove_Up": 4,
+  "SpecialIncrease_Up": 5,
+  "RespawnSpecialGauge_Save": 6,
+  "SpecialSpec_Up": 7,
+  "RespawnTime_Save": 8,
+  "JumpTime_Save": 9,
+  "SubSpec_Up": 10,
+  "OpInkEffect_Reduction": 11,
+  "SubEffect_Reduction": 12,
+  "Action_Up": 13,
+  "StartAllUp": 100,
+  "EndAllUp": 101,
+  "MinorityUp": 102,
+  "ComeBack": 103,
+  "SquidMoveSpatter_Reduction": 104,
+  "DeathMarking": 105,
+  "ThermalInk": 106,
+  "Exorcist": 107,
+  "ExSkillDouble": 108,
+  "SuperJumpSign_Hide": 109,
+  "ObjectEffect_Up": 110,
+  "SomersaultLanding": 111,
+  "None": -1
+};

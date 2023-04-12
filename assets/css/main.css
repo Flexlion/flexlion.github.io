@@ -389,3 +389,47 @@
   .player_shoes[selected="true"]{
     border: 2px solid var(--bs-primary);
   }
+
+  .ability_main{
+    border: 2px solid var(--bs-gray-500);
+    background-color: black;
+    border-radius: 30px;
+    width: 60px;
+    height: 60px;
+  }
+
+  .ability_main:hover {
+    border: 2px solid rgb(30, 155, 255);
+  }
+
+  .ability_sub{
+    border: 2px solid var(--bs-gray-500);
+    background-color: black;
+    border-radius: 20px;
+    width: 40px;
+    height: 40px;
+  }
+
+  .ability_sub:hover {
+    border: 2px solid rgb(30, 155, 255);
+  }
+
+
+  .image_gallery_weapon {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  
+  .gear_ability {
+    border: 2px solid var(--bs-gray-500);
+    background-color: black;
+    transition: 0.2s;
+    margin: 10px 10px; 
+    border-radius: 30px;
+    width: 60px;
+    height: 60px;
+  }
+  
+  .gear_ability:hover {
+    border: 2px solid rgb(30, 155, 255);
+  }
