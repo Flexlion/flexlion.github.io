@@ -8,12 +8,14 @@ function getRsdbInfoById(rsdbData, id){
     for(var i = 0; i < rsdbData.length; i++){
       if(rsdbData[i]["Id"] == id) return rsdbData[i];
     }
+    return null;
 }
 
 function getRsdbInfoByName(rsdbData, name){
     for(var i = 0; i < rsdbData.length; i++){
       if(rsdbData[i]["__RowId"] == name) return rsdbData[i];
     }
+    return null;
 }
   
 function getElementByRsdbId(className, rsdbId){
@@ -22,6 +24,15 @@ function getElementByRsdbId(className, rsdbId){
     for(var i = 0; i < elements.length; i++){
       if(elements[i].getAttribute("rsdb_id") == rsdbId) return elements[i];
     }
+    return null;
+}
+
+function getSelectedElement(className){
+    var elements = document.getElementsByClassName(className);
+    for(var i = 0; i < elements.length; i++){
+      if(elements[i].getAttribute("selected") == "true") return elements[i];
+    }
+    return null;
 }
 
 function downloadFile(content, fileName, contentType) {
@@ -32,7 +43,7 @@ function downloadFile(content, fileName, contentType) {
     a.click();
 }
 
-function loadClickableIdOptions(galleryId, galleryClassName, imgClassName, totalNum, entryPerLine, getImgUrlFunc, getRsdbIdFunc){
+function loadClickableIdOptions(galleryId, galleryClassName, imgClassName, totalNum, entryPerLine, getImgUrlFunc, getRsdbIdFunc, width = null, height = null){
   gallery_root = document.getElementById(galleryId);
 
   for(var i = 0; i < totalNum / entryPerLine; i++){
@@ -43,6 +54,8 @@ function loadClickableIdOptions(galleryId, galleryClassName, imgClassName, total
           option.src = getImgUrlFunc(idx);
           option.setAttribute("rsdb_id", getRsdbIdFunc(idx));
           option.setAttribute("class", imgClassName);
+          if(width != null) option.setAttribute("width", width);
+          if(height != null) option.setAttribute("height", height);
           gallery.appendChild(option);
       }
 

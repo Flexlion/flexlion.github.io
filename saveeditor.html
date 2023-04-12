@@ -47,67 +47,186 @@
     <input id ="save_decrypt" class="form-control w-auto" type="file" onchange="onDecryptSave()" />
     <p id="decrypt_error" class="fw-bold" style="color:red"></p>
     <br><br>
-    <a href="#" type="button" class="btn btn-outline-primary btn-lg px-4" data-bs-toggle="modal" data-bs-target="#modalPlayerSett">Player Settings</a>
+    <a href="#" type="button" class="btn btn-outline-primary btn-lg px-4" data-bs-toggle="modal" data-bs-target="#modalPlayerSett">Player Settings</a><br><br>
+    <a href="#" type="button" class="btn btn-outline-primary btn-lg px-4" data-bs-toggle="modal" data-bs-target="#modalWeaponSett">Weapons</a><br><br>
+    <a href="#" type="button" class="btn btn-outline-primary btn-lg px-4" data-bs-toggle="modal" data-bs-target="#modalGearHeadSett">Headgear</a><br><br>
+    <a href="#" type="button" class="btn btn-outline-primary btn-lg px-4" data-bs-toggle="modal" data-bs-target="#modalGearClothesSett">Clothes</a><br><br>
+    <a href="#" type="button" class="btn btn-outline-primary btn-lg px-4" data-bs-toggle="modal" data-bs-target="#modalGearShoesSett">Shoes</a>
     <br><br><br>
     <button type="button" onclick="onEditSave()" class="btn btn-primary" id="edit_save_btn">Save</button>
     <p id="edit_error" class="fw-bold" style="color:red"></p>
     <div class="modal fade" id="modalPlayerSett" tabindex="-1" role="dialog" aria-labelledby="modalPlayerSettTitle" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document" style="max-width: 1000px;">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="modalPlayerSettTitle">Player Settings</h5>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      <div class="modal-dialog modal-dialog-centered" role="document" style="max-width: 1000px;">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="modalPlayerSettTitle">Player Settings</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <label class="fw-bold" for="player_name_holder">Name:</label>
+            <input class="form-control player_name_holder d-inline-block w-auto" id="player_name_holder" type="text"/>
+            <label class="fw-bold" for="player_identifier_holder">Identifier:</label>
+            <input class="form-control player_identifier_holder d-inline-block w-auto" id="player_identifier_holder" type="text"/>
+            <br><br>
+            <label style="color:lime" class="fw-bold" for="player_rank_holder">Level:</label>
+            <input class="form-control player_rank_holder d-inline-block w-auto" type="number" id="player_rank_holder" min="1" max="99" value="1"/>
+            <label style="color:lime" class="fw-bold" for="player_rank_exp_holder">Level XP:</label>
+            <input class="form-control player_rank_exp_holder d-inline-block w-auto" type="number" id="player_rank_exp_holder" value="0"/>
+            <br><br>
+            <img src="./assets/img/ui/money.png" width="35" height="35" style="margin-bottom: 10px;">
+            <label class="fw-bold" for="money_holder">Money:</label>
+            <input class="form-control money_holder d-inline-block w-auto" type="number" id="money_holder" min="0" max="9999999" value="0"/>
+            <img src="./assets/img/ui/snail.png" width="35" height="35" style="margin-bottom: 10px;">
+            <label class="fw-bold" for="snail_holder">Snails:</label>
+            <input class="form-control snail_holder d-inline-block w-auto" type="number" id="snail_holder" min="0" max="999" value="0"/>
+            <p class="fw-bold">Player Type:</p>
+            <div id="image_gallery_playertype">
+            <div class="image_gallery_playertype">
+              <img src="./assets/img/player/playertype/InkGirl.png" rsdb_id="0" class="player_playertype">
+              <img src="./assets/img/player/playertype/InkBoy.png" rsdb_id="1" class="player_playertype">
+              <img src="./assets/img/player/playertype/OctGirl.png" rsdb_id="2" class="player_playertype">
+              <img src="./assets/img/player/playertype/OctBoy.png" rsdb_id="3" class="player_playertype">
+              <img src="./assets/img/player/playertype/Rival.png" rsdb_id="4" class="player_playertype">
+            </div>   
+            <p class="fw-bold">Skintone:</p>       
+            <div id="image_gallery_skin">
             </div>
-            <div class="modal-body">
-              <label class="fw-bold" for="player_name_holder">Name:</label>
-              <input class="form-control player_name_holder d-inline-block w-auto" id="player_name_holder" type="text"/>
-              <label class="fw-bold" for="player_identifier_holder">Identifier:</label>
-              <input class="form-control player_identifier_holder d-inline-block w-auto" id="player_identifier_holder" type="text"/>
-              <br><br>
-              <label style="color:lime" class="fw-bold" for="player_rank_holder">Level:</label>
-              <input class="form-control player_rank_holder d-inline-block w-auto" type="number" id="player_rank_holder" min="1" max="99" value="1"/>
-              <label style="color:lime" class="fw-bold" for="player_rank_exp_holder">Level XP:</label>
-              <input class="form-control player_rank_exp_holder d-inline-block w-auto" type="number" id="player_rank_exp_holder" value="0"/>
-              <br><br>
-              <img src="./assets/img/ui/money.png" width="35" height="35" style="margin-bottom: 10px;">
-              <label class="fw-bold" for="money_holder">Money:</label>
-              <input class="form-control money_holder d-inline-block w-auto" type="number" id="money_holder" min="0" max="9999999" value="0"/>
-              <img src="./assets/img/ui/snail.png" width="35" height="35" style="margin-bottom: 10px;">
-              <label class="fw-bold" for="snail_holder">Snails:</label>
-              <input class="form-control snail_holder d-inline-block w-auto" type="number" id="snail_holder" min="0" max="999" value="0"/>
-              <p class="fw-bold">Player Type:</p>
-              <div id="image_gallery_playertype">
-              <div class="image_gallery_playertype">
-                <img src="./assets/img/player/playertype/InkGirl.png" rsdb_id="0" class="player_playertype">
-                <img src="./assets/img/player/playertype/InkBoy.png" rsdb_id="1" class="player_playertype">
-                <img src="./assets/img/player/playertype/OctGirl.png" rsdb_id="2" class="player_playertype">
-                <img src="./assets/img/player/playertype/OctBoy.png" rsdb_id="3" class="player_playertype">
-                <img src="./assets/img/player/playertype/Rival.png" rsdb_id="4" class="player_playertype">
-              </div>   
-              <p class="fw-bold">Skintone:</p>       
-              <div id="image_gallery_skin">
-              </div>
-              <p class="fw-bold">Eye color:</p> 
-              <div id="image_gallery_eyecolor">
-              </div>
-              <p class="fw-bold">Hairstyle:</p> 
-              <div id="image_gallery_hair">
-              </div>
-              <p class="fw-bold">Eyebrows:</p> 
-              <div id="image_gallery_eyebrow">
-              </div>
-              <br>
-              <p class="fw-bold">Legwear:</p> 
-              <div id="image_gallery_pants">
-              </div>
+            <p class="fw-bold">Eye color:</p> 
+            <div id="image_gallery_eyecolor">
             </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <p class="fw-bold">Hairstyle:</p> 
+            <div id="image_gallery_hair">
             </div>
+            <p class="fw-bold">Eyebrows:</p> 
+            <div id="image_gallery_eyebrow">
+            </div>
+            <br>
+            <p class="fw-bold">Legwear:</p> 
+            <div id="image_gallery_pants">
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
           </div>
         </div>
       </div>
     </div>
+  </div>
+  <div class="modal fade" id="modalWeaponSett" tabindex="-1" role="dialog" aria-labelledby="modalWeaponSettTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document" style="max-width: 850px;">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalWeaponSettTitle">Weapons</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-header">
+          <div class="CstContainer">
+            <img src="./assets/img/player/customize/BtnWeapon.png" class="base">
+            <img src="https://raw.githubusercontent.com/Leanny/leanny.github.io/master/splat3/images/weapon/Dummy.png" class="item" id="chosenWeaponImg">
+            <p class="chosenWpn" id="chosenWeaponInfo" player_specific="true"></p>
+          </div>
+          <button type="button" class="btn btn-primary get_weapon_button" style="translate: 300px 120px;position: absolute;" disabled="true" id="get_weapon_button">Obtain</button>
+          <button type="button" class="btn btn-primary remove_weapon_button" style="translate: 400px 120px;position: absolute;" disabled="true" id="remove_weapon_button">Remove</button>
+          <button type="button" class="btn btn-primary equip_weapon_button" style="translate: 500px 120px;position: absolute;" disabled="true" id="equip_weapon_button">Equip</button>
+          <button type="button" class="btn btn-primary bulk_get_weapon_button" id="bulk_get_weapon_button">Bulk Obtain</button>
+          <p class="fw-bold" for="weapon_freshness_holder" style="translate: 300px 0px;position: absolute;" >Freshness:</p>
+          <input class="form-control weapon_freshness_holder w-auto" type="number" style="translate: 300px 30px;position: absolute;" id="weapon_freshness_holder" min="0" max="5" value="0"/>
+        </div>
+        <div class="modal-body">
+          <div id="image_gallery_weapon">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal fade" id="modalGearHeadSett" tabindex="-1" role="dialog" aria-labelledby="modalGearHeadSettTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document" style="max-width: 850px;">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalGearHeadSettTitle">Headgears</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-header">
+          <div class="CstContainer">
+            <img src="./assets/img/player/customize/BtnHeadgear.png" class="base">
+            <img src="https://raw.githubusercontent.com/Leanny/leanny.github.io/master/splat3/images/gear/Dummy.png" class="item" id="chosenHedImg">
+            <p class="chosenHed" id="chosenHedInfo" player_specific="true"></p>
+          </div>
+          <button type="button" class="btn btn-primary get_headgear_button" style="translate: 300px 120px;position: absolute;" disabled="true" id="get_headgear_button">Obtain</button>
+          <button type="button" class="btn btn-primary remove_headgear_button" style="translate: 400px 120px;position: absolute;" disabled="true" id="remove_headgear_button">Remove</button>
+          <button type="button" class="btn btn-primary equip_headgear_button" style="translate: 500px 120px;position: absolute;" disabled="true" id="equip_headgear_button">Equip</button>
+          <button type="button" class="btn btn-primary bulk_get_headgear_button" id="bulk_get_headgear_button">Bulk Obtain</button>
+        </div>
+        <div class="modal-body">
+          <div id="image_gallery_gear_head">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal fade" id="modalGearClothesSett" tabindex="-1" role="dialog" aria-labelledby="modalGearClothesSettTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document" style="max-width: 850px;">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalGearClothesSettTitle">Clothes</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-header">
+          <div class="CstContainer">
+            <img src="./assets/img/player/customize/BtnClothes.png" class="base">
+            <img src="https://raw.githubusercontent.com/Leanny/leanny.github.io/master/splat3/images/gear/Dummy.png" class="item" id="chosenCltImg">
+            <p class="chosenClt" id="chosenCltInfo" player_specific="true"></p>
+          </div>
+          <button type="button" class="btn btn-primary get_clothes_button" style="translate: 300px 120px;position: absolute;" disabled="true" id="get_clothes_button">Obtain</button>
+          <button type="button" class="btn btn-primary remove_clothes_button" style="translate: 400px 120px;position: absolute;" disabled="true" id="remove_clothes_button">Remove</button>
+          <button type="button" class="btn btn-primary equip_clothes_button" style="translate: 500px 120px;position: absolute;" disabled="true" id="equip_clothes_button">Equip</button>
+          <button type="button" class="btn btn-primary bulk_get_clothes_button" id="bulk_get_clothes_button">Bulk Obtain</button>
+        </div>
+        <div class="modal-body">
+          <div id="image_gallery_gear_clothes">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal fade" id="modalGearShoesSett" tabindex="-1" role="dialog" aria-labelledby="modalGearShoesSettTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document" style="max-width: 850px;">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalGearShoesSettTitle">Shoes</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-header">
+          <div class="CstContainer">
+            <img src="./assets/img/player/customize/BtnShoes.png" class="base">
+            <img src="https://raw.githubusercontent.com/Leanny/leanny.github.io/master/splat3/images/gear/Dummy.png" class="item" id="chosenShsImg">
+            <p class="chosenShs" id="chosenShsInfo" player_specific="true"></p>
+          </div>
+          <button type="button" class="btn btn-primary get_shoes_button" style="translate: 300px 120px;position: absolute;" disabled="true" id="get_shoes_button">Obtain</button>
+          <button type="button" class="btn btn-primary remove_shoes_button" style="translate: 400px 120px;position: absolute;" disabled="true" id="remove_shoes_button">Remove</button>
+          <button type="button" class="btn btn-primary equip_shoes_button" style="translate: 500px 120px;position: absolute;" disabled="true" id="equip_shoes_button">Equip</button>
+          <button type="button" class="btn btn-primary bulk_get_shoes_button" id="bulk_get_shoes_button">Bulk Obtain</button>
+        </div>
+        <div class="modal-body">
+          <div id="image_gallery_gear_shoes">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
     <div class="modal modal-lg fade" id="warningModal" tabindex="-1" role="dialog" aria-labelledby="warningModalLabel" aria-hidden="true">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
