@@ -116,24 +116,24 @@ function loadSave(){
     
     element = getElementByRsdbId("player_headgear", playerInfo["GearHeadId"]);
     if(element != null){
-        click_clickable_sett(element);
         setEquippedObtainableItem(element);
+        element.click();
     }
 
     for(var rsdb_id in SaveJson["server"]["HaveGearClothesMap"]) setHaveObtainableItemById("player_clothes", rsdb_id);
 
     element = getElementByRsdbId("player_clothes", playerInfo["GearClothesId"]);
     if(element != null){
-        click_clickable_sett(element);
         setEquippedObtainableItem(element);
+        element.click();
     }
 
     for(var rsdb_id in SaveJson["server"]["HaveGearShoesMap"]) setHaveObtainableItemById("player_shoes", rsdb_id);
 
     element = getElementByRsdbId("player_shoes", playerInfo["GearShoesId"]);
     if(element != null){
-        click_clickable_sett(element);
         setEquippedObtainableItem(element);
+        element.click();
     }
 }
 
