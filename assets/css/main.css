@@ -3,6 +3,11 @@
     src:
     url("../font/Splatfont2.ttf");
   }
+  @font-face {
+    font-family: Splatfont;
+    src:
+    url("../font/Splatfont.ttf");
+  }
   body {
     display: flex;
     min-height: 100vh;
@@ -443,7 +448,7 @@
   }
 
   .nameplate_bg[obtainable_state="no"]{
-    filter:brightness(0.2);
+    filter:brightness(0.5);
   }
   
   .nameplate_bg:hover {
@@ -458,4 +463,42 @@
     border-radius: 15px;
     width: 700px;
     height: 200px;
+  }
+
+  .nameplate_bg_player {
+    border: 2px solid white;
+    display: block;
+  }
+
+  .nameplate_bg_player:hover {
+    border: 2px solid var(--bs-primary);
+  }
+
+  .nameplate_name{
+    border: 2px solid transparent;
+    border-radius: 5px;
+    font-family: 'Splatfont';
+    position: relative;
+    width: 700px;
+    transform: translate(0px, 36px);
+    font-size: 72px;
+    text-align:center;
+    justify-content: center;
+    white-space: nowrap;
+    z-index: 2;
+    pointer-events: none;
+  }
+
+  .nameplate_identifier{
+    border: 2px solid transparent;
+    border-radius: 5px;
+    font-family: 'Splatfont2';
+    position: absolute;
+    width: 700px;
+    transform: translate(24px, 24px);
+    font-size: 24px;
+    text-align:left;
+    white-space: nowrap;
+    z-index: 2;
+    pointer-events: none;
   }

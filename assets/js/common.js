@@ -137,6 +137,24 @@ function onChangePlayerType(playerType){
   document.getElementById("hair_msn310").src = "./assets/img/player/hair/" + getRsdbInfoById(HairInfo, 500)["__RowId"] + suffix;
 };
 
+function RGBAToHex(r,g,b,a) {
+  r = Math.round(r * 255).toString(16);
+  g = Math.round(g * 255).toString(16);
+  b = Math.round(b * 255).toString(16);
+  a = Math.round(a * 255).toString(16);
+
+  if (r.length == 1) r = "0" + r;
+  if (g.length == 1) g = "0" + g;
+  if (b.length == 1) b = "0" + b;
+  if (a.length == 1) a = "0" + a;
+
+  return "#" + r + g + b + a;
+}
+
+function ColorToHex(color) {
+  return RGBAToHex(color.R, color.G, color.B, color.A);
+}
+
 GEAR_ABILITY_ID_MAP = {
   0: "MainInk_Save",
   1: "SubInk_Save",

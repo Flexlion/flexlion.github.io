@@ -74,6 +74,18 @@ function setHaveObtainableItemById(className, rsdb_id){
     setHaveObtainableItem(element);
 }
 
+function updateNameplateBg(sel){
+    document.getElementById("nameplate_bg_player").src = sel.src;
+
+    var textColor = "#ffffffff"
+
+    var npl_info = getRsdbInfoById(NameplateInfo, sel.getAttribute("rsdb_id"));
+    if(npl_info != null) textColor = ColorToHex(npl_info["TextColor"]);
+
+    document.getElementById("nameplate_name").style.color = textColor;
+    document.getElementById("nameplate_identifier").style.color = textColor;
+}
+
 function click_clickable_sett(target)
 {
     var className = target.getAttribute("class");
@@ -88,7 +100,9 @@ function loadSave(){
     resetEdits();
 
     document.getElementById("player_name_holder").value = SaveJson["server"]["UserName"];
+    document.getElementById("nameplate_name").textContent = SaveJson["server"]["UserName"];
 	document.getElementById("player_identifier_holder").value = SaveJson["server"]["Identifier"];
+    document.getElementById("nameplate_identifier").textContent = "#" + SaveJson["server"]["Identifier"];
 	document.getElementById("player_rank_holder").value = SaveJson["server"]["PlayerRank"] + 1;
 	document.getElementById("player_rank_exp_holder").value = SaveJson["server"]["PlayerRankExp"];
     document.getElementById("money_holder").value = SaveJson["server"]["Money"];
@@ -147,6 +161,7 @@ function loadSave(){
     if(element != null){
         setEquippedObtainableItem(element);
         element.click();
+        updateNameplateBg(element);
     }
 }
 
@@ -512,11 +527,13 @@ async function load_options(){
         var name_holder = event.target;
         if(name_holder.value.length > 16) name_holder.value = name_holder.value.slice(0, 16);
         SaveEdits["default_edits"]["player_name"] = name_holder.value;
+        document.getElementById("nameplate_name").textContent = name_holder.value;
     });
 	$('.player_identifier_holder').on("propertychange change click keyup input paste", function(event){
         var id_holder = event.target;
         if(id_holder.value.length > 4) id_holder.value = id_holder.value.slice(0, 4);
         SaveEdits["default_edits"]["player_identifier"] = id_holder.value;
+        document.getElementById("nameplate_identifier").textContent = "#" + id_holder.value;
     });
 	$('.player_rank_holder').on("propertychange change click keyup input paste", function(event){
         var rank_holder = event.target;
@@ -577,7 +594,7 @@ async function load_options(){
     });
     $('.equip_npl_bg_button').click( function(event){
         equipObtainable("nameplate_bg", "nameplate_bg", updateNplBgObtainable);
-        document.getElementById("nameplate_bg_player").src = getSelectedElement("nameplate_bg").src;
+        updateNameplateBg(getSelectedElement("nameplate_bg"));
     });
     $('.remove_npl_bg_button').click( function(event){
         removeObtainable("nameplate_bg", "nameplate_bg", updateNplBgObtainable);
