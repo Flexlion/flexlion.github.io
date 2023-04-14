@@ -291,14 +291,18 @@
           <p class="fw-bold">Upload png image(resolution has to be 320x120 or 120x320):</p>
           <input id ="plaza_img_upload" class="form-control" type="file" onchange="onUploadPlazaImg()" />
           <p id="plaza_img_upload_error" class="fw-bold" style="color:red"></p>
-          <label for="plaza_post_brightness_slider">Brightness Margin</label>
-          <input type="range" min="1" max="255" value="127" class="plaza_post_brightness_slider" id="plaza_post_brightness_slider">
-          <label for="plaza_post_is_inverted">Invert</label>
-          <input id="plaza_post_is_inverted" class="form-check-input plaza_post_is_inverted" type="checkbox">
+          <label for="oekaki_brightness_slider">Brightness Margin</label>
+          <input type="range" min="1" max="255" value="127" class="slider oekaki_brightness_slider" id="oekaki_brightness_slider">
+          <label for="oekaki_brightness_slider">Color Sensitivity</label>
+          <input type="range" min="0" max="255" value="255" class="slider oekaki_r_power_slider" id="oekaki_r_power_slider">
+          <input type="range" min="0" max="255" value="255" class="slider oekaki_g_power_slider" id="oekaki_g_power_slider">
+          <input type="range" min="0" max="255" value="255" class="slider oekaki_b_power_slider" id="oekaki_b_power_slider">
+          <label for="oekaki_is_inverted">Invert</label>
+          <input id="oekaki_is_inverted" class="form-check-input oekaki_is_inverted" type="checkbox">
         </div>
         </div>
         <div class="modal-body">
-          <img id="plaza_post_img" class="plaza_post_img" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="" width="640" height="240">
+          <img id="oekaki_img" class="oekaki_img" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="" width="640" height="240">
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>

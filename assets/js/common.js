@@ -155,6 +155,12 @@ function ColorToHex(color) {
   return RGBAToHex(color.R, color.G, color.B, color.A);
 }
 
+function Clamp(val, min, max){
+  if(val < min) val = min;
+  if(val > max) val = max;
+  return val;
+};
+
 GEAR_ABILITY_ID_MAP = {
   0: "MainInk_Save",
   1: "SubInk_Save",

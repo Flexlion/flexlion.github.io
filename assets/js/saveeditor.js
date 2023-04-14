@@ -102,7 +102,7 @@ function click_clickable_sett(target)
 };
 
 function updatePlazaPostImg(pixels, isVertical){
-    var post_img = document.getElementById("plaza_post_img");
+    var post_img = document.getElementById("oekaki_img");
     
     if(pixels.length != 600) {
         console.log("Abnormal plaza post length!");
@@ -159,10 +159,15 @@ function updateCustomImg(){
     var pixels = [];
     for(var i = 0 ; i < 600; i++) pixels[i] = BigInt(0);
 
-    var brightness = Number(document.getElementById("plaza_post_brightness_slider").value);
-    if(brightness > 255) brightness = 255;
-    if(brightness < 0) brightness = 0;
-    var isInvert = document.getElementById("plaza_post_is_inverted").checked ^ 1;
+    var brightness = Clamp(Number(document.getElementById("oekaki_brightness_slider").value), 1, 255);
+
+    var r_power = Clamp(Number(document.getElementById("oekaki_r_power_slider").value), 0, 255) / 255;
+    var g_power = Clamp(Number(document.getElementById("oekaki_g_power_slider").value), 0, 255) / 255;
+    var b_power = Clamp(Number(document.getElementById("oekaki_b_power_slider").value), 0, 255) / 255;
+
+    var dmul = Clamp((r_power + g_power + b_power) * 255, 1, 255 * 3);
+
+    var isInvert = document.getElementById("oekaki_is_inverted").checked ^ 1;
 
     for(var y = 0; y < h; y++){
         for(var x = 0; x < w; x++){
@@ -174,7 +179,7 @@ function updateCustomImg(){
                 var i = Math.floor((y * w + x) / 64);
                 var j = BigInt((y * w + x) % 64);
             }
-            var isBrightEnough = (pngPixel[0] + pngPixel[1] + pngPixel[2]) * pngPixel[3] / (255 * 3) > brightness;
+            var isBrightEnough = ((pngPixel[0] * r_power + pngPixel[1] * g_power + pngPixel[2] * b_power) * pngPixel[3] / dmul) > brightness;
             if(isBrightEnough ^ isInvert) pixels[i]|=(1n << j);
         }
     }
@@ -895,10 +900,19 @@ async function load_options(){
     $('.remove_shoes_button').click( function(event){
         removeObtainable("player_shoes", "gear_shoes", updateShoesObtainable);
     });
-    $('.plaza_post_brightness_slider').on("propertychange change click keyup input paste", function(event){
+    $('.oekaki_brightness_slider').on("propertychange change click keyup input paste", function(event){
         updateCustomImg();
     });
-    $('.plaza_post_is_inverted').on("propertychange change click keyup input paste", function(event){
+    $('.oekaki_r_power_slider').on("propertychange change click keyup input paste", function(event){
+        updateCustomImg();
+    })
+    $('.oekaki_g_power_slider').on("propertychange change click keyup input paste", function(event){
+        updateCustomImg();
+    })
+    $('.oekaki_b_power_slider').on("propertychange change click keyup input paste", function(event){
+        updateCustomImg();
+    });
+    $('.oekaki_is_inverted').on("propertychange change click", function(event){
         updateCustomImg();
     });
 }
