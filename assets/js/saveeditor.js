@@ -162,7 +162,7 @@ function updateCustomImg(){
     var brightness = Number(document.getElementById("plaza_post_brightness_slider").value);
     if(brightness > 255) brightness = 255;
     if(brightness < 0) brightness = 0;
-    var isInvert = document.getElementById("plaza_post_is_inverted").checked;
+    var isInvert = document.getElementById("plaza_post_is_inverted").checked ^ 1;
 
     for(var y = 0; y < h; y++){
         for(var x = 0; x < w; x++){
