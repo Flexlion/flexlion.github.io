@@ -38,9 +38,14 @@ function resetEdits(){
             "nameplate_bg": {
                 "edit": {},
                 "remove": new Set()
+            },
+            "oekaki_img": {
+                "edit": {},
+                "remove": new Set()
             }
         }
     };
+    PlazaImgCustomPng = null;
 };
 resetEdits();
 
@@ -95,6 +100,125 @@ function click_clickable_sett(target)
     }
     target.setAttribute("selected", "true");
 };
+
+function updatePlazaPostImg(pixels, isVertical){
+    var post_img = document.getElementById("plaza_post_img");
+    
+    if(pixels.length != 600) {
+        console.log("Abnormal plaza post length!");
+        post_img.src = "data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=";
+        return;
+    }
+
+    if(isVertical){
+        var w = 120;
+        var h = 320;
+    } else{
+        var w = 320;
+        var h = 120;
+    }
+
+    bmp = new Bitmap(w, h);
+    for(var y = 0; y < h; y++){
+        for(var x = 0; x < w; x++){
+            if(isVertical){
+                var i = Math.floor(((w - x - 1) * h + y) / 64);
+                var j = BigInt(((w - x - 1) * h + y) % 64);
+            } else {
+                var i = Math.floor((y * w + x) / 64);
+                var j = BigInt((y * w + x) % 64);
+            }
+            var pixel = 255;
+            if(BigInt(BigInt(pixels[i]) & (1n << j)) != 0n) pixel = 0;
+            bmp.pixel[x][y] = [pixel, pixel, pixel, 1];
+        }
+    }
+
+    post_img.src = bmp.dataURL();
+    post_img.setAttribute("width", w * 2);
+    post_img.setAttribute("height", h * 2);
+}
+
+var PlazaImgCustomPng = null;
+
+function updateCustomImg(){
+
+    if(PlazaImgCustomPng == null) return;
+
+    var w = PlazaImgCustomPng.getWidth();
+    var h = PlazaImgCustomPng.getHeight();
+
+    var isHorizontal = (w == 320 && h == 120);
+    var isVertical = (w == 120 && h == 320);
+
+    if(!isHorizontal && !isVertical) return;
+
+    var oekaki_img = SaveEdits["dict_edits"]["oekaki_img"]["edit"];
+    oekaki_img["IsOekakiVertical"] = isVertical;
+
+    var pixels = [];
+    for(var i = 0 ; i < 600; i++) pixels[i] = BigInt(0);
+
+    var brightness = Number(document.getElementById("plaza_post_brightness_slider").value);
+    if(brightness > 255) brightness = 255;
+    if(brightness < 0) brightness = 0;
+    var isInvert = document.getElementById("plaza_post_is_inverted").checked;
+
+    for(var y = 0; y < h; y++){
+        for(var x = 0; x < w; x++){
+            var pngPixel = PlazaImgCustomPng.getPixel(x, y);
+            if(isVertical){
+                var i = Math.floor(((w - x - 1) * h + y) / 64);
+                var j = BigInt(((w - x - 1) * h + y) % 64);
+            } else {
+                var i = Math.floor((y * w + x) / 64);
+                var j = BigInt((y * w + x) % 64);
+            }
+            var isBrightEnough = (pngPixel[0] + pngPixel[1] + pngPixel[2]) * pngPixel[3] / (255 * 3) > brightness;
+            if(isBrightEnough ^ isInvert) pixels[i]|=(1n << j);
+        }
+    }
+
+    for(var i = 0 ; i < 600; i++) pixels[i] = pixels[i].toString();
+    oekaki_img["OekakiImage"] = pixels;
+
+    updatePlazaPostImg(pixels, isVertical);
+}
+
+function onUploadPlazaImg(){
+    var freader = new FileReader();
+    freader.onload = function(e){
+        var pngreader = new PNGReader(e.target.result);
+        pngreader.parse(function(err, png){
+            PlazaImgCustomPng = null;
+
+            var img_error = document.getElementById("plaza_img_upload_error");
+            if (err){
+                updateCustomImg();
+                console.log(err);
+                img_error.textContent = "Failed to decrypt png!";
+                return;
+            }
+
+            var w = png.getWidth();
+            var h = png.getHeight();
+            
+            var isHorizontal = (w == 320 && h == 120);
+            var isVertical = (w == 120 && h == 320);
+
+            if(!isHorizontal && !isVertical){
+                updateCustomImg();
+                img_error.textContent = "Resolution invalid!(has to be either 320x120 or 120x320)";
+                return;
+            }
+            
+            img_error.textContent = "";
+            PlazaImgCustomPng = png;
+            updateCustomImg();
+        });
+    };
+    freader.readAsBinaryString(document.getElementById("plaza_img_upload").files[0]);
+}
 
 function loadSave(){
     resetEdits();
@@ -163,6 +287,9 @@ function loadSave(){
         element.click();
         updateNameplateBg(element);
     }
+
+    if("Plaza" in SaveJson["client"] && "OekakiImage" in SaveJson["client"]["Plaza"] && "IsOekakiVertical" in SaveJson["client"]["Plaza"]) 
+        updatePlazaPostImg(SaveJson["client"]["Plaza"]["OekakiImage"],  SaveJson["client"]["Plaza"]["IsOekakiVertical"]);
 }
 
 async function onDecryptSave(){
@@ -189,7 +316,7 @@ async function onEditSave(){
     formData.append('save', SaveRaw);
     formData.append('edits', JSON.stringify(SaveEdits, null, 2));
 
-    const response = await fetch('https://flexlion3.herokuapp.com/save/edit', {
+    const response = await fetch('http://localhost:8069/save/edit', {
 		method: "POST", 
 		body: formData
 	});
@@ -767,6 +894,12 @@ async function load_options(){
     });
     $('.remove_shoes_button').click( function(event){
         removeObtainable("player_shoes", "gear_shoes", updateShoesObtainable);
+    });
+    $('.plaza_post_brightness_slider').on("propertychange change click keyup input paste", function(event){
+        updateCustomImg();
+    });
+    $('.plaza_post_is_inverted').on("propertychange change click keyup input paste", function(event){
+        updateCustomImg();
     });
 }
 

@@ -51,7 +51,8 @@
     <a href="#" type="button" class="btn btn-outline-primary btn-lg px-4" data-bs-toggle="modal" data-bs-target="#modalWeaponSett">Weapons</a><br><br>
     <a href="#" type="button" class="btn btn-outline-primary btn-lg px-4" data-bs-toggle="modal" data-bs-target="#modalGearHeadSett">Headgear</a><br><br>
     <a href="#" type="button" class="btn btn-outline-primary btn-lg px-4" data-bs-toggle="modal" data-bs-target="#modalGearClothesSett">Clothes</a><br><br>
-    <a href="#" type="button" class="btn btn-outline-primary btn-lg px-4" data-bs-toggle="modal" data-bs-target="#modalGearShoesSett">Shoes</a>
+    <a href="#" type="button" class="btn btn-outline-primary btn-lg px-4" data-bs-toggle="modal" data-bs-target="#modalGearShoesSett">Shoes</a><br><br>
+    <a href="#" type="button" class="btn btn-outline-primary btn-lg px-4" data-bs-toggle="modal" data-bs-target="#modalPlazaPost">Plaza Post</a>
     <br><br><br>
     <button type="button" onclick="onEditSave()" class="btn btn-primary" id="edit_save_btn">Save</button>
     <p id="edit_error" class="fw-bold" style="color:red"></p>
@@ -278,6 +279,33 @@
       </div>
     </div>
   </div>
+  <div class="modal fade" id="modalPlazaPost" target_id = "" tabindex="-1" role="dialog" aria-labelledby="modalPlazaPostTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document" style="max-width: 850px;">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalPlazaPostTitle">Plaza Post</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-header">
+          <div style="display: inline-block;">
+          <p class="fw-bold">Upload png image(resolution has to be 320x120 or 120x320):</p>
+          <input id ="plaza_img_upload" class="form-control" type="file" onchange="onUploadPlazaImg()" />
+          <p id="plaza_img_upload_error" class="fw-bold" style="color:red"></p>
+          <label for="plaza_post_brightness_slider">Brightness Margin</label>
+          <input type="range" min="1" max="255" value="127" class="plaza_post_brightness_slider" id="plaza_post_brightness_slider">
+          <label for="plaza_post_is_inverted">Invert</label>
+          <input id="plaza_post_is_inverted" class="form-check-input plaza_post_is_inverted" type="checkbox">
+        </div>
+        </div>
+        <div class="modal-body">
+          <img id="plaza_post_img" class="plaza_post_img" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="" width="640" height="240">
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
   <div class="modal fade" id="modalGearAbility" target_id = "" tabindex="-1" role="dialog" aria-labelledby="modalGearAbilityTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document" style="max-width: 850px;">
       <div class="modal-content">
@@ -317,6 +345,8 @@
     </div>   
 
     <script src="./assets/js/common.js"></script>
+    <script src="./assets/js/bitmap.js"></script>
+    <script src="./assets/js/pngjs.js"></script>
     <script src="./assets/js/saveeditor.js"></script>
 </body>
 </html>
