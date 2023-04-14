@@ -316,7 +316,7 @@ async function onEditSave(){
     formData.append('save', SaveRaw);
     formData.append('edits', JSON.stringify(SaveEdits, null, 2));
 
-    const response = await fetch('http://localhost:8069/save/edit', {
+    const response = await fetch('https://flexlion3.herokuapp.com/save/edit', {
 		method: "POST", 
 		body: formData
 	});
