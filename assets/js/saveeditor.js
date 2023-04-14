@@ -664,7 +664,7 @@ async function load_options(){
     });
 	$('.player_rank_holder').on("propertychange change click keyup input paste", function(event){
         var rank_holder = event.target;
-        if(rank_holder.value > 99) rank_holder.value = 99;
+        if(rank_holder.value > 999) rank_holder.value = 999;
         if(rank_holder.value < 1) rank_holder.value = 1;
         SaveEdits["default_edits"]["player_rank"] = rank_holder.value - 1;
     });
