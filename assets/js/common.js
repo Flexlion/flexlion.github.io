@@ -160,6 +160,21 @@ function Clamp(val, min, max){
   if(val > max) val = max;
   return val;
 };
+function redirectHome(){
+  window.location.replace("https://flexlion.github.io/");
+}
+function redirectAccount(){
+  window.location.replace("https://flexlion.github.io/account");
+}
+function redirectLogin(){
+  window.location.replace("https://discord.com/oauth2/authorize?client_id=1098338471829065939&redirect_uri=https%3A%2F%2Fflexlion.github.io%2Flogin&response_type=code&scope=identify");
+}
+function getFxToken(){
+  return localStorage.getItem("fxtoken");
+}
+function setFxToken(token){
+  localStorage.setItem("fxtoken", token)
+}
 
 GEAR_ABILITY_ID_MAP = {
   0: "MainInk_Save",

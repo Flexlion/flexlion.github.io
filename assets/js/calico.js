@@ -185,9 +185,9 @@ function loadMaps(){
         "image_gallery_map",
         "vs_map",
         codeName => {
-            return "https://raw.githubusercontent.com/Leanny/leanny.github.io/master/splat3/images/stage/Vss_" + codeName + ".png";
+            return "./assets/img/stage/Vss_" + codeName + ".png";
         },
-        'https://raw.githubusercontent.com/Leanny/leanny.github.io/master/splat3/images/stage/Dummy.png',
+        './assets/img/stage/Dummy.png',
         160,
         90,
         "chosenMapImg",
@@ -216,9 +216,9 @@ function loadWeapons(){
         "image_gallery_weapon",
         "player_weapon",
         codeName => {
-            return "https://raw.githubusercontent.com/Leanny/leanny.github.io/master/splat3/images/weapon/Wst_" + codeName + ".png"
+            return "./assets/img/player/weapon/Wst_" + codeName + ".png"
         },
-        'https://raw.githubusercontent.com/Leanny/leanny.github.io/master/splat3/images/weapon/Dummy.png',
+        './assets/img/player/weapon/Dummy.png',
         90,
         90,
         "chosenWeaponImg",
@@ -243,9 +243,9 @@ function loadGear(modalName, GearInfo, langFileName, className, resultImg, resul
         "image_gallery_gear",
         className,
         codeName => {
-            return "https://raw.githubusercontent.com/Leanny/leanny.github.io/master/splat3/images/gear/" + codeName + ".png"
+            return "./assets/img/player/gear/" + codeName + ".png"
         },
-        'https://raw.githubusercontent.com/Leanny/leanny.github.io/master/splat3/images/gear/Dummy.png',
+        './assets/img/player/gear/Dummy.png',
         90,
         90,
         resultImg,
@@ -306,7 +306,7 @@ function load_options(){
 
 $(document).ready(async () => {
     await Promise.all([
-        (async () => { langEUen = await fetchJson("https://raw.githubusercontent.com/Leanny/leanny.github.io/master/splat3/data/language/EUen.json") })(),
+        (async () => { langEUen = await fetchJson("https://raw.githubusercontent.com/Flexlion/flexlion.github.io/master/assets/lang/EUen.json") })(),
         (async () => { WeaponInfoMain = await fetchJson("https://raw.githubusercontent.com/Flexlion/flexlion.github.io/master/assets/RSDB/WeaponInfoMain.json") })(),
         (async () => { VersusSceneInfo =    await fetchJson("https://raw.githubusercontent.com/Flexlion/flexlion.github.io/master/assets/RSDB/VersusSceneInfo.json") })(),
         (async () => { GearInfoHead = await fetchJson("https://raw.githubusercontent.com/Flexlion/flexlion.github.io/master/assets/RSDB/GearInfoHead.json") })(),

@@ -297,8 +297,8 @@ function loadSave(){
         updatePlazaPostImg(SaveJson["client"]["Plaza"]["OekakiImage"],  SaveJson["client"]["Plaza"]["IsOekakiVertical"]);
 }
 
-async function onDecryptSave(){
-    SaveRaw = document.getElementById("save_decrypt").files[0];
+async function onDecryptSave(saveFile){
+    SaveRaw = saveFile;
     const response = await fetch('https://flexlion3.herokuapp.com/save/decrypt', {
 		method: "POST", 
 		body: SaveRaw, 
@@ -316,24 +316,60 @@ async function onDecryptSave(){
     loadSave();
 }
 
-async function onEditSave(){
-    let formData = new FormData();
-    formData.append('save', SaveRaw);
-    formData.append('edits', JSON.stringify(SaveEdits, null, 2));
+async function onDecryptCloudSave(){
+    const errorItem = document.getElementById("decrypt_error");
 
-    const response = await fetch('https://flexlion3.herokuapp.com/save/edit', {
-		method: "POST", 
-		body: formData
+    const fxtoken = getFxToken();
+    if(fxtoken == null){
+        errorItem.textContent = "Please login in order to use Flexlion CloudSave.";
+        return;
+    }
+
+    const response = await fetch('https://flexlion3.herokuapp.com/save', {
+		method: "GET", 
+		headers: {
+			'authorization': getFxToken()
+    	}
 	});
-
     body = await response.blob();
 
-    const errorItem = document.getElementById("edit_error");
     try {
         errorJson = JSON.parse(await body.text());
         errorItem.textContent = errorJson["error"];
     } catch(error){
-        downloadFile(body, "save.dat", "text/plain");
+        onDecryptSave(body);
+    }
+}
+
+async function onEditSave(isCloudSave){
+    const errorItem = document.getElementById("edit_error");
+
+    const fxtoken = getFxToken();
+    if(fxtoken == null && isCloudSave){
+        errorItem.textContent = "Please login in order to use Flexlion CloudSave.";
+        return;
+    }
+
+    let formData = new FormData();
+    formData.append('save', SaveRaw);
+    formData.append('edits', JSON.stringify(SaveEdits));
+    formData.append('is_cloudsave', isCloudSave);
+
+    const response = await fetch('https://flexlion3.herokuapp.com/save/edit', {
+		method: "POST", 
+		body: formData,
+        headers: {
+            'authorization': getFxToken()
+        }
+	});
+
+    body = await response.blob();
+
+    try {
+        errorJson = JSON.parse(await body.text());
+        errorItem.textContent = errorJson["error"];
+    } catch(error){
+        if(!isCloudSave) downloadFile(body, "save.dat", "text/plain");
         errorItem.textContent = "";
     }
 }
@@ -347,7 +383,7 @@ function loadWeapons(){
     loadClickableIdOptions(
         "image_gallery_weapon", "image_gallery_weapon", "player_weapon", validInfos.length, 6, 
         idx => {
-            return "https://raw.githubusercontent.com/Leanny/leanny.github.io/master/splat3/images/weapon/Wst_" + validInfos[idx]["__RowId"] + ".png"
+            return "./assets/img/player/weapon/Wst_" + validInfos[idx]["__RowId"] + ".png"
         }, 
         idx => {
             return validInfos[idx]["Id"];
@@ -359,7 +395,7 @@ function loadWeapons(){
     for(var i = 0; i < elements.length; i++){
         elements[i].onerror = function(event){
             var target = event.target;
-            target.src = "https://raw.githubusercontent.com/Leanny/leanny.github.io/master/splat3/images/weapon/Dummy.png"; // No Icon
+            target.src = "./assets/img/player/weapon/Dummy.png"; // No Icon
         };
     }
     resetObtainableItems("player_weapon");
@@ -369,7 +405,7 @@ function loadNameplates(){
     loadClickableIdOptions(
         "image_gallery_nameplate_bg", "image_gallery_nameplate_bg", "nameplate_bg", NameplateInfo.length, 4, 
         idx => {
-            return "https://raw.githubusercontent.com/Leanny/leanny.github.io/master/splat3/images/npl/" + NameplateInfo[idx]["__RowId"] + ".png"
+            return "./assets/img/npl/" + NameplateInfo[idx]["__RowId"] + ".png"
         }, 
         idx => {
             return NameplateInfo[idx]["Id"];
@@ -389,7 +425,7 @@ function loadGear(galleryId, galleryClassName, imgClassName, GearInfo){
     loadClickableIdOptions(
         galleryId, galleryClassName, imgClassName, GearInfo.length, 6, 
         idx => {
-            return "https://raw.githubusercontent.com/Leanny/leanny.github.io/master/splat3/images/gear/" + GearInfo[idx]["__RowId"] + ".png"
+            return "./assets/img/player/gear/" + GearInfo[idx]["__RowId"] + ".png"
         }, 
         idx => {
             return GearInfo[idx]["Id"];
@@ -401,7 +437,7 @@ function loadGear(galleryId, galleryClassName, imgClassName, GearInfo){
     for(var i = 0; i < elements.length; i++){
         elements[i].onerror = function(event){
             var target = event.target;
-            target.src = "https://raw.githubusercontent.com/Leanny/leanny.github.io/master/splat3/images/gear/Dummy.png"; // No Icon
+            target.src = "./assets/img/player/gear/Dummy.png"; // No Icon
         };
     }
     resetObtainableItems(imgClassName);
@@ -919,7 +955,7 @@ async function load_options(){
 
 $(document).ready(async () => {
     await Promise.all([
-        (async () => { langEUen = await fetchJson("https://raw.githubusercontent.com/Leanny/leanny.github.io/master/splat3/data/language/EUen.json") })(),
+        (async () => { langEUen = await fetchJson("https://raw.githubusercontent.com/Flexlion/flexlion.github.io/master/assets/lang/EUen.json") })(),
         (async () => { WeaponInfoMain = await fetchJson("https://raw.githubusercontent.com/Flexlion/flexlion.github.io/master/assets/RSDB/WeaponInfoMain.json") })(),
         (async () => { GearInfoHead = await fetchJson("https://raw.githubusercontent.com/Flexlion/flexlion.github.io/master/assets/RSDB/GearInfoHead.json") })(),
         (async () => { GearInfoClothes = await fetchJson("https://raw.githubusercontent.com/Flexlion/flexlion.github.io/master/assets/RSDB/GearInfoClothes.json") })(),
@@ -933,7 +969,7 @@ $(document).ready(async () => {
 });
 
 $(document).ready(function() {
-    var chosenOption = Cookies.get('accept_warning');
+    var chosenOption = localStorage.getItem('accept_warning');
     if (chosenOption === 'true') return;
     var warningModal = new bootstrap.Modal(document.getElementById('warningModal'), {
         backdrop: 'static',
@@ -942,7 +978,7 @@ $(document).ready(function() {
     warningModal.show();
     $('#acceptModal').click(function() {
         warningModal.hide();
-        Cookies.set('accept_warning', 'true');
+        localStorage.setItem('accept_warning', 'true');
     });
   });
   

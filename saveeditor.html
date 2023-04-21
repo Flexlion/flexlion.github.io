@@ -20,7 +20,6 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js" integrity="sha384-zYPOMqeu1DAVkHiLqWBUTcbYfZ8osu1Nd6Z89ify25QV9guujx43ITvfi12/QExE" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.min.js" integrity="sha384-Y4oOpwW3duJdCWv5ly8SCFYWqFDsfob/3GkgExXKV4idmbt98QcxXYs9UoXAB7BZ" crossorigin="anonymous"></script>
     <script type="text/javascript" src="./assets/js/jszip.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.1/dist/js.cookie.min.js"></script>
 </head>
 <body>
   <div class="container">
@@ -34,6 +33,7 @@
         <li class="nav-item"><a href="./index.html" class="nav-link" aria-current="page">Home</a></li>
         <li class="nav-item"><a href="./configurator.html" class="nav-link">Configurator</a></li>
         <li class="nav-item"><a href="./saveeditor.html" class="nav-link active">Save Editor</a></li>
+        <li class="nav-item"><a href="./account.html" class="nav-link">Account</a></li>
       </ul>
     </header>
   </div>
@@ -43,8 +43,10 @@
       <strong class="lead mb-4" style="color:red">USING SAVE EDITS IS NOT SAFE ONLINE AND YOU WILL GET BANNED IF YOU USE IT ONLINE. PLEASE ONLY USE OFFLINE/EMULATOR.</strong>
     </div> -->
     <br>
+    <button type="button" onclick="onDecryptCloudSave()" class="btn btn-outline-primary" id="cloud_save_dl">Use Flexlion CloudSave</button>
+    <br><br>
     <p class="fw-bold" >Decrypt Save:</p>
-    <input id ="save_decrypt" class="form-control w-auto" type="file" onchange="onDecryptSave()" />
+    <input id ="save_decrypt" class="form-control w-auto" type="file" onchange="onDecryptSave(document.getElementById('save_decrypt').files[0])"/>
     <p id="decrypt_error" class="fw-bold" style="color:red"></p>
     <br><br>
     <a href="#" type="button" class="btn btn-outline-primary btn-lg px-4" data-bs-toggle="modal" data-bs-target="#modalPlayerSett">Player Settings</a><br><br>
@@ -54,7 +56,8 @@
     <a href="#" type="button" class="btn btn-outline-primary btn-lg px-4" data-bs-toggle="modal" data-bs-target="#modalGearShoesSett">Shoes</a><br><br>
     <a href="#" type="button" class="btn btn-outline-primary btn-lg px-4" data-bs-toggle="modal" data-bs-target="#modalPlazaPost">Plaza Post</a>
     <br><br><br>
-    <button type="button" onclick="onEditSave()" class="btn btn-primary" id="edit_save_btn">Save</button>
+    <button type="button" onclick="onEditSave(false)" class="btn btn-primary" id="edit_save_btn">Save</button>
+    <button type="button" onclick="onEditSave(true)" class="btn btn-primary" id="edit_save_btn">Save to Flexlion CloudSave</button>
     <p id="edit_error" class="fw-bold" style="color:red"></p>
     <div class="modal fade" id="modalPlayerSett" tabindex="-1" role="dialog" aria-labelledby="modalPlayerSettTitle" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered" role="document" style="max-width: 1000px;">
@@ -70,7 +73,7 @@
             <input class="form-control player_identifier_holder d-inline-block w-auto" id="player_identifier_holder" type="text"/>
             <br><br>
             <div class="CstContainer">
-            <img class="nameplate_bg_sel nameplate_bg_player base" id ="nameplate_bg_player" src="https://raw.githubusercontent.com/Leanny/leanny.github.io/master/splat3/images/npl/Npl_Tutorial00.png">
+            <img class="nameplate_bg_sel nameplate_bg_player base" id ="nameplate_bg_player" src="./assets/img/npl/Npl_Tutorial00.png">
             <p class="nameplate_name" id="nameplate_name" style="color:white">Player</p>
             <p class="nameplate_identifier" id="nameplate_identifier" style="color:white">#0000</p>
             </div>
@@ -129,7 +132,7 @@
         </div>
         <div class="modal-header">
           <div class="CstContainer">
-            <img src="https://raw.githubusercontent.com/Leanny/leanny.github.io/master/splat3/images/npl/Npl_Tutorial00.png" class="item nameplate_bg_sel" id="chosenNameplateBg">
+            <img src="./assets/img/npl/Npl_Tutorial00.png" class="item nameplate_bg_sel" id="chosenNameplateBg">
           </div>
           <button type="button" class="btn btn-primary get_npl_bg_button" style="translate: 300px -120px;position: absolute;" disabled="true" id="get_npl_bg_button">Obtain</button>
           <button type="button" class="btn btn-primary remove_npl_bg_button" style="translate: 400px -120px;position: absolute;" disabled="true" id="remove_npl_bg_button">Remove</button>
@@ -157,7 +160,7 @@
         <div class="modal-header">
           <div class="CstContainer">
             <img src="./assets/img/player/customize/BtnWeapon.png" class="base">
-            <img src="https://raw.githubusercontent.com/Leanny/leanny.github.io/master/splat3/images/weapon/Dummy.png" width="128" height="128" class="item" id="chosenWeaponImg">
+            <img src="./assets/img/player/weapon/Dummy.png" width="128" height="128" class="item" id="chosenWeaponImg">
             <p class="chosenWpn" id="chosenWeaponInfo" player_specific="true"></p>
           </div>
           <button type="button" class="btn btn-primary get_weapon_button" style="translate: 300px 120px;position: absolute;" disabled="true" id="get_weapon_button">Obtain</button>
@@ -187,7 +190,7 @@
         <div class="modal-header">
           <div class="CstContainer">
             <img src="./assets/img/player/customize/BtnHeadgear.png" class="base">
-            <img src="https://raw.githubusercontent.com/Leanny/leanny.github.io/master/splat3/images/gear/Dummy.png" width="128" height="128" class="item" id="chosenHedImg">
+            <img src="./assets/img/player/gear/Dummy.png" width="128" height="128" class="item" id="chosenHedImg">
             <p class="chosenHed" id="chosenHedInfo" player_specific="true"></p>
           </div>
           <button type="button" class="btn btn-primary get_headgear_button" style="translate: 300px 120px;position: absolute;" disabled="true" id="get_headgear_button">Obtain</button>
@@ -221,7 +224,7 @@
         <div class="modal-header">
           <div class="CstContainer">
             <img src="./assets/img/player/customize/BtnClothes.png" class="base">
-            <img src="https://raw.githubusercontent.com/Leanny/leanny.github.io/master/splat3/images/gear/Dummy.png" width="128" height="128" class="item" id="chosenCltImg">
+            <img src="./assets/img/player/gear/Dummy.png" width="128" height="128" class="item" id="chosenCltImg">
             <p class="chosenClt" id="chosenCltInfo" player_specific="true"></p>
           </div>
           <button type="button" class="btn btn-primary get_clothes_button" style="translate: 300px 120px;position: absolute;" disabled="true" id="get_clothes_button">Obtain</button>
@@ -255,7 +258,7 @@
         <div class="modal-header">
           <div class="CstContainer">
             <img src="./assets/img/player/customize/BtnShoes.png" class="base">
-            <img src="https://raw.githubusercontent.com/Leanny/leanny.github.io/master/splat3/images/gear/Dummy.png" width="128" height="128" class="item" id="chosenShsImg">
+            <img src="./assets/img/player/gear/Dummy.png" width="128" height="128" class="item" id="chosenShsImg">
             <p class="chosenShs" id="chosenShsInfo" player_specific="true"></p>
           </div>
           <button type="button" class="btn btn-primary get_shoes_button" style="translate: 300px 120px;position: absolute;" disabled="true" id="get_shoes_button">Obtain</button>

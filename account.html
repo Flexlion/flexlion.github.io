@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="shortcut icon" href="./assets/img/favico.ico">
+    <link rel="apple-touch-icon" href="./assets/img/favico.ico">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="stylesheet" href="./assets/css/main.css">
+    <link rel="stylesheet" href="./assets/css/master.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flexlion</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.4/font/bootstrap-icons.css">
+
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js" integrity="sha384-zYPOMqeu1DAVkHiLqWBUTcbYfZ8osu1Nd6Z89ify25QV9guujx43ITvfi12/QExE" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.min.js" integrity="sha384-Y4oOpwW3duJdCWv5ly8SCFYWqFDsfob/3GkgExXKV4idmbt98QcxXYs9UoXAB7BZ" crossorigin="anonymous"></script>
+</head>
+<body>
+  <div class="container">
+    <header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom">
+      <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-dark text-decoration-none">
+        <img src="./assets/img/favico.ico" width="50" height="43" alt="">
+        <span class="fs-4" style="padding-left: 10px;">Flexlion</span>
+      </a>
+
+      <ul class="nav nav-pills">
+        <li class="nav-item"><a href="./index.html" class="nav-link" aria-current="page">Home</a></li>
+        <li class="nav-item"><a href="./configurator.html" class="nav-link">Configurator</a></li>
+        <li class="nav-item"><a href="./saveeditor.html" class="nav-link">Save Editor</a></li>
+        <li class="nav-item"><a href="./account.html" class="nav-link active">Account</a></li>
+      </ul>
+    </header>
+  </div>
+
+    
+  </div>
+    <div class="container">
+    <a onclick="onGetToken()" id="getTokenBtn" type="button" class="btn btn-outline-primary">Get fxtoken.epic (put to /flexlion3/ on your sd card)</a>
+    <br><br>
+    <a onclick="onResetToken()" id="resetTokenBtn" type="button" class="btn btn-outline-primary">Reset Token</a>
+    <p class="lead mb-4" id="token_reset_result"></p>
+    </div>
+
+    <script src="./assets/js/common.js"></script>
+    <script src="./assets/js/account.js"></script>
+</body>
+</html>
