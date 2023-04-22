@@ -175,6 +175,9 @@ function getFxToken(){
 function setFxToken(token){
   localStorage.setItem("fxtoken", token)
 }
+function resetFxToken(){
+  localStorage.removeItem("fxtoken");
+}
 
 GEAR_ABILITY_ID_MAP = {
   0: "MainInk_Save",
@@ -246,5 +249,8 @@ $(document).ready(async function() {
       }
   });
   const result = await response.text();
-  if(result != 'hewwo') redirectLogin();
+  if(result != 'hewwo'){
+    resetFxToken();
+    redirectLogin();
+  }
 });
