@@ -354,13 +354,14 @@ async function onEditSave(isCloudSave){
     formData.append('save', SaveRaw);
     formData.append('edits', JSON.stringify(SaveEdits));
     formData.append('is_cloudsave', isCloudSave);
-
+    
+    let headers = {};
+    if(isCloudSave) headers['authorization'] = getFxToken();
+    
     const response = await fetch('https://flexlion3.herokuapp.com/save/edit', {
 		method: "POST", 
 		body: formData,
-        headers: {
-            'authorization': getFxToken()
-        }
+        headers: headers
 	});
 
     body = await response.blob();
