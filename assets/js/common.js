@@ -235,3 +235,16 @@ GEAR_ABILITY_NAME_MAP = {
   "SomersaultLanding": 111,
   "None": -1
 };
+
+$(document).ready(async function() {
+  const fxtoken = getFxToken();
+  if(fxtoken == null) return;
+  const response = await fetch('https://flexlion3.herokuapp.com/', {
+      method: "GET", 
+      headers: {
+        "authorization": fxtoken
+      }
+  });
+  const result = await response.text();
+  if(result != 'hewwo') redirectLogin();
+});
