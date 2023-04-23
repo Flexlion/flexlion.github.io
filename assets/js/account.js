@@ -1,17 +1,30 @@
+var UserInfo;
+
 function onGetToken(){
     downloadFile(getFxToken(), "fxtoken.epic", "text/plain");
 }
 
-async function onToggleCloudSave(val){
-    const resultItem = document.getElementById("cloud_save_updateconfig_result");
+async function updateUserInfo(){
+    const cloudsaveToggle = document.getElementById("cloud_save_toggle");
+    if(UserInfo["cloudsave"]) cloudsaveToggle.textContent = "Disable CloudSave";
+    else cloudsaveToggle.textContent = "Enable CloudSave";
+}
+
+async function onToggleCloudSave(){
+
+    const resultItem = document.getElementById("cloud_save_toggle_result");
     resultItem.textContent = "";
 
     const fxtoken = getFxToken();
     if(fxtoken == null) return;
 
-    const response = await fetch('https://flexlion3.herokuapp.com/save/set_config', {
+    if(UserInfo == null) UserInfo = {};
+    if (!("cloudsave" in UserInfo)) UserInfo["cloudsave"] = 1;
+    UserInfo["cloudsave"]^=1;
+
+    const response = await fetch('https://flexlion3.herokuapp.com/update_userinfo', {
 		method: "POST", 
-        body: JSON.stringify({"cloudsave": val}),
+        body: JSON.stringify({"cloudsave": UserInfo["cloudsave"]}),
 		headers: {
             'authorization': getFxToken()
         }
@@ -24,8 +37,9 @@ async function onToggleCloudSave(val){
 		return;
 	}
     
-    if(val) resultItem.textContent = "Successfully enabled cloudsave!";
+    if(UserInfo["cloudsave"]) resultItem.textContent = "Successfully enabled cloudsave!";
     else resultItem.textContent = "Successfully disabled cloudsave!";
+    updateUserInfo();
     resultItem.setAttribute("style", "color:lime");
 }
 
@@ -55,12 +69,22 @@ async function onResetToken(){
     resultItem.setAttribute("style", "color:lime");
 }
 
-$(document).ready(function() {
+$(document).ready(async function() {
     const fxtoken = getFxToken();
     if(fxtoken == null){
         redirectLogin();
         return;
     }
+    const response = await fetch('https://flexlion3.herokuapp.com/user_info', {
+		method: "GET", 
+		headers: {
+            'authorization': getFxToken()
+        }
+	});
+    let result = await response.json();
+    if('error' in result) return;
+    UserInfo = result;
+    updateUserInfo();
 });
 
     

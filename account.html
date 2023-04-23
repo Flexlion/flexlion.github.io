@@ -39,7 +39,9 @@
     <a onclick="onGetToken()" id="getTokenBtn" type="button" class="btn btn-outline-primary">Get fxtoken.epic (put to /flexlion3/ on your sd card)</a>
     <br><br>
     <a onclick="onResetToken()" id="resetTokenBtn" type="button" class="btn btn-outline-primary">Reset Token</a>
-    <p class="lead mb-4" id="token_reset_result"></p>
+    <p class="fw-bold" id="token_reset_result"></p>
+    <button type="button" onclick="onToggleCloudSave()" class="btn btn-outline-primary btn_cloudsave" id="cloud_save_toggle">Enable CloudSave</button>
+    <p class="fw-bold" id="cloud_save_toggle_result"></p>
     </div>
 
     <script src="./assets/js/common.js"></script>
