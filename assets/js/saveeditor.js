@@ -236,9 +236,9 @@ function loadSave(){
 	document.getElementById("player_rank_exp_holder").value = SaveJson["server"]["PlayerRankExp"];
     document.getElementById("money_holder").value = SaveJson["server"]["Money"];
     document.getElementById("snail_holder").value = SaveJson["server"]["Shell"];
-	document.getElementById("season_id_holder").value = SaveJson["client"]["Plaza"]["UnlockedSeason"];
-	document.getElementById("season_catalog_level_holder").value = SaveJson["server"]["Season"]["CatalogLevel"];
-	document.getElementById("season_catalog_point_holder").value = SaveJson["server"]["Season"]["CatalogPoint"];
+    document.getElementById("season_id_holder").value = SaveJson["client"]["Plaza"]["UnlockedSeason"];
+    document.getElementById("season_catalog_level_holder").value = SaveJson["server"]["Season"]["CatalogLevel"];
+    document.getElementById("season_catalog_point_holder").value = SaveJson["server"]["Season"]["CatalogPoint"];
 
     var playerInfo = SaveJson["client"]["Common"]["Coordinates"];
     click_clickable_sett(getElementByRsdbId("player_playertype", playerInfo["ModelType"]));
