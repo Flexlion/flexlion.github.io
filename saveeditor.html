@@ -90,8 +90,19 @@
             <label class="fw-bold" for="snail_holder">Snails:</label>
             <input class="form-control snail_holder d-inline-block w-auto" type="number" id="snail_holder" min="0" max="999" value="0"/>
             <br><br><br>
-            <label style="color:black" class="fw-bold" for="season_id_holder">Season:</label>
-            <input class="form-control season_id_holder d-inline-block w-auto" type="number" id="season_id_holder" min="0" max="999" value="0"/>
+            <form>
+              <div class="form-group row">
+                <label for="season_id_holder" class="col-sm-1 col-form-label fw-bold">Season:</label>
+                <div class="col-sm-3">
+                  <select id="season_id_holder" class="form-control">
+                    <option value="0">Choose...</option>
+                    <option value="1">Drizzle Season 2022</option>
+                    <option value="2">Chill Season 2022</option>
+                    <option value="3">Fresh Season 2023</option>
+                  </select>
+                </div>
+              </div>
+            </form>
             <br><br>
             <label style="color:black" class="fw-bold" for="season_catalog_level_holder">Catalog Level:</label>
             <input class="form-control season_catalog_level_holder d-inline-block w-auto" type="number" id="season_catalog_level_holder" min="0" max="100" value="0"/>

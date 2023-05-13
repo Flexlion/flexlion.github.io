@@ -728,13 +728,10 @@ async function load_options(){
         if(snail_holder.value < 0) snail_holder.value = 0;
         SaveEdits["default_edits"]["snails"] = snail_holder.value;
     });
-	$('.season_id_holder').on("propertychange change click keyup input paste", function(event){
-        var season_id_holder = event.target;
-		var current_season = 3; // Fresh Season 2023
-        if(season_id_holder.value > current_season) season_id_holder.value = current_season;
-        if(season_id_holder.value < 0) season_id_holder.value = 0;
-        SaveEdits["default_edits"]["current_season_id"] = season_id_holder.value;
-		SaveEdits["default_edits"]["unlocked_season_id"] = season_id_holder.value;
+	$('#season_id_holder').on("change", function(event){
+        var season_id_holder = $(this).find("option:selected").prop("value");
+        SaveEdits["default_edits"]["current_season_id"] = season_id_holder;
+        SaveEdits["default_edits"]["unlocked_season_id"] = season_id_holder;
     });
 	$('.season_catalog_level_holder').on("propertychange change click keyup input paste", function(event){
         var catalog_level_holder = event.target;
