@@ -72,6 +72,12 @@
         "__RowId": "Vss_Scrap00"
     },
     {
+        "DisplayOrder": 17,
+        "Id": 8,
+        "Season": 4,
+        "__RowId": "Vss_Section00"
+    },
+    {
         "DisplayOrder": 4,
         "Id": 4,
         "Season": 0,
@@ -82,6 +88,12 @@
         "Id": 13,
         "Season": 0,
         "__RowId": "Vss_Upland03"
+    },
+    {
+        "DisplayOrder": 18,
+        "Id": 17,
+        "Season": 4,
+        "__RowId": "Vss_Wave03"
     },
     {
         "DisplayOrder": 3,
