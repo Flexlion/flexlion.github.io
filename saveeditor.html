@@ -89,7 +89,26 @@
             <img src="./assets/img/ui/snail.png" width="35" height="35" style="margin-bottom: 10px;">
             <label class="fw-bold" for="snail_holder">Snails:</label>
             <input class="form-control snail_holder d-inline-block w-auto" type="number" id="snail_holder" min="0" max="999" value="0"/>
+            <br><br><br>
+            <form>
+              <div class="form-group row">
+                <label for="season_id_holder" class="col-sm-1 col-form-label fw-bold" style="color:black">Season:</label>
+                <div class="col-sm-3">
+                  <select id="season_id_holder" class="form-control">
+                    <option value="0">Choose...</option>
+                    <option value="1">Drizzle Season 2022</option>
+                    <option value="2">Chill Season 2022</option>
+                    <option value="3">Fresh Season 2023</option>
+                  </select>
+                </div>
+              </div>
+            </form>
             <br>
+            <label style="color:black" class="fw-bold" for="season_catalog_level_holder">Catalog Level:</label>
+            <input class="form-control season_catalog_level_holder d-inline-block w-auto" type="number" id="season_catalog_level_holder" min="0" max="100" value="0"/>
+            <label style="color:black" class="fw-bold" for="season_catalog_point_holder">Catalog Points:</label>
+            <input class="form-control season_catalog_point_holder d-inline-block w-auto" type="number" id="season_catalog_point_holder" min="0" max="9500" value="0"/>
+            <br><br><br>
             <p class="fw-bold">Player Type:</p>
             <div id="image_gallery_playertype">
             <div class="image_gallery_playertype">
