@@ -572,7 +572,7 @@
             "SilverUrokoNum": 0
         },
         "UrokoUnlockLevel": 1,
-        "VariationNum": 0,
+        "VariationNum": 1,
         "__RowId": "Hed_CAP000"
     },
     {
@@ -636,7 +636,7 @@
             "SilverUrokoNum": 0
         },
         "UrokoUnlockLevel": 1,
-        "VariationNum": 0,
+        "VariationNum": 1,
         "__RowId": "Hed_CAP002"
     },
     {
@@ -648,7 +648,7 @@
         "Genre0": "Head_Cap",
         "Genre1": "Unknown",
         "HarnessType": "S",
-        "HeadParamSetPath": "Work/Gyml/GearHead/Hed_CAP000.spl__GearHeadParamSet.gyml",
+        "HeadParamSetPath": "Work/Gyml/GearHead/Hed_CAP003.spl__GearHeadParamSet.gyml",
         "HowToGet": "Shop",
         "Id": 1003,
         "IsHideHarness": false,
@@ -668,7 +668,7 @@
             "SilverUrokoNum": 0
         },
         "UrokoUnlockLevel": 1,
-        "VariationNum": 0,
+        "VariationNum": 1,
         "__RowId": "Hed_CAP003"
     },
     {
@@ -680,7 +680,7 @@
         "Genre0": "Head_Cap",
         "Genre1": "Unknown",
         "HarnessType": "S",
-        "HeadParamSetPath": "Work/Gyml/GearHead/Hed_CAP000.spl__GearHeadParamSet.gyml",
+        "HeadParamSetPath": "Work/Gyml/GearHead/Hed_CAP003.spl__GearHeadParamSet.gyml",
         "HowToGet": "Shop",
         "Id": 1004,
         "IsHideHarness": false,
@@ -700,7 +700,7 @@
             "SilverUrokoNum": 0
         },
         "UrokoUnlockLevel": 1,
-        "VariationNum": 0,
+        "VariationNum": 1,
         "__RowId": "Hed_CAP004"
     },
     {
@@ -732,7 +732,7 @@
             "SilverUrokoNum": 0
         },
         "UrokoUnlockLevel": 1,
-        "VariationNum": 0,
+        "VariationNum": 1,
         "__RowId": "Hed_CAP005"
     },
     {
@@ -764,7 +764,7 @@
             "SilverUrokoNum": 0
         },
         "UrokoUnlockLevel": 1,
-        "VariationNum": 0,
+        "VariationNum": 1,
         "__RowId": "Hed_CAP006"
     },
     {
@@ -828,7 +828,7 @@
             "SilverUrokoNum": 0
         },
         "UrokoUnlockLevel": 1,
-        "VariationNum": 0,
+        "VariationNum": 1,
         "__RowId": "Hed_CAP008"
     },
     {
@@ -860,7 +860,7 @@
             "SilverUrokoNum": 0
         },
         "UrokoUnlockLevel": 1,
-        "VariationNum": 0,
+        "VariationNum": 1,
         "__RowId": "Hed_CAP009"
     },
     {
@@ -892,7 +892,7 @@
             "SilverUrokoNum": 0
         },
         "UrokoUnlockLevel": 1,
-        "VariationNum": 0,
+        "VariationNum": 1,
         "__RowId": "Hed_CAP010"
     },
     {
@@ -1052,7 +1052,7 @@
             "SilverUrokoNum": 0
         },
         "UrokoUnlockLevel": 1,
-        "VariationNum": 0,
+        "VariationNum": 1,
         "__RowId": "Hed_CAP021"
     },
     {
@@ -1064,7 +1064,7 @@
         "Genre0": "Head_Cap",
         "Genre1": "Unknown",
         "HarnessType": "S",
-        "HeadParamSetPath": "Work/Gyml/GearHead/Hed_CAP000.spl__GearHeadParamSet.gyml",
+        "HeadParamSetPath": "Work/Gyml/GearHead/Hed_CAP003.spl__GearHeadParamSet.gyml",
         "HowToGet": "Shop",
         "Id": 1023,
         "IsHideHarness": false,
@@ -1084,7 +1084,7 @@
             "SilverUrokoNum": 0
         },
         "UrokoUnlockLevel": 1,
-        "VariationNum": 0,
+        "VariationNum": 1,
         "__RowId": "Hed_CAP023"
     },
     {
@@ -1244,7 +1244,7 @@
             "SilverUrokoNum": 0
         },
         "UrokoUnlockLevel": 1,
-        "VariationNum": 0,
+        "VariationNum": 1,
         "__RowId": "Hed_CAP034"
     },
     {
@@ -1276,7 +1276,7 @@
             "SilverUrokoNum": 0
         },
         "UrokoUnlockLevel": 1,
-        "VariationNum": 0,
+        "VariationNum": 1,
         "__RowId": "Hed_CAP035"
     },
     {
@@ -1310,6 +1310,70 @@
         "UrokoUnlockLevel": 1,
         "VariationNum": 0,
         "__RowId": "Hed_CAP036"
+    },
+    {
+        "AlphaMaskF": "",
+        "AlphaMaskM": "",
+        "AlphaMaskV1": "",
+        "Brand": "B09",
+        "CaptureModelType": "Male",
+        "Genre0": "Head_Cap",
+        "Genre1": "Unknown",
+        "HarnessType": "S",
+        "HeadParamSetPath": "Work/Gyml/GearHead/Hed_CAP038.spl__GearHeadParamSet.gyml",
+        "HowToGet": "Catalog",
+        "Id": 1038,
+        "IsHideHarness": false,
+        "IsThinHarness": false,
+        "IsUnisex": true,
+        "LObjParam": "Work/Gyml/LObj_Hed_CAP038.spl__LockerObjParam.gyml",
+        "LObjParamM": "",
+        "Label": "\u30ca\u30a4\u30c8\u30cf\u30a4\u30af\u30ad\u30e3\u30c3\u30d7",
+        "Material": "Rubber",
+        "Price": 5000,
+        "Rarity": 1,
+        "Season": 5,
+        "Skill": "SubInk_Save",
+        "UrokoPrice": {
+            "BronzeUrokoNum": 0,
+            "GoldUrokoNum": 0,
+            "SilverUrokoNum": 0
+        },
+        "UrokoUnlockLevel": 1,
+        "VariationNum": 0,
+        "__RowId": "Hed_CAP038"
+    },
+    {
+        "AlphaMaskF": "",
+        "AlphaMaskM": "",
+        "AlphaMaskV1": "",
+        "Brand": "B20",
+        "CaptureModelType": "Male",
+        "Genre0": "Head_Cap",
+        "Genre1": "Head_Goggle",
+        "HarnessType": "S",
+        "HeadParamSetPath": "Work/Gyml/GearHead/Hed_CAP039.spl__GearHeadParamSet.gyml",
+        "HowToGet": "Catalog",
+        "Id": 1039,
+        "IsHideHarness": false,
+        "IsThinHarness": false,
+        "IsUnisex": true,
+        "LObjParam": "Work/Gyml/LObj_Hed_CAP039.spl__LockerObjParam.gyml",
+        "LObjParamM": "",
+        "Label": "\u30b9\u30a4\u30e0\u30ad\u30e3\u30c3\u30d7",
+        "Material": "Rubber",
+        "Price": 3200,
+        "Rarity": 1,
+        "Season": 5,
+        "Skill": "SpecialSpec_Up",
+        "UrokoPrice": {
+            "BronzeUrokoNum": 0,
+            "GoldUrokoNum": 0,
+            "SilverUrokoNum": 0
+        },
+        "UrokoUnlockLevel": 1,
+        "VariationNum": 0,
+        "__RowId": "Hed_CAP039"
     },
     {
         "AlphaMaskF": "",
@@ -1669,6 +1733,102 @@
         "AlphaMaskV1": "",
         "Brand": "B97",
         "CaptureModelType": "Male",
+        "Genre0": "Unknown",
+        "Genre1": "Unknown",
+        "HarnessType": "S",
+        "HeadParamSetPath": "Work/Gyml/GearHead/Hed_COP001.spl__GearHeadParamSet.gyml",
+        "HowToGet": "Impossible",
+        "Id": 20012,
+        "IsHideHarness": false,
+        "IsThinHarness": false,
+        "IsUnisex": true,
+        "LObjParam": "",
+        "LObjParamM": "",
+        "Label": "\u30d0\u30a4\u30c8\u30d8\u30eb\u30e1\u30c3\u30c8 \u30cd\u30aa\u30f3",
+        "Material": "Rubber",
+        "Price": 10000,
+        "Rarity": 2,
+        "Season": 5,
+        "Skill": "RespawnTime_Save",
+        "UrokoPrice": {
+            "BronzeUrokoNum": 0,
+            "GoldUrokoNum": 0,
+            "SilverUrokoNum": 0
+        },
+        "UrokoUnlockLevel": 1,
+        "VariationNum": 0,
+        "__RowId": "Hed_COP012"
+    },
+    {
+        "AlphaMaskF": "",
+        "AlphaMaskM": "",
+        "AlphaMaskV1": "",
+        "Brand": "B97",
+        "CaptureModelType": "Male",
+        "Genre0": "Unknown",
+        "Genre1": "Unknown",
+        "HarnessType": "S",
+        "HeadParamSetPath": "Work/Gyml/GearHead/Hed_COP001.spl__GearHeadParamSet.gyml",
+        "HowToGet": "Impossible",
+        "Id": 20013,
+        "IsHideHarness": false,
+        "IsThinHarness": false,
+        "IsUnisex": true,
+        "LObjParam": "",
+        "LObjParamM": "",
+        "Label": "\u30d0\u30a4\u30c8\u30d8\u30eb\u30e1\u30c3\u30c8 \u30ab\u30fc\u30ad",
+        "Material": "Rubber",
+        "Price": 10000,
+        "Rarity": 2,
+        "Season": 5,
+        "Skill": "RespawnTime_Save",
+        "UrokoPrice": {
+            "BronzeUrokoNum": 0,
+            "GoldUrokoNum": 0,
+            "SilverUrokoNum": 0
+        },
+        "UrokoUnlockLevel": 1,
+        "VariationNum": 0,
+        "__RowId": "Hed_COP013"
+    },
+    {
+        "AlphaMaskF": "",
+        "AlphaMaskM": "",
+        "AlphaMaskV1": "",
+        "Brand": "B97",
+        "CaptureModelType": "Male",
+        "Genre0": "Unknown",
+        "Genre1": "Unknown",
+        "HarnessType": "S",
+        "HeadParamSetPath": "Work/Gyml/GearHead/Hed_COP001.spl__GearHeadParamSet.gyml",
+        "HowToGet": "Impossible",
+        "Id": 20014,
+        "IsHideHarness": false,
+        "IsThinHarness": false,
+        "IsUnisex": true,
+        "LObjParam": "",
+        "LObjParamM": "",
+        "Label": "\u30d0\u30a4\u30c8\u30d8\u30eb\u30e1\u30c3\u30c8 \u30ec\u30c3\u30c9",
+        "Material": "Rubber",
+        "Price": 10000,
+        "Rarity": 2,
+        "Season": 5,
+        "Skill": "RespawnTime_Save",
+        "UrokoPrice": {
+            "BronzeUrokoNum": 0,
+            "GoldUrokoNum": 0,
+            "SilverUrokoNum": 0
+        },
+        "UrokoUnlockLevel": 1,
+        "VariationNum": 0,
+        "__RowId": "Hed_COP014"
+    },
+    {
+        "AlphaMaskF": "",
+        "AlphaMaskM": "",
+        "AlphaMaskV1": "",
+        "Brand": "B97",
+        "CaptureModelType": "Male",
         "Genre0": "Head_Helmet",
         "Genre1": "Unknown",
         "HarnessType": "S",
@@ -1733,6 +1893,70 @@
         "AlphaMaskV1": "",
         "Brand": "B97",
         "CaptureModelType": "Male",
+        "Genre0": "Head_Mask",
+        "Genre1": "Unknown",
+        "HarnessType": "S",
+        "HeadParamSetPath": "Work/Gyml/GearHead/Hed_COP102.spl__GearHeadParamSet.gyml",
+        "HowToGet": "Uroko",
+        "Id": 21002,
+        "IsHideHarness": false,
+        "IsThinHarness": false,
+        "IsUnisex": true,
+        "LObjParam": "Work/Gyml/LObj_Hed_COP102.spl__LockerObjParam.gyml",
+        "LObjParamM": "",
+        "Label": "\u30a2\u30a4\u30a2\u30f3\u30de\u30b9\u30ab\u30ec\u30a4\u30c9",
+        "Material": "Metal",
+        "Price": 0,
+        "Rarity": 2,
+        "Season": 5,
+        "Skill": "MinorityUp",
+        "UrokoPrice": {
+            "BronzeUrokoNum": 800,
+            "GoldUrokoNum": 0,
+            "SilverUrokoNum": 0
+        },
+        "UrokoUnlockLevel": 3,
+        "VariationNum": 0,
+        "__RowId": "Hed_COP102"
+    },
+    {
+        "AlphaMaskF": "",
+        "AlphaMaskM": "",
+        "AlphaMaskV1": "",
+        "Brand": "B97",
+        "CaptureModelType": "Male",
+        "Genre0": "Head_Cap",
+        "Genre1": "Unknown",
+        "HarnessType": "S",
+        "HeadParamSetPath": "Work/Gyml/GearHead/Hed_COP105.spl__GearHeadParamSet.gyml",
+        "HowToGet": "Uroko",
+        "Id": 21005,
+        "IsHideHarness": false,
+        "IsThinHarness": false,
+        "IsUnisex": true,
+        "LObjParam": "Work/Gyml/LObj_Hed_COP105.spl__LockerObjParam.gyml",
+        "LObjParamM": "",
+        "Label": "\u30ec\u30b8\u30a7\u30f3\u30c9\u306e\u307c\u3046\u3057",
+        "Material": "Rubber",
+        "Price": 0,
+        "Rarity": 2,
+        "Season": 5,
+        "Skill": "EndAllUp",
+        "UrokoPrice": {
+            "BronzeUrokoNum": 0,
+            "GoldUrokoNum": 30,
+            "SilverUrokoNum": 0
+        },
+        "UrokoUnlockLevel": 3,
+        "VariationNum": 0,
+        "__RowId": "Hed_COP105"
+    },
+    {
+        "AlphaMaskF": "",
+        "AlphaMaskM": "",
+        "AlphaMaskV1": "",
+        "Brand": "B97",
+        "CaptureModelType": "Male",
         "Genre0": "Head_Cap",
         "Genre1": "Unknown",
         "HarnessType": "S",
@@ -1756,7 +1980,7 @@
             "SilverUrokoNum": 0
         },
         "UrokoUnlockLevel": 1,
-        "VariationNum": 0,
+        "VariationNum": 1,
         "__RowId": "Hed_COP110"
     },
     {
@@ -2046,6 +2270,38 @@
         "UrokoUnlockLevel": 1,
         "VariationNum": 0,
         "__RowId": "Hed_COP119"
+    },
+    {
+        "AlphaMaskF": "",
+        "AlphaMaskM": "",
+        "AlphaMaskV1": "",
+        "Brand": "B97",
+        "CaptureModelType": "Male",
+        "Genre0": "Head_Glasses",
+        "Genre1": "Unknown",
+        "HarnessType": "S",
+        "HeadParamSetPath": "Work/Gyml/GearHead/Hed_COP120.spl__GearHeadParamSet.gyml",
+        "HowToGet": "Other",
+        "Id": 21020,
+        "IsHideHarness": false,
+        "IsThinHarness": false,
+        "IsUnisex": true,
+        "LObjParam": "Work/Gyml/LObj_Hed_COP120.spl__LockerObjParam.gyml",
+        "LObjParamM": "",
+        "Label": "\u30a6\u30ad\u30a2\u30ac\u30fc\u30ebRB",
+        "Material": "Paper",
+        "Price": 0,
+        "Rarity": 2,
+        "Season": 5,
+        "Skill": "RespawnTime_Save",
+        "UrokoPrice": {
+            "BronzeUrokoNum": 0,
+            "GoldUrokoNum": 0,
+            "SilverUrokoNum": 0
+        },
+        "UrokoUnlockLevel": 1,
+        "VariationNum": 0,
+        "__RowId": "Hed_COP120"
     },
     {
         "AlphaMaskF": "",
@@ -3427,6 +3683,38 @@
         "AlphaMaskF": "",
         "AlphaMaskM": "",
         "AlphaMaskV1": "",
+        "Brand": "B02",
+        "CaptureModelType": "Male",
+        "Genre0": "Head_Hat",
+        "Genre1": "Head_KnitCap",
+        "HarnessType": "S",
+        "HeadParamSetPath": "Work/Gyml/GearHead/Hed_HAT018.spl__GearHeadParamSet.gyml",
+        "HowToGet": "Catalog",
+        "Id": 4018,
+        "IsHideHarness": false,
+        "IsThinHarness": false,
+        "IsUnisex": true,
+        "LObjParam": "Work/Gyml/LObj_Hed_HAT018.spl__LockerObjParam.gyml",
+        "LObjParamM": "",
+        "Label": "\u30e0\u30ad\u30a6\u30cb\u30af\u30ed\u30b7\u30a7",
+        "Material": "Cloth",
+        "Price": 11000,
+        "Rarity": 2,
+        "Season": 5,
+        "Skill": "Action_Up",
+        "UrokoPrice": {
+            "BronzeUrokoNum": 0,
+            "GoldUrokoNum": 0,
+            "SilverUrokoNum": 0
+        },
+        "UrokoUnlockLevel": 1,
+        "VariationNum": 0,
+        "__RowId": "Hed_HAT018"
+    },
+    {
+        "AlphaMaskF": "",
+        "AlphaMaskM": "",
+        "AlphaMaskV1": "",
         "Brand": "B09",
         "CaptureModelType": "Male",
         "Genre0": "Head_Hat",
@@ -3971,6 +4259,38 @@
         "AlphaMaskF": "",
         "AlphaMaskM": "",
         "AlphaMaskV1": "",
+        "Brand": "B05",
+        "CaptureModelType": "Male",
+        "Genre0": "Head_Headphone",
+        "Genre1": "Unknown",
+        "HarnessType": "S",
+        "HeadParamSetPath": "Work/Gyml/GearHead/Hed_HDP000.spl__GearHeadParamSet.gyml",
+        "HowToGet": "Catalog",
+        "Id": 5010,
+        "IsHideHarness": false,
+        "IsThinHarness": false,
+        "IsUnisex": true,
+        "LObjParam": "Work/Gyml/LObj_Hed_HDP010.spl__LockerObjParam.gyml",
+        "LObjParamM": "",
+        "Label": "\u30d8\u30c3\u30c9\u30db\u30f390-d",
+        "Material": "Metal",
+        "Price": 3000,
+        "Rarity": 1,
+        "Season": 5,
+        "Skill": "SpecialIncrease_Up",
+        "UrokoPrice": {
+            "BronzeUrokoNum": 0,
+            "GoldUrokoNum": 0,
+            "SilverUrokoNum": 0
+        },
+        "UrokoUnlockLevel": 1,
+        "VariationNum": 0,
+        "__RowId": "Hed_HDP010"
+    },
+    {
+        "AlphaMaskF": "",
+        "AlphaMaskM": "",
+        "AlphaMaskV1": "",
         "Brand": "B18",
         "CaptureModelType": "Male",
         "Genre0": "Head_Headphone",
@@ -4382,6 +4702,38 @@
         "UrokoUnlockLevel": 1,
         "VariationNum": 0,
         "__RowId": "Hed_MET014"
+    },
+    {
+        "AlphaMaskF": "",
+        "AlphaMaskM": "",
+        "AlphaMaskV1": "",
+        "Brand": "B05",
+        "CaptureModelType": "Male",
+        "Genre0": "Head_Helmet",
+        "Genre1": "Unknown",
+        "HarnessType": "S",
+        "HeadParamSetPath": "Work/Gyml/GearHead/Hed_MET014.spl__GearHeadParamSet.gyml",
+        "HowToGet": "Catalog",
+        "Id": 7015,
+        "IsHideHarness": false,
+        "IsThinHarness": false,
+        "IsUnisex": true,
+        "LObjParam": "Work/Gyml/LObj_Hed_MET015.spl__LockerObjParam.gyml",
+        "LObjParamM": "",
+        "Label": "\u30ad\u30e3\u30c3\u30c1\u30e3\u30fc\u30de\u30b9\u30afFC",
+        "Material": "Plastic",
+        "Price": 7700,
+        "Rarity": 2,
+        "Season": 5,
+        "Skill": "EndAllUp",
+        "UrokoPrice": {
+            "BronzeUrokoNum": 0,
+            "GoldUrokoNum": 0,
+            "SilverUrokoNum": 0
+        },
+        "UrokoUnlockLevel": 1,
+        "VariationNum": 0,
+        "__RowId": "Hed_MET015"
     },
     {
         "AlphaMaskF": "",
