@@ -5091,7 +5091,9 @@
       "Unknown": "???",
       "Upland": "Inkblot Art Academy",
       "Yagara": "Hagglefish Market",
-      "Yunohana": "Scorch Gorge"
+      "Yunohana": "Scorch Gorge",
+      "Wave": "Humpback Pump Track",
+      "Section": "Barnacle & Dime"
     },
     "CommonMsg/VS/XRankingRegion": {
       "Atlantic_Detail": "The Americas/Europe",
