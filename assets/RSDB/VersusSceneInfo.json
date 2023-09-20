@@ -78,10 +78,22 @@
         "__RowId": "Vss_Section00"
     },
     {
+        "DisplayOrder": 19,
+        "Id": 19,
+        "Season": 5,
+        "__RowId": "Vss_Spider00"
+    },
+    {
         "DisplayOrder": 4,
         "Id": 4,
         "Season": 0,
         "__RowId": "Vss_Temple00"
+    },
+    {
+        "DisplayOrder": 20,
+        "Id": 20,
+        "Season": 5,
+        "__RowId": "Vss_Twist00"
     },
     {
         "DisplayOrder": 9,
