@@ -21,27 +21,27 @@ function resetEdits(){
         {
             "weapon": {
                 "edit": {},
-                "remove": new Set()
+                "remove": []
             }, 
             "gear_head": {
                 "edit": {},
-                "remove": new Set()
+                "remove": []
             },
             "gear_clothes": {
                 "edit": {},
-                "remove": new Set()
+                "remove": []
             },
             "gear_shoes": {
                 "edit": {},
-                "remove": new Set()
+                "remove": []
             },
             "nameplate_bg": {
                 "edit": {},
-                "remove": new Set()
+                "remove": []
             },
             "oekaki_img": {
                 "edit": {},
-                "remove": new Set()
+                "remove": []
             }
         }
     };
@@ -484,8 +484,8 @@ function obtainGear(element, gear_name){
 
     var skillId = 0;
     if(rsdbInfo != null && rsdbInfo["Skill"] in GEAR_ABILITY_NAME_MAP) skillId = Math.max(GEAR_ABILITY_NAME_MAP[rsdbInfo["Skill"]], 0);
-
-    SaveEdits["dict_edits"][gear_name]["remove"].delete(rsdb_id);
+    
+    SaveEdits["dict_edits"][gear_name]["remove"].pop(rsdb_id);
     SaveEdits["dict_edits"][gear_name]["edit"][rsdb_id] = {
         "Exp": 0,
         "TotalExp": 0,
@@ -502,7 +502,7 @@ function obtainGear(element, gear_name){
 
 function obtainWeapon(element){
     var rsdb_id = element.getAttribute("rsdb_id");
-    SaveEdits["dict_edits"]["weapon"]["remove"].delete(rsdb_id);
+    SaveEdits["dict_edits"]["weapon"]["remove"].pop(rsdb_id);
     SaveEdits["dict_edits"]["weapon"]["edit"][rsdb_id] = {
         "TotalPaintTubo": 0,
         "LastPlayDateTimeUtc": 0,
@@ -519,9 +519,13 @@ function obtainWeapon(element){
 function removeObtainable(className, editType, updateObtainableF){
     var element = getSelectedElement(className);
     if(element.getAttribute("obtainable_state") == "equipped") return;
+    
     var rsdb_id = element.getAttribute("rsdb_id");
     if(rsdb_id in SaveEdits["dict_edits"][editType]["edit"]) delete SaveEdits["dict_edits"][editType]["edit"][rsdb_id];
-    SaveEdits["dict_edits"][editType]["remove"].add(rsdb_id);
+
+    var rmList = SaveEdits["dict_edits"][editType]["remove"];
+    if(!rmList.includes(rsdb_id)) rmList.push(rsdb_id);
+
     setNotHaveObtainableItem(element);
     updateObtainableF(element);
 }
@@ -577,7 +581,7 @@ function updateNplBgObtainable(element){
 };
 function obtainNplBg(element){
     var rsdb_id = element.getAttribute("rsdb_id");
-    SaveEdits["dict_edits"]["nameplate_bg"]["remove"].delete(rsdb_id);
+    SaveEdits["dict_edits"]["nameplate_bg"]["remove"].pop(rsdb_id);
     SaveEdits["dict_edits"]["nameplate_bg"]["edit"][rsdb_id] = {
         "AcquiredDateTimeUtc": 0
     };
