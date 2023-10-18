@@ -3801,6 +3801,44 @@
     },
     {
         "HowToGet": "Other",
+        "Id": 954,
+        "Order": 954,
+        "Season": -1,
+        "TextColor": {
+            "A": 1.0,
+            "B": 0.019917840138077736,
+            "G": 0.08464152365922928,
+            "R": 0.9075471758842468
+        },
+        "UrokoPrice": {
+            "BronzeUrokoNum": 0,
+            "GoldUrokoNum": 0,
+            "SilverUrokoNum": 0
+        },
+        "UrokoUhlockLevel": 1,
+        "__RowId": "Npl_News_Season05_Lv04"
+    },
+    {
+        "HowToGet": "Other",
+        "Id": 810,
+        "Order": 810,
+        "Season": -1,
+        "TextColor": {
+            "A": 1.0,
+            "B": 1.0,
+            "G": 1.0,
+            "R": 1.0
+        },
+        "UrokoPrice": {
+            "BronzeUrokoNum": 0,
+            "GoldUrokoNum": 0,
+            "SilverUrokoNum": 0
+        },
+        "UrokoUhlockLevel": 1,
+        "__RowId": "Npl_Sdodr00"
+    },
+    {
+        "HowToGet": "Other",
         "Id": 901,
         "Order": 901,
         "Season": 1,
@@ -3912,6 +3950,44 @@
         },
         "UrokoUhlockLevel": 1,
         "__RowId": "Npl_Trg_Season05_Lv02"
+    },
+    {
+        "HowToGet": "Other",
+        "Id": 923,
+        "Order": 923,
+        "Season": -1,
+        "TextColor": {
+            "A": 1.0,
+            "B": 1.0,
+            "G": 1.0,
+            "R": 1.0
+        },
+        "UrokoPrice": {
+            "BronzeUrokoNum": 0,
+            "GoldUrokoNum": 0,
+            "SilverUrokoNum": 0
+        },
+        "UrokoUhlockLevel": 1,
+        "__RowId": "Npl_Trg_Season05_Lv03"
+    },
+    {
+        "HowToGet": "Other",
+        "Id": 924,
+        "Order": 924,
+        "Season": -1,
+        "TextColor": {
+            "A": 1.0,
+            "B": 0.3215686082839966,
+            "G": 0.12941180169582367,
+            "R": 0.047058820724487305
+        },
+        "UrokoPrice": {
+            "BronzeUrokoNum": 0,
+            "GoldUrokoNum": 0,
+            "SilverUrokoNum": 0
+        },
+        "UrokoUhlockLevel": 1,
+        "__RowId": "Npl_Trg_Season05_Lv04"
     },
     {
         "HowToGet": "Other",
