@@ -12,7 +12,10 @@
     display: flex;
     min-height: 100vh;
     flex-direction: column;
+    --bs-dark-rgb:rgb(255, 255, 255);
+    --bs-body-bg: rgb(26, 30, 37);
   }
+  
   main {
     flex: 1 0 auto;
   }
@@ -20,7 +23,7 @@
     position: relative;
   }   
   footer {
-    background-color: #fff;
+    background-color: #202020;
     position: fixed;
     left: 0;
     bottom: 0;
