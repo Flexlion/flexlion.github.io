@@ -2,6 +2,10 @@
 <html lang="en" data-bs-theme="dark">
 <head>
     <meta charset="UTF-8">
+    <meta name="application-name" content="Flexlion">
+
+    <meta name="description" content="Home.">
+
     <link rel="shortcut icon" href="./assets/img/favico.ico">
     <link rel="apple-touch-icon" href="./assets/img/favico.ico">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -28,7 +32,7 @@
         <li class="nav-item"><a href="./index.html" class="nav-link">Home</a></li>
         <li class="nav-item"><a href="./configurator.html" class="nav-link">Configurator</a></li>
         <li class="nav-item"><a href="./saveeditor.html" class="nav-link">Save Editor</a></li>
-        <li class="nav-item"><a href="./fxnetctrl.html" class="nav-link">FXNETCTRL</a></li>
+        <li class="nav-item"><a href="#" class="nav-link active" aria-current="page">FXNETCTRL</a></li>
         <li class="nav-item"><a href="./account.html" class="nav-link">Account</a></li>
       </ul>
     </header>
@@ -36,15 +40,32 @@
 
     
   </div>
-    <div class="container">
-    <div class="px-4 my-2 text-center">
-      <div class="col-lg-6 mx-auto">
-        <p class="lead mb-4">404 Page Not found</p>
-        <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
-          <a href="./index.html" type="button" class="btn btn-outline-primary btn-lg px-4">Home</a>
-        </div>
-      </div>
+  <div class="container">
+    <p class="lead mb-4">This page is meant for connecting and interacting with an instance of <a target="_blank" href="https://gamebanana.com/wips/70362">Splatoon 3 Flexlion Mod Menu</a></p>
+    <p class="lead mb-4">For this to work you need to run <a target="_blank" href="https://github.com/Flexlion/FlexClient">the flexlion client</a> on your PC in the background and enable "FxNetCtrl" module in Other Section of the menu.</p>
+    <p class="fw-bold">Flexlion client:</p>
+    <label class="d-inline-block" for="client_port_holder">ws://localhost:</label>
+    <input class="form-control d-inline-block w-auto" id="client_port_holder" value="8882" type="text"/>
+    <br><br>
+    <p class="fw-bold">Flexlion instance(on console):</p>
+    <input class="form-control d-inline-block w-auto" id="fx_ip_holder" value="192.168.0.0" type="text"/>
+    <b>:</b>
+    <input class="form-control d-inline-block w-auto" id="fx_port_holder" value="8882" type="text"/>
+    <br>
+    <label class="d-inline-block" for="fx_pwd_holder">Password(specify if you set it in the menu):</label>
+    <input class="form-control d-inline-block w-auto" id="fx_pwd_holder" value="" type="text"/>
+    <br><br>
+    <p>Connection status: <b class="fw-bold" id="conn_status" style="color:cyan;">Waiting for user action...</b></p>
+    <button type="button" class="btn btn-primary" id="conn_btn">Connect</button>
+    <hr>
+    <div class="fx_menu">
+    <ul class="list-group fx_section_list" id="fx_section_list"></ul>
+    <div class="fx_module_lists" id="fx_module_lists"></div>
     </div>
+  </div>
+
+  <script src="./assets/js/common.js"></script>
+  <script src="./assets/js/fxnetctrl.js"></script>
 
 </body>
 </html>
