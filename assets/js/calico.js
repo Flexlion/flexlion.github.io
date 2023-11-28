@@ -36,6 +36,7 @@ async function onLoadCalicoConfig(configData){
         const pinfo = playerConfig[name];
         
         info["name"] = name;
+        info["anim"] = pinfo["anim_name"];
         info["sett_clickable"]["player_playertype"] = pinfo["player_type"].toString();
         info["sett_clickable"]["player_hair"] = pinfo["hair"].toString();
         info["sett_clickable"]["player_skintone"] = pinfo["skin_tone"].toString();
@@ -116,18 +117,14 @@ function click_player_sett_event(event)
     click_player_sett(event.target);
 };
 
-function updateAnimIcon(select, anim_icon){
-    anim_icon.src = "./assets/img/player/animations/" + select.value + '.png';
+function updateAnimIcon(player_anim_list, anim_icon){
+    anim_icon.src = "./assets/img/player/animations/" + player_anim_list.value + '.png';
 }
 
-const select = document.getElementById('player_anim_list');
-const anim_icon = document.getElementById('player_anim_icon');
-select.addEventListener('change', () => {
-    updateAnimIcon(select, anim_icon);
-});
-
 async function loadAnims(url) {
-    let player_anim_list = document.getElementById("player_anim_list");
+    
+    const player_anim_list = document.getElementById('player_anim_list');
+
     let response = await fetch(url);
     let data = await response.text();
 
@@ -137,7 +134,13 @@ async function loadAnims(url) {
         option.text = lines[i];
         player_anim_list.add(option);
     }
-    updateAnimIcon(select, anim_icon);
+
+    const anim_icon = document.getElementById('player_anim_icon');
+
+    updateAnimIcon(player_anim_list, anim_icon);
+    player_anim_list.addEventListener('change', () => {
+        updateAnimIcon(player_anim_list, anim_icon);
+    });
 };
 
 function onRsdbEntrySelect(target){
@@ -168,7 +171,10 @@ function onPlayerChange(id){
     for (const [key, value] of Object.entries(info["sett_rsdb"])) onRsdbEntrySelect(getElementByRsdbId(key, value));
     for (const [key, value] of Object.entries(info["sett_clickable"])) click_player_sett(getElementByRsdbId(key, value));
     document.getElementById('player_name_holder').value = info["name"];
-    document.getElementById("player_anim_list").value = info["anim"];
+
+    const player_anim_list = document.getElementById("player_anim_list");
+    player_anim_list.value = info["anim"];
+    updateAnimIcon(player_anim_list, document.getElementById('player_anim_icon'));
 
     let r = Math.round(info["color"].r * 255).toString(16);
     let g = Math.round(info["color"].g * 255).toString(16);
