@@ -45,6 +45,10 @@
     <div class="col-lg-6 mx-auto">
       <p class="lead mb-4">This page is meant for creating and configure scenes made for the "PhotoForCalico" module found in the <a target="_blank" href="https://gamebanana.com/wips/70362">Splatoon 3 Flexlion Mod Menu</a></p>
     </div>
+    <hr>
+    <p>If you want to edit an existing config(.zip):</p>
+    <input id ="load_config" class="form-control w-auto" type="file" onchange="onLoadCalicoConfig(document.getElementById('load_config').files[0])"/>
+    <hr>
     <div class="ext-left">
       <div class="">
         <p class="display-6 fw-bold">Session Config</p>
@@ -73,6 +77,10 @@
             <div>
               <label class="fw-bold" for="player_name_holder">Name:</label>
               <input class="form-control player_name_holder d-inline-block w-auto" id="player_name_holder" type="text"/>
+            </div>
+            <div>
+              <p class="fw-bold">Color:</p>
+              <input class="player_color_holder" id="player_color_holder" type="color"/>
             </div>
             <br>
             <p>Player Type.</p>

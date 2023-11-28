@@ -5,14 +5,14 @@ async function fetchJson(url) {
 
 function getRsdbInfoById(rsdbData, id){
     id = Number(id);
-    for(var i = 0; i < rsdbData.length; i++){
+    for(let i = 0; i < rsdbData.length; i++){
       if(rsdbData[i]["Id"] == id) return rsdbData[i];
     }
     return null;
 }
 
 function getRsdbInfoByName(rsdbData, name){
-    for(var i = 0; i < rsdbData.length; i++){
+    for(let i = 0; i < rsdbData.length; i++){
       if(rsdbData[i]["__RowId"] == name) return rsdbData[i];
     }
     return null;
@@ -20,24 +20,24 @@ function getRsdbInfoByName(rsdbData, name){
   
 function getElementByRsdbId(className, rsdbId){
     rsdbId = String(rsdbId);
-    var elements = document.getElementsByClassName(className);
-    for(var i = 0; i < elements.length; i++){
+    let elements = document.getElementsByClassName(className);
+    for(let i = 0; i < elements.length; i++){
       if(elements[i].getAttribute("rsdb_id") == rsdbId) return elements[i];
     }
     return null;
 }
 
 function getSelectedElement(className){
-    var elements = document.getElementsByClassName(className);
-    for(var i = 0; i < elements.length; i++){
+    let elements = document.getElementsByClassName(className);
+    for(let i = 0; i < elements.length; i++){
       if(elements[i].getAttribute("selected") == "true") return elements[i];
     }
     return null;
 }
 
 function downloadFile(content, fileName, contentType) {
-    var a = document.createElement("a");
-    var file = new Blob([content], {type: contentType});
+    let a = document.createElement("a");
+    let file = new Blob([content], {type: contentType});
     a.href = URL.createObjectURL(file);
     a.download = fileName;
     a.click();
@@ -46,10 +46,10 @@ function downloadFile(content, fileName, contentType) {
 function loadClickableIdOptions(galleryId, galleryClassName, imgClassName, totalNum, entryPerLine, getImgUrlFunc, getRsdbIdFunc, width = null, height = null){
   gallery_root = document.getElementById(galleryId);
 
-  for(var i = 0; i < totalNum / entryPerLine; i++){
+  for(let i = 0; i < totalNum / entryPerLine; i++){
       gallery = document.createElement("div");
       gallery.setAttribute("class", galleryClassName)
-      for(var idx = i * entryPerLine; idx < Math.min((i + 1) * entryPerLine, totalNum); idx++){
+      for(let idx = i * entryPerLine; idx < Math.min((i + 1) * entryPerLine, totalNum); idx++){
           option = new Image();
           option.src = getImgUrlFunc(idx);
           option.setAttribute("rsdb_id", getRsdbIdFunc(idx));
@@ -92,7 +92,7 @@ function loadHairs(){
       return HairInfo[idx]["Id"];
   });
   hairOpts = document.getElementsByClassName("player_hair");
-  for(var i = 0; i < hairOpts.length; i++){
+  for(let i = 0; i < hairOpts.length; i++){
       if(hairOpts[i].getAttribute("rsdb_id") == "500"){
           hairOpts[i].src = "./assets/img/player/hair/" + getRsdbInfoById(HairInfo, 500)["__RowId"] + "_F.png";
           hairOpts[i].setAttribute("id", "hair_msn310");
@@ -111,8 +111,8 @@ function loadEyebrows(){
 };
 
 function loadPants(){
-  var validInfos = [];
-  for(var i = 0; i < BottomInfo.length; i++){
+  let validInfos = [];
+  for(let i = 0; i < BottomInfo.length; i++){
       if(BottomInfo[i]["Order"] == -1) continue;
       validInfos.push(BottomInfo[i]);
   }
@@ -128,11 +128,11 @@ function loadPants(){
 function onChangePlayerType(playerType){
   playerType = Number(playerType);
 
-  var suffix = "_F.png";
+  let suffix = "_F.png";
   if(playerType & 1) suffix = "_M.png";
 
   eyebrowOpts = document.getElementsByClassName("player_eyebrow");
-  for(var i = 0; i < eyebrowOpts.length; i++) eyebrowOpts[i].src = "./assets/img/player/eyebrow/" + getRsdbInfoById(EyebrowInfo, eyebrowOpts[i].getAttribute("rsdb_id"))["__RowId"] + suffix;
+  for(let i = 0; i < eyebrowOpts.length; i++) eyebrowOpts[i].src = "./assets/img/player/eyebrow/" + getRsdbInfoById(EyebrowInfo, eyebrowOpts[i].getAttribute("rsdb_id"))["__RowId"] + suffix;
 
   document.getElementById("hair_msn310").src = "./assets/img/player/hair/" + getRsdbInfoById(HairInfo, 500)["__RowId"] + suffix;
 };

@@ -1,29 +1,74 @@
-var WeaponInfoMain;
-var GearInfoHead;
-var GearInfoClothes;
-var GearInfoShoes;
-var BottomInfo;
-var HairInfo;
-var EyebrowInfo;
-var VersusSceneInfo;
-var langEUen;
+let WeaponInfoMain;
+let GearInfoHead;
+let GearInfoClothes;
+let GearInfoShoes;
+let BottomInfo;
+let HairInfo;
+let EyebrowInfo;
+let VersusSceneInfo;
+let langEUen;
 
-var sessionInfo = {};
-var playerInfos = [];
-var defaultPlayerInfo = {"sett_rsdb": {}, "sett_clickable": {}, "name": "", "anim": "Tstance"};
-var curPlayer = -1;
-var playerNum = 1;
+let sessionInfo = {};
+let playerInfos = [];
+let defaultPlayerInfo = {"sett_rsdb": {}, "sett_clickable": {}, "name": "", "anim": "Tstance", "color": {"r": 1.0, "g": 1.0, "b": 1.0, "a": 1.0}};
+let curPlayer = -1;
+let playerNum = 1;
 const maxPlayerNum = 10;
 
-function downloadConfig(){
-    var zip = new JSZip();
+async function onLoadCalicoConfig(configData){
 
-    var sessionConfig = {"map_name": getRsdbInfoById(VersusSceneInfo, sessionInfo["vs_map"])["__RowId"], "env_time": Number(document.getElementById("chosenEnvTime").checked) * 2};
+    const zipConfig = await JSZip.loadAsync(configData);
+    
+    const sessionConfig = JSON.parse(await zipConfig.file("PhotoForCalico/SessionConfig.json").async("string"));
+    const playerConfig = JSON.parse(await zipConfig.file("PhotoForCalico/PlayerConfig.json").async("string"));
+
+    sessionInfo["vs_map"] = getRsdbInfoByName(VersusSceneInfo, sessionConfig["map_name"])["Id"];
+    document.getElementById("chosenEnvTime").checked = sessionConfig["env_time"] == 2;
+    onRsdbEntrySelect(getElementByRsdbId("vs_map", sessionInfo["vs_map"]));
+
+    curPlayer = 0;
+
+    playerNum = 0;
+
+    for(let name of Object.keys(playerConfig)){
+        
+        const info = playerInfos[playerNum++];
+        const pinfo = playerConfig[name];
+        
+        info["name"] = name;
+        info["sett_clickable"]["player_playertype"] = pinfo["player_type"].toString();
+        info["sett_clickable"]["player_hair"] = pinfo["hair"].toString();
+        info["sett_clickable"]["player_skintone"] = pinfo["skin_tone"].toString();
+        info["sett_clickable"]["player_eyebrow"] = pinfo["eye_brows"].toString();
+        info["sett_clickable"]["player_eyecolor"] = pinfo["eye_color"].toString();
+        info["sett_rsdb"]["player_headgear"] = pinfo["gear_head"].toString();
+        info["sett_rsdb"]["player_clothes"] = pinfo["gear_cloth"].toString();
+        info["sett_rsdb"]["player_shoes"] = pinfo["gear_shoes"].toString();
+        info["sett_rsdb"]["player_weapon"] = pinfo["weapon_main"].toString();
+        if(pinfo.hasOwnProperty("color")) info["sett_rsdb"]["color"] = pinfo["color"]
+        else{
+            for (const [key, value] of Object.entries(defaultPlayerInfo["color"])) info["color"][key] = value;
+        }
+        
+    }
+
+    document.getElementById('player_id_holder').setAttribute("max", playerNum);
+    document.getElementById("player_id_holder").value = curPlayer + 1;
+    document.getElementById("player_num_holder").value = playerNum;
+
+    onPlayerChange(curPlayer);
+
+}
+
+function downloadConfig(){
+    let zip = new JSZip();
+
+    let sessionConfig = {"map_name": getRsdbInfoById(VersusSceneInfo, sessionInfo["vs_map"])["__RowId"], "env_time": Number(document.getElementById("chosenEnvTime").checked) * 2};
     zip.file('PhotoForCalico/SessionConfig.json', JSON.stringify(sessionConfig, null, 2));
 
-    var playerConfig = {};
-    for(var i = 0; i < playerNum; i++){
-        var info = playerInfos[i];
+    let playerConfig = {};
+    for(let i = 0; i < playerNum; i++){
+        let info = playerInfos[i];
         while(info["name"] in playerConfig) info["name"]+="0";
         playerConfig[info["name"]] = {
             "player_type": Number(info["sett_clickable"]["player_playertype"]), 
@@ -37,7 +82,7 @@ function downloadConfig(){
             "gear_shoes": Number(info["sett_rsdb"]["player_shoes"]),
             "weapon_main": Number(info["sett_rsdb"]["player_weapon"]),
             "anim_name": info["anim"],
-            "color_name": "NULL"
+            "color": info["color"]
         }
     }
     zip.file('PhotoForCalico/PlayerConfig.json', JSON.stringify(playerConfig, null, 2));
@@ -50,9 +95,12 @@ function downloadConfig(){
 
 function click_player_sett(target)
 {
-    var className = target.getAttribute("class");
-    var elements = document.getElementsByClassName(className);
-    for (var i = 0; i < elements.length; i++) {
+
+    if(target == null) return;
+
+    let className = target.getAttribute("class");
+    let elements = document.getElementsByClassName(className);
+    for (let i = 0; i < elements.length; i++) {
         elements[i].setAttribute("selected", "false");
     }
     target.setAttribute("selected", "true");
@@ -79,30 +127,30 @@ select.addEventListener('change', () => {
 });
 
 async function loadAnims(url) {
-    var player_anim_list = document.getElementById("player_anim_list");
+    let player_anim_list = document.getElementById("player_anim_list");
     let response = await fetch(url);
     let data = await response.text();
 
-    var lines = data.split("\n");
-    for (var i = 0; i < lines.length; i++) {
-        var option = document.createElement("option");
+    let lines = data.split("\n");
+    for (let i = 0; i < lines.length; i++) {
+        let option = document.createElement("option");
         option.text = lines[i];
         player_anim_list.add(option);
     }
     updateAnimIcon(select, anim_icon);
 };
 
-
-
 function onRsdbEntrySelect(target){
-    var className = target.getAttribute("class");
+    if(target == null) return;
+    
+    let className = target.getAttribute("class");
     
     document.getElementById(target.getAttribute('resultImg')).setAttribute('src', target.src);
-    var info = document.getElementById(target.getAttribute('resultInfo'));
+    let info = document.getElementById(target.getAttribute('resultInfo'));
     info.setAttribute("rsdb_id", target.getAttribute("rsdb_id"));
     info.textContent = target.alt;
 
-    var rsdb_id = target.getAttribute("rsdb_id");
+    let rsdb_id = target.getAttribute("rsdb_id");
     if(info.getAttribute("player_specific") == "true"){
         if(curPlayer != -1) playerInfos[curPlayer]["sett_rsdb"][className] = rsdb_id;
         else defaultPlayerInfo["sett_rsdb"][className] = rsdb_id;
@@ -110,35 +158,50 @@ function onRsdbEntrySelect(target){
 }
 
 function onPlayerChange(id){
-    if(id >= maxPlayerNum) console.error("wtf");
+    if(id >= maxPlayerNum){
+        console.error("wtf");
+        return;
+    }
     curPlayer = id;
+    const info = playerInfos[curPlayer];
     document.getElementById('player_id_holder').value = curPlayer + 1;
-    for (const [key, value] of Object.entries(playerInfos[curPlayer]["sett_rsdb"])) onRsdbEntrySelect(getElementByRsdbId(key, value));
-    for (const [key, value] of Object.entries(playerInfos[curPlayer]["sett_clickable"])) click_player_sett(getElementByRsdbId(key, value));
-    document.getElementById('player_name_holder').value = playerInfos[curPlayer]["name"];
-    document.getElementById("player_anim_list").value = playerInfos[curPlayer]["anim"];
+    for (const [key, value] of Object.entries(info["sett_rsdb"])) onRsdbEntrySelect(getElementByRsdbId(key, value));
+    for (const [key, value] of Object.entries(info["sett_clickable"])) click_player_sett(getElementByRsdbId(key, value));
+    document.getElementById('player_name_holder').value = info["name"];
+    document.getElementById("player_anim_list").value = info["anim"];
+
+    let r = Math.round(info["color"].r * 255).toString(16);
+    let g = Math.round(info["color"].g * 255).toString(16);
+    let b = Math.round(info["color"].b * 255).toString(16);
+
+    if (r.length == 1) r = "0" + r;
+    if (g.length == 1) g = "0" + g;
+    if (b.length == 1) b = "0" + b;
+
+    document.getElementById("player_color_holder").value = "#" + r + g + b;
 }
 
 function onPlayersCreate(){
-    for(var i = 0; i < maxPlayerNum; i++){
-        playerInfos.push({"sett_rsdb": {}, "sett_clickable": {}, "name": defaultPlayerInfo["name"], "anim": defaultPlayerInfo["anim"]});
+    for(let i = 0; i < maxPlayerNum; i++){
+        playerInfos.push({"sett_rsdb": {}, "sett_clickable": {}, "name": defaultPlayerInfo["name"], "anim": defaultPlayerInfo["anim"], "color": {}});
         for (const [key, value] of Object.entries(defaultPlayerInfo["sett_rsdb"])) playerInfos[i]["sett_rsdb"][key] = value;
         for (const [key, value] of Object.entries(defaultPlayerInfo["sett_clickable"])) playerInfos[i]["sett_clickable"][key] = value;
+        for (const [key, value] of Object.entries(defaultPlayerInfo["color"])) playerInfos[i]["color"][key] = value;
     }
 }
 
 function buildRsdbSelector(modalName, rsdbInfos, entryPerLine, getCodeNameFunc, getNameFunc, classNameGallery, classNameImg, getImgUrlFunc, defaultImgUrl, width, height, resultImg, resultInfo){
-    var modalBody = document.getElementById(modalName).getElementsByClassName("modal-body")[0];
+    let modalBody = document.getElementById(modalName).getElementsByClassName("modal-body")[0];
 
-    for(var i = 0; i < rsdbInfos.length / entryPerLine; i++){
+    for(let i = 0; i < rsdbInfos.length / entryPerLine; i++){
 
-        var gallery = document.createElement("div");
+        let gallery = document.createElement("div");
         gallery.setAttribute("class", classNameGallery);
 
-        for(var idx = i * entryPerLine; idx < Math.min((i + 1) * entryPerLine, rsdbInfos.length); idx++){
-            var entry = new Image();
+        for(let idx = i * entryPerLine; idx < Math.min((i + 1) * entryPerLine, rsdbInfos.length); idx++){
+            let entry = new Image();
 
-            var codeName = getCodeNameFunc(rsdbInfos[idx]);
+            let codeName = getCodeNameFunc(rsdbInfos[idx]);
             entry.alt = getNameFunc(codeName);
             entry.src = getImgUrlFunc(codeName);
 
@@ -146,11 +209,11 @@ function buildRsdbSelector(modalName, rsdbInfos, entryPerLine, getCodeNameFunc, 
             entry.setAttribute("default_url", defaultImgUrl);
 
             entry.onerror = function(event){
-                var target = event.target;
+                let target = event.target;
                 target.src = target.getAttribute("default_url"); // No Icon
             };
             entry.addEventListener('click', (event) => {
-                var target = event.target;
+                let target = event.target;
                 onRsdbEntrySelect(target);
             });
             entry.setAttribute("width", width);
@@ -168,13 +231,13 @@ function buildRsdbSelector(modalName, rsdbInfos, entryPerLine, getCodeNameFunc, 
 }
 
 function loadMaps(){
-    var mapNames = langEUen["CommonMsg/VS/VSStageName"];
+    let mapNames = langEUen["CommonMsg/VS/VSStageName"];
     buildRsdbSelector(
         "modalMap", 
         VersusSceneInfo, 
         4, 
         info => {
-            var mapName = info["__RowId"].slice(4);
+            let mapName = info["__RowId"].slice(4);
             if(/\d$/.test(mapName)) mapName = mapName.slice(0, mapName.length - 2);
             return mapName;
         },
@@ -196,12 +259,12 @@ function loadMaps(){
 };
 
 function loadWeapons(){
-    var validInfos = [];
-    for(var i = 0; i < WeaponInfoMain.length; i++){
+    let validInfos = [];
+    for(let i = 0; i < WeaponInfoMain.length; i++){
         if(WeaponInfoMain[i]["Type"] != "Versus" && WeaponInfoMain[i]["__RowId"] != "Free") continue; // Only add obtainable weapons
         validInfos.push(WeaponInfoMain[i]);
     }
-    var weaponNames = langEUen["CommonMsg/Weapon/WeaponName_Main"];
+    let weaponNames = langEUen["CommonMsg/Weapon/WeaponName_Main"];
     buildRsdbSelector(
         "modalWpn", 
         validInfos, 
@@ -227,7 +290,7 @@ function loadWeapons(){
 };
 
 function loadGear(modalName, GearInfo, langFileName, className, resultImg, resultInfo){
-    var gearNames = langEUen[langFileName];
+    let gearNames = langEUen[langFileName];
     buildRsdbSelector(
         modalName, 
         GearInfo, 
@@ -236,7 +299,7 @@ function loadGear(modalName, GearInfo, langFileName, className, resultImg, resul
             return info["__RowId"];
         },
         codeName => {
-            var name = codeName.slice(4);
+            let name = codeName.slice(4);
             if(name in gearNames) return gearNames[name];
             return name;
         },
@@ -273,12 +336,21 @@ function load_options(){
     $('.player_eyebrow').click(click_player_sett_event);
     $('.player_bottom').click(click_player_sett_event);
     $('.player_name_holder').on("propertychange change click keyup input paste", function(event){
-        var name_holder = event.target;
+        let name_holder = event.target;
         playerInfos[curPlayer]["name"] = name_holder.value;
     });
     $('.player_anim_list').on("propertychange change click keyup input paste", function(event){
-        var anim_holder = event.target;
+        let anim_holder = event.target;
         playerInfos[curPlayer]["anim"] = anim_holder.value;
+    });
+    $('.player_color_holder').on("propertychange change click keyup input paste", function(event){
+        let color = event.target.value;
+        playerInfos[curPlayer]["color"] = {
+            "r": parseInt(color.substr(1,2), 16) / 255,
+            "g": parseInt(color.substr(3,2), 16) / 255,
+            "b": parseInt(color.substr(5,2), 16) / 255,
+            "a": 1.0
+        }
     });
     click_player_sett(document.getElementsByClassName('player_playertype')[0]);
     click_player_sett(document.getElementsByClassName('player_skintone')[0]);
@@ -291,7 +363,7 @@ function load_options(){
     onPlayerChange(0);
     
     $('.player_num_holder').on("propertychange change click keyup input paste", function(event){
-        var num_holder = event.target;
+        let num_holder = event.target;
         if(num_holder.value != playerNum){
             playerNum = num_holder.value;
             document.getElementById('player_id_holder').setAttribute("max", playerNum);
@@ -299,7 +371,7 @@ function load_options(){
         };
     });
     $('.player_id_holder').on("propertychange change click keyup input paste", function(event){
-        var id_holder = event.target;
+        let id_holder = event.target;
         if(id_holder.value - 1 != curPlayer) onPlayerChange(id_holder.value - 1);
     });
 };

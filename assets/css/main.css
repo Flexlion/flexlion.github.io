@@ -98,6 +98,27 @@
   map img{
     border-radius: 45px;
   }
+  .player_color_holder::-moz-color-swatch {
+    border: none;
+  }
+  .player_color_holder::-webkit-color-swatch-wrapper {
+    padding: 0;
+    border-radius: 0;
+  }
+  .player_color_holder::-webkit-color-swatch {
+    border-radius: 10px;
+    border: 5px rgb(163, 105, 255) solid ;
+  }
+  .player_color_holder{
+    padding: 0;
+    width: 300px;
+    height: 200px;
+    border-radius: 10px;
+    transition: 0.2s;
+  }
+  .player_color_holder:hover{
+    box-shadow: 0px 0px 10px 5px rgb(208, 105, 255);
+  }
   .image_gallery_playertype {
     display: flex;
     flex-wrap: wrap;

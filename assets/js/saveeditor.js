@@ -1,18 +1,18 @@
-var WeaponInfoMain;
-var GearInfoHead;
-var GearInfoClothes;
-var GearInfoShoes;
-var BottomInfo;
-var HairInfo;
-var EyebrowInfo;
-var NameplateInfo;
-var langEUen;
+let WeaponInfoMain;
+let GearInfoHead;
+let GearInfoClothes;
+let GearInfoShoes;
+let BottomInfo;
+let HairInfo;
+let EyebrowInfo;
+let NameplateInfo;
+let langEUen;
 
-var SaveJson;
-var SaveRaw;
+let SaveJson;
+let SaveRaw;
 
 
-var SaveEdits;
+let SaveEdits;
 
 function resetEdits(){
     SaveEdits = {
@@ -60,8 +60,8 @@ function setHaveObtainableItem(element){
 }
 
 function setEquippedObtainableItem(element){
-    var elements = document.getElementsByClassName(element.getAttribute("class"));
-    for(var i = 0; i < elements.length; i++){
+    let elements = document.getElementsByClassName(element.getAttribute("class"));
+    for(let i = 0; i < elements.length; i++){
         if(elements[i].getAttribute("obtainable_state") == "equipped") setHaveObtainableItem(elements[i]);
     }
     element.style.backgroundColor = "rgb(0, 125, 125)";
@@ -69,12 +69,12 @@ function setEquippedObtainableItem(element){
 }
 
 function resetObtainableItems(imgClassName){
-    var elements = document.getElementsByClassName(imgClassName);
-    for(var i = 0; i < elements.length; i++) setNotHaveObtainableItem(elements[i]);
+    let elements = document.getElementsByClassName(imgClassName);
+    for(let i = 0; i < elements.length; i++) setNotHaveObtainableItem(elements[i]);
 }
 
 function setHaveObtainableItemById(className, rsdb_id){
-    var element = getElementByRsdbId(className, rsdb_id);
+    let element = getElementByRsdbId(className, rsdb_id);
     if(element == null) return;
     setHaveObtainableItem(element);
 }
@@ -82,9 +82,9 @@ function setHaveObtainableItemById(className, rsdb_id){
 function updateNameplateBg(sel){
     document.getElementById("nameplate_bg_player").src = sel.src;
 
-    var textColor = "#ffffffff"
+    let textColor = "#ffffffff"
 
-    var npl_info = getRsdbInfoById(NameplateInfo, sel.getAttribute("rsdb_id"));
+    let npl_info = getRsdbInfoById(NameplateInfo, sel.getAttribute("rsdb_id"));
     if(npl_info != null) textColor = ColorToHex(npl_info["TextColor"]);
 
     document.getElementById("nameplate_name").style.color = textColor;
@@ -93,16 +93,16 @@ function updateNameplateBg(sel){
 
 function click_clickable_sett(target)
 {
-    var className = target.getAttribute("class");
-    var elements = document.getElementsByClassName(className);
-    for (var i = 0; i < elements.length; i++) {
+    let className = target.getAttribute("class");
+    let elements = document.getElementsByClassName(className);
+    for (let i = 0; i < elements.length; i++) {
         elements[i].setAttribute("selected", "false");
     }
     target.setAttribute("selected", "true");
 };
 
 function updatePlazaPostImg(pixels, isVertical){
-    var post_img = document.getElementById("oekaki_img");
+    let post_img = document.getElementById("oekaki_img");
     
     if(pixels.length != 600) {
         console.log("Abnormal plaza post length!");
@@ -111,24 +111,24 @@ function updatePlazaPostImg(pixels, isVertical){
     }
 
     if(isVertical){
-        var w = 120;
-        var h = 320;
+        let w = 120;
+        let h = 320;
     } else{
-        var w = 320;
-        var h = 120;
+        let w = 320;
+        let h = 120;
     }
 
     bmp = new Bitmap(w, h);
-    for(var y = 0; y < h; y++){
-        for(var x = 0; x < w; x++){
+    for(let y = 0; y < h; y++){
+        for(let x = 0; x < w; x++){
             if(isVertical){
-                var i = Math.floor(((w - x - 1) * h + y) / 64);
-                var j = BigInt(((w - x - 1) * h + y) % 64);
+                let i = Math.floor(((w - x - 1) * h + y) / 64);
+                let j = BigInt(((w - x - 1) * h + y) % 64);
             } else {
-                var i = Math.floor((y * w + x) / 64);
-                var j = BigInt((y * w + x) % 64);
+                let i = Math.floor((y * w + x) / 64);
+                let j = BigInt((y * w + x) % 64);
             }
-            var pixel = 255;
+            let pixel = 255;
             if(BigInt(BigInt(pixels[i]) & (1n << j)) != 0n) pixel = 0;
             bmp.pixel[x][y] = [pixel, pixel, pixel, 1];
         }
@@ -139,65 +139,65 @@ function updatePlazaPostImg(pixels, isVertical){
     post_img.setAttribute("height", h * 2);
 }
 
-var PlazaImgCustomPng = null;
+let PlazaImgCustomPng = null;
 
 function updateCustomImg(){
 
     if(PlazaImgCustomPng == null) return;
 
-    var w = PlazaImgCustomPng.getWidth();
-    var h = PlazaImgCustomPng.getHeight();
+    let w = PlazaImgCustomPng.getWidth();
+    let h = PlazaImgCustomPng.getHeight();
 
-    var isHorizontal = (w == 320 && h == 120);
-    var isVertical = (w == 120 && h == 320);
+    let isHorizontal = (w == 320 && h == 120);
+    let isVertical = (w == 120 && h == 320);
 
     if(!isHorizontal && !isVertical) return;
 
-    var oekaki_img = SaveEdits["dict_edits"]["oekaki_img"]["edit"];
+    let oekaki_img = SaveEdits["dict_edits"]["oekaki_img"]["edit"];
     oekaki_img["IsOekakiVertical"] = isVertical;
 
-    var pixels = [];
-    for(var i = 0 ; i < 600; i++) pixels[i] = BigInt(0);
+    let pixels = [];
+    for(let i = 0 ; i < 600; i++) pixels[i] = BigInt(0);
 
-    var brightness = Clamp(Number(document.getElementById("oekaki_brightness_slider").value), 1, 255);
+    let brightness = Clamp(Number(document.getElementById("oekaki_brightness_slider").value), 1, 255);
 
-    var r_power = Clamp(Number(document.getElementById("oekaki_r_power_slider").value), 0, 255) / 255;
-    var g_power = Clamp(Number(document.getElementById("oekaki_g_power_slider").value), 0, 255) / 255;
-    var b_power = Clamp(Number(document.getElementById("oekaki_b_power_slider").value), 0, 255) / 255;
+    let r_power = Clamp(Number(document.getElementById("oekaki_r_power_slider").value), 0, 255) / 255;
+    let g_power = Clamp(Number(document.getElementById("oekaki_g_power_slider").value), 0, 255) / 255;
+    let b_power = Clamp(Number(document.getElementById("oekaki_b_power_slider").value), 0, 255) / 255;
 
-    var dmul = Clamp((r_power + g_power + b_power) * 255, 1, 255 * 3);
+    let dmul = Clamp((r_power + g_power + b_power) * 255, 1, 255 * 3);
 
-    var isInvert = document.getElementById("oekaki_is_inverted").checked ^ 1;
+    let isInvert = document.getElementById("oekaki_is_inverted").checked ^ 1;
 
-    for(var y = 0; y < h; y++){
-        for(var x = 0; x < w; x++){
-            var pngPixel = PlazaImgCustomPng.getPixel(x, y);
+    for(let y = 0; y < h; y++){
+        for(let x = 0; x < w; x++){
+            let pngPixel = PlazaImgCustomPng.getPixel(x, y);
             if(isVertical){
-                var i = Math.floor(((w - x - 1) * h + y) / 64);
-                var j = BigInt(((w - x - 1) * h + y) % 64);
+                let i = Math.floor(((w - x - 1) * h + y) / 64);
+                let j = BigInt(((w - x - 1) * h + y) % 64);
             } else {
-                var i = Math.floor((y * w + x) / 64);
-                var j = BigInt((y * w + x) % 64);
+                let i = Math.floor((y * w + x) / 64);
+                let j = BigInt((y * w + x) % 64);
             }
-            var isBrightEnough = ((pngPixel[0] * r_power + pngPixel[1] * g_power + pngPixel[2] * b_power) * pngPixel[3] / dmul) > brightness;
+            let isBrightEnough = ((pngPixel[0] * r_power + pngPixel[1] * g_power + pngPixel[2] * b_power) * pngPixel[3] / dmul) > brightness;
             if(isBrightEnough ^ isInvert) pixels[i]|=(1n << j);
         }
     }
 
-    for(var i = 0 ; i < 600; i++) pixels[i] = pixels[i].toString();
+    for(let i = 0 ; i < 600; i++) pixels[i] = pixels[i].toString();
     oekaki_img["OekakiImage"] = pixels;
 
     updatePlazaPostImg(pixels, isVertical);
 }
 
 function onUploadPlazaImg(){
-    var freader = new FileReader();
+    let freader = new FileReader();
     freader.onload = function(e){
-        var pngreader = new PNGReader(e.target.result);
+        let pngreader = new PNGReader(e.target.result);
         pngreader.parse(function(err, png){
             PlazaImgCustomPng = null;
 
-            var img_error = document.getElementById("plaza_img_upload_error");
+            let img_error = document.getElementById("plaza_img_upload_error");
             if (err){
                 updateCustomImg();
                 console.log(err);
@@ -205,11 +205,11 @@ function onUploadPlazaImg(){
                 return;
             }
 
-            var w = png.getWidth();
-            var h = png.getHeight();
+            let w = png.getWidth();
+            let h = png.getHeight();
             
-            var isHorizontal = (w == 320 && h == 120);
-            var isVertical = (w == 120 && h == 320);
+            let isHorizontal = (w == 320 && h == 120);
+            let isVertical = (w == 120 && h == 320);
 
             if(!isHorizontal && !isVertical){
                 updateCustomImg();
@@ -237,7 +237,7 @@ function loadSave(){
     document.getElementById("money_holder").value = SaveJson["server"]["Money"];
     document.getElementById("snail_holder").value = SaveJson["server"]["Shell"];
 
-    var playerInfo = SaveJson["client"]["Common"]["Coordinates"];
+    let playerInfo = SaveJson["client"]["Common"]["Coordinates"];
     click_clickable_sett(getElementByRsdbId("player_playertype", playerInfo["ModelType"]));
     onChangePlayerType(playerInfo["ModelType"]);
     click_clickable_sett(getElementByRsdbId("player_skintone", playerInfo["SkinColor"]));
@@ -252,15 +252,15 @@ function loadSave(){
     resetObtainableItems("player_shoes");
     resetObtainableItems("nameplate_bg");
 
-    for(var rsdb_id in SaveJson["server"]["HaveWeaponMap"]) setHaveObtainableItemById("player_weapon", rsdb_id);
+    for(let rsdb_id in SaveJson["server"]["HaveWeaponMap"]) setHaveObtainableItemById("player_weapon", rsdb_id);
 
-    var element = getElementByRsdbId("player_weapon", playerInfo["WeaponId"]);
+    let element = getElementByRsdbId("player_weapon", playerInfo["WeaponId"]);
     if(element != null){
         setEquippedObtainableItem(element);
         element.click();
     }
 
-    for(var rsdb_id in SaveJson["server"]["HaveGearHeadMap"]) setHaveObtainableItemById("player_headgear", rsdb_id);
+    for(let rsdb_id in SaveJson["server"]["HaveGearHeadMap"]) setHaveObtainableItemById("player_headgear", rsdb_id);
     
     element = getElementByRsdbId("player_headgear", playerInfo["GearHeadId"]);
     if(element != null){
@@ -268,7 +268,7 @@ function loadSave(){
         element.click();
     }
 
-    for(var rsdb_id in SaveJson["server"]["HaveGearClothesMap"]) setHaveObtainableItemById("player_clothes", rsdb_id);
+    for(let rsdb_id in SaveJson["server"]["HaveGearClothesMap"]) setHaveObtainableItemById("player_clothes", rsdb_id);
 
     element = getElementByRsdbId("player_clothes", playerInfo["GearClothesId"]);
     if(element != null){
@@ -276,7 +276,7 @@ function loadSave(){
         element.click();
     }
 
-    for(var rsdb_id in SaveJson["server"]["HaveGearShoesMap"]) setHaveObtainableItemById("player_shoes", rsdb_id);
+    for(let rsdb_id in SaveJson["server"]["HaveGearShoesMap"]) setHaveObtainableItemById("player_shoes", rsdb_id);
 
     element = getElementByRsdbId("player_shoes", playerInfo["GearShoesId"]);
     if(element != null){
@@ -284,7 +284,7 @@ function loadSave(){
         element.click();
     }
 
-    for(var rsdb_id in SaveJson["server"]["HaveNamePlateBgMap"]) setHaveObtainableItemById("nameplate_bg", rsdb_id);
+    for(let rsdb_id in SaveJson["server"]["HaveNamePlateBgMap"]) setHaveObtainableItemById("nameplate_bg", rsdb_id);
 
     element = getElementByRsdbId("nameplate_bg", SaveJson["client"]["NamePlateEditor"]["NamePlate"]["Background"]);
     if(element != null){
@@ -376,8 +376,8 @@ async function onEditSave(isCloudSave){
 }
 
 function loadWeapons(){
-    var validInfos = [];
-    for(var i = 0; i < WeaponInfoMain.length; i++){
+    let validInfos = [];
+    for(let i = 0; i < WeaponInfoMain.length; i++){
         if(WeaponInfoMain[i]["Type"] != "Versus") continue; // Only add obtainable weapons
         validInfos.push(WeaponInfoMain[i]);
     }
@@ -392,10 +392,10 @@ function loadWeapons(){
         90,
         90
     );
-    var elements = document.getElementsByClassName("player_weapon");
-    for(var i = 0; i < elements.length; i++){
+    let elements = document.getElementsByClassName("player_weapon");
+    for(let i = 0; i < elements.length; i++){
         elements[i].onerror = function(event){
-            var target = event.target;
+            let target = event.target;
             target.src = "./assets/img/player/weapon/Dummy.png"; // No Icon
         };
     }
@@ -418,8 +418,8 @@ function loadNameplates(){
 };
 
 function loadGear(galleryId, galleryClassName, imgClassName, GearInfo){
-    /*var validInfos = [];
-    for(var i = 0; i < GearInfo.length; i++){
+    /*let validInfos = [];
+    for(let i = 0; i < GearInfo.length; i++){
         if(GearInfo[i]["HowToGet"] == "Impossible") continue; // Only add obtainable gear
         validInfos.push(GearInfo[i]);
     }*/
@@ -434,10 +434,10 @@ function loadGear(galleryId, galleryClassName, imgClassName, GearInfo){
         90,
         90
     );
-    var elements = document.getElementsByClassName(imgClassName);
-    for(var i = 0; i < elements.length; i++){
+    let elements = document.getElementsByClassName(imgClassName);
+    for(let i = 0; i < elements.length; i++){
         elements[i].onerror = function(event){
-            var target = event.target;
+            let target = event.target;
             target.src = "./assets/img/player/gear/Dummy.png"; // No Icon
         };
     }
@@ -445,7 +445,7 @@ function loadGear(galleryId, galleryClassName, imgClassName, GearInfo){
 };
 
 function loadAbilities(){
-    var ability_ids = Object.keys(GEAR_ABILITY_ID_MAP);
+    let ability_ids = Object.keys(GEAR_ABILITY_ID_MAP);
     loadClickableIdOptions(
         "image_gallery_ability", "image_gallery_ability", "gear_ability", ability_ids.length, ability_ids.length, 
         idx => {
@@ -460,8 +460,8 @@ function loadAbilities(){
 }
 
 function ensureObtainableInDictEdits(element, editType, mapName){
-    var rsdb_id = element.getAttribute("rsdb_id");
-    var edit_info = SaveEdits["dict_edits"][editType]["edit"];
+    let rsdb_id = element.getAttribute("rsdb_id");
+    let edit_info = SaveEdits["dict_edits"][editType]["edit"];
     if(!(rsdb_id in edit_info)) 
         edit_info[rsdb_id] = JSON.parse(JSON.stringify(SaveJson["server"][mapName][rsdb_id]));
 };
@@ -473,16 +473,16 @@ function getObtainableJson(rsdb_id, editType, mapName){
 }
 
 function obtainGear(element, gear_name){
-    var RsdbData = null;
+    let RsdbData = null;
 
     if(gear_name == "gear_head") RsdbData = GearInfoHead;
     else if(gear_name == "gear_clothes") RsdbData = GearInfoClothes;
     else if(gear_name == "gear_shoes") RsdbData = GearInfoShoes;
 
-    var rsdb_id = element.getAttribute("rsdb_id");
-    var rsdbInfo = getRsdbInfoById(RsdbData, rsdb_id);
+    let rsdb_id = element.getAttribute("rsdb_id");
+    let rsdbInfo = getRsdbInfoById(RsdbData, rsdb_id);
 
-    var skillId = 0;
+    let skillId = 0;
     if(rsdbInfo != null && rsdbInfo["Skill"] in GEAR_ABILITY_NAME_MAP) skillId = Math.max(GEAR_ABILITY_NAME_MAP[rsdbInfo["Skill"]], 0);
     
     SaveEdits["dict_edits"][gear_name]["remove"].pop(rsdb_id);
@@ -501,7 +501,7 @@ function obtainGear(element, gear_name){
 };
 
 function obtainWeapon(element){
-    var rsdb_id = element.getAttribute("rsdb_id");
+    let rsdb_id = element.getAttribute("rsdb_id");
     SaveEdits["dict_edits"]["weapon"]["remove"].pop(rsdb_id);
     SaveEdits["dict_edits"]["weapon"]["edit"][rsdb_id] = {
         "TotalPaintTubo": 0,
@@ -517,13 +517,13 @@ function obtainWeapon(element){
 };
 
 function removeObtainable(className, editType, updateObtainableF){
-    var element = getSelectedElement(className);
+    let element = getSelectedElement(className);
     if(element.getAttribute("obtainable_state") == "equipped") return;
     
-    var rsdb_id = element.getAttribute("rsdb_id");
+    let rsdb_id = element.getAttribute("rsdb_id");
     if(rsdb_id in SaveEdits["dict_edits"][editType]["edit"]) delete SaveEdits["dict_edits"][editType]["edit"][rsdb_id];
 
-    var rmList = SaveEdits["dict_edits"][editType]["remove"];
+    let rmList = SaveEdits["dict_edits"][editType]["remove"];
     if(!rmList.includes(rsdb_id)) rmList.push(rsdb_id);
 
     setNotHaveObtainableItem(element);
@@ -531,16 +531,16 @@ function removeObtainable(className, editType, updateObtainableF){
 }
 
 function equipObtainable(className, editType, updateObtainableF){
-    var element = getSelectedElement(className);
-    var rsdb_id = element.getAttribute("rsdb_id");
+    let element = getSelectedElement(className);
+    let rsdb_id = element.getAttribute("rsdb_id");
     SaveEdits["default_edits"][editType] = rsdb_id;
     setEquippedObtainableItem(element);
     updateObtainableF(element);
 }
 
 function bulkGetObtainable(className, obtainFunction, obtainFunctionArg){
-    var elements = document.getElementsByClassName(className);
-    for(var i = 0; i < elements.length; i++){
+    let elements = document.getElementsByClassName(className);
+    for(let i = 0; i < elements.length; i++){
         if(elements[i].getAttribute("obtainable_state") == "no") obtainFunction(elements[i], obtainFunctionArg);
     }
 }
@@ -580,7 +580,7 @@ function updateNplBgObtainable(element){
     document.getElementById("equip_npl_bg_button").disabled = (obtainable_state != "yes");
 };
 function obtainNplBg(element){
-    var rsdb_id = element.getAttribute("rsdb_id");
+    let rsdb_id = element.getAttribute("rsdb_id");
     SaveEdits["dict_edits"]["nameplate_bg"]["remove"].pop(rsdb_id);
     SaveEdits["dict_edits"]["nameplate_bg"]["edit"][rsdb_id] = {
         "AcquiredDateTimeUtc": 0
@@ -595,7 +595,7 @@ function clickObtainable(element, updateObtainableF, chosenImgId = null, chosenI
 
 
     if(chosenInfoId != null){
-        var name = getRsdbInfoById(RsdbInfo, element.getAttribute("rsdb_id"))["__RowId"];
+        let name = getRsdbInfoById(RsdbInfo, element.getAttribute("rsdb_id"))["__RowId"];
         if(parseCodeNameF != null) name = parseCodeNameF(name);
         if(name in langEUen[langFileName]) name = langEUen[langFileName][name];
         document.getElementById(chosenInfoId).textContent = name;
@@ -605,16 +605,16 @@ function clickObtainable(element, updateObtainableF, chosenImgId = null, chosenI
 }
 
 function openAbilityModal(event){
-    var target_id = event.target.getAttribute("id");
+    let target_id = event.target.getAttribute("id");
 
-    var element_type = null;
+    let element_type = null;
     if(target_id.startsWith('hed')) element_type ="player_headgear";
     else if(target_id.startsWith('clt')) element_type ="player_clothes";
     else if(target_id.startsWith('shs')) element_type ="player_shoes";
 
     if(element_type == null) return;
 
-    var element = getSelectedElement(element_type);
+    let element = getSelectedElement(element_type);
     if(element.getAttribute("obtainable_state") == "no") return;
     
     $('#modalGearAbility').modal('show');
@@ -622,16 +622,16 @@ function openAbilityModal(event){
 }
 
 function selectAbilityModal(event){
-    var target = event.target;
-    var new_rsdb_id = Number(target.getAttribute("rsdb_id"));
+    let target = event.target;
+    let new_rsdb_id = Number(target.getAttribute("rsdb_id"));
 
     $('#modalGearAbility').modal('hide');
-    var target_id = document.getElementById('modalGearAbility').target_id;
+    let target_id = document.getElementById('modalGearAbility').target_id;
     document.getElementById(target_id).src = "./assets/img/skill/" + GEAR_ABILITY_ID_MAP[new_rsdb_id] + '.png';
 
-    var edit_type = null;
-    var map_type = null;
-    var element_type = null;
+    let edit_type = null;
+    let map_type = null;
+    let element_type = null;
     if(target_id.startsWith('hed')){
         edit_type = "gear_head";
         map_type = "HaveGearHeadMap";
@@ -649,38 +649,38 @@ function selectAbilityModal(event){
 
     if(edit_type == null || map_type == null || element_type == null) return;
 
-    var element = getSelectedElement(element_type);
-    var rsdb_id = element.getAttribute("rsdb_id");
+    let element = getSelectedElement(element_type);
+    let rsdb_id = element.getAttribute("rsdb_id");
 
     ensureObtainableInDictEdits(element, edit_type, map_type);
-    var editInfo = SaveEdits["dict_edits"][edit_type]["edit"][rsdb_id];
+    let editInfo = SaveEdits["dict_edits"][edit_type]["edit"][rsdb_id];
 
     if(target_id.slice(4).startsWith("ability_main")){
         editInfo["MainSkill"] = new_rsdb_id;
         return
     }
-    var exSkillId = Number(target_id.slice(target_id.length - 1, target_id.length));
+    let exSkillId = Number(target_id.slice(target_id.length - 1, target_id.length));
     if(exSkillId < 0 || exSkillId >= 3 || exSkillId == NaN) return;
 
-    for(var i = editInfo["ExSkillArray"].length; i < exSkillId; i++) editInfo["ExSkillArray"][i] = -1;
+    for(let i = editInfo["ExSkillArray"].length; i < exSkillId; i++) editInfo["ExSkillArray"][i] = -1;
     editInfo["ExSkillArray"][exSkillId] = new_rsdb_id;
 }
 
 function initGearAbilityIcons(curInfo, classAbilityMain, classAbilitySub){
-    var ability_id = 0;
+    let ability_id = 0;
     if(curInfo != null) ability_id = curInfo["MainSkill"];
 
-    var sub_abilities = [];
+    let sub_abilities = [];
     if(curInfo != null) sub_abilities = curInfo["ExSkillArray"];
     
-    var ability_main = document.getElementById(classAbilityMain);
+    let ability_main = document.getElementById(classAbilityMain);
     ability_main.src = "./assets/img/skill/" + GEAR_ABILITY_ID_MAP[ability_id] + '.png';
     ability_main.onclick = openAbilityModal;
 
-    var head_abilities_sub = document.getElementsByClassName(classAbilitySub);
-    for(var i = 0; i < sub_abilities.length; i++) head_abilities_sub[i].src = "./assets/img/skill/" + GEAR_ABILITY_ID_MAP[sub_abilities[i]] + '.png';
-    for(var i = sub_abilities.length; i < 3; i++) head_abilities_sub[i].src = "./assets/img/skill/None.png";
-    for(var i = 0; i < 3; i++) head_abilities_sub[i].onclick = openAbilityModal;
+    let head_abilities_sub = document.getElementsByClassName(classAbilitySub);
+    for(let i = 0; i < sub_abilities.length; i++) head_abilities_sub[i].src = "./assets/img/skill/" + GEAR_ABILITY_ID_MAP[sub_abilities[i]] + '.png';
+    for(let i = sub_abilities.length; i < 3; i++) head_abilities_sub[i].src = "./assets/img/skill/None.png";
+    for(let i = 0; i < 3; i++) head_abilities_sub[i].onclick = openAbilityModal;
 }
 
 async function load_options(){
@@ -697,19 +697,19 @@ async function load_options(){
     loadAbilities();
 
 	$('.player_name_holder').on("propertychange change click keyup input paste", function(event){
-        var name_holder = event.target;
+        let name_holder = event.target;
         if(name_holder.value.length > 16) name_holder.value = name_holder.value.slice(0, 16);
         SaveEdits["default_edits"]["player_name"] = name_holder.value;
         document.getElementById("nameplate_name").textContent = name_holder.value;
     });
 	$('.player_identifier_holder').on("propertychange change click keyup input paste", function(event){
-        var id_holder = event.target;
+        let id_holder = event.target;
         if(id_holder.value.length > 4) id_holder.value = id_holder.value.slice(0, 4);
         SaveEdits["default_edits"]["player_identifier"] = id_holder.value;
         document.getElementById("nameplate_identifier").textContent = "#" + id_holder.value;
     });
 	$('.player_rank_holder').on("propertychange change click keyup input paste", function(event){
-        var rank_holder = event.target;
+        let rank_holder = event.target;
         if(rank_holder.value > 999) rank_holder.value = 999;
         if(rank_holder.value < 1) rank_holder.value = 1;
         SaveEdits["default_edits"]["player_rank"] = rank_holder.value - 1;
@@ -718,13 +718,13 @@ async function load_options(){
         SaveEdits["default_edits"]["player_rank_exp"] = event.target.value;
     });
     $('.money_holder').on("propertychange change click keyup input paste", function(event){
-        var money_holder = event.target;
+        let money_holder = event.target;
         if(money_holder.value > 9999999) money_holder.value = 9999999;
         if(money_holder.value < 0) money_holder.value = 0;
         SaveEdits["default_edits"]["money"] = money_holder.value;
     });
     $('.snail_holder').on("propertychange change click keyup input paste", function(event){
-        var snail_holder = event.target;
+        let snail_holder = event.target;
         if(snail_holder.value > 999) snail_holder.value = 999;
         if(snail_holder.value < 0) snail_holder.value = 0;
         SaveEdits["default_edits"]["snails"] = snail_holder.value;
@@ -758,7 +758,7 @@ async function load_options(){
         clickObtainable(event.target, updateNplBgObtainable, "chosenNameplateBg");
     });
     $('.get_npl_bg_button').click( function(event){
-        var element = getSelectedElement("nameplate_bg");
+        let element = getSelectedElement("nameplate_bg");
         obtainNplBg(element);
         updateNplBgObtainable(element);
     });
@@ -777,16 +777,16 @@ async function load_options(){
     });
     $('.player_weapon').click( function(event){
         clickObtainable(event.target, updateWeaponObtainable, "chosenWeaponImg", "chosenWeaponInfo", WeaponInfoMain, "CommonMsg/Weapon/WeaponName_Main");
-        var rsdb_id = event.target.getAttribute("rsdb_id");
-        var curInfo = getObtainableJson(rsdb_id, "weapon", "HaveWeaponMap");
+        let rsdb_id = event.target.getAttribute("rsdb_id");
+        let curInfo = getObtainableJson(rsdb_id, "weapon", "HaveWeaponMap");
 
-        var freshness = document.getElementById("weapon_freshness_holder");
+        let freshness = document.getElementById("weapon_freshness_holder");
 
         if(curInfo != null) freshness.value = curInfo["Level"];
         else freshness.value = 0;
     });
     $('.get_weapon_button').click( function(event){
-        var element = getSelectedElement("player_weapon");
+        let element = getSelectedElement("player_weapon");
         obtainWeapon(element);
         updateWeaponObtainable(element);
     });
@@ -800,14 +800,14 @@ async function load_options(){
         removeObtainable("player_weapon", "weapon", updateWeaponObtainable);
     });
     $('.weapon_freshness_holder').on("propertychange change click keyup input paste", function(event){
-        var freshness_holder = event.target;
+        let freshness_holder = event.target;
         if(freshness_holder.value > 5) freshness_holder.value = 5;
         if(freshness_holder.value < 0) freshness_holder.value = 0;
 
-        var element = getSelectedElement("player_weapon");
+        let element = getSelectedElement("player_weapon");
         if(element.getAttribute("obtainable_state") == "no") return;
 
-        var rsdb_id = element.getAttribute("rsdb_id");
+        let rsdb_id = element.getAttribute("rsdb_id");
 
         ensureObtainableInDictEdits(element, "weapon", "HaveWeaponMap");
         SaveEdits["dict_edits"]["weapon"]["edit"][rsdb_id]["Level"] = freshness_holder.value;
@@ -818,12 +818,12 @@ async function load_options(){
             return codeName.slice(4);
         });
 
-        var rsdb_id = event.target.getAttribute("rsdb_id");
-        var curInfo = getObtainableJson(rsdb_id, "gear_head", "HaveGearHeadMap");
+        let rsdb_id = event.target.getAttribute("rsdb_id");
+        let curInfo = getObtainableJson(rsdb_id, "gear_head", "HaveGearHeadMap");
         
         initGearAbilityIcons(curInfo, "hed_ability_main", "hed_ability_sub");
 
-        var rarity = document.getElementById("hed_rarity_holder");
+        let rarity = document.getElementById("hed_rarity_holder");
 
         if(curInfo != null) rarity.value = curInfo["Rarity"];
         else rarity.value = 0;
@@ -835,12 +835,12 @@ async function load_options(){
             return codeName.slice(4);
         });
 
-        var rsdb_id = event.target.getAttribute("rsdb_id");
-        var curInfo = getObtainableJson(rsdb_id, "gear_clothes", "HaveGearClothesMap");
+        let rsdb_id = event.target.getAttribute("rsdb_id");
+        let curInfo = getObtainableJson(rsdb_id, "gear_clothes", "HaveGearClothesMap");
         
         initGearAbilityIcons(curInfo, "clt_ability_main", "clt_ability_sub");
 
-        var rarity = document.getElementById("clt_rarity_holder");
+        let rarity = document.getElementById("clt_rarity_holder");
 
         if(curInfo != null) rarity.value = curInfo["Rarity"];
         else rarity.value = 0;
@@ -852,27 +852,27 @@ async function load_options(){
             return codeName.slice(4);
         });
 
-        var rsdb_id = event.target.getAttribute("rsdb_id");
-        var curInfo = getObtainableJson(rsdb_id, "gear_shoes", "HaveGearShoesMap");
+        let rsdb_id = event.target.getAttribute("rsdb_id");
+        let curInfo = getObtainableJson(rsdb_id, "gear_shoes", "HaveGearShoesMap");
         
         initGearAbilityIcons(curInfo, "shs_ability_main", "shs_ability_sub");
 
-        var rarity = document.getElementById("shs_rarity_holder");
+        let rarity = document.getElementById("shs_rarity_holder");
 
         if(curInfo != null) rarity.value = curInfo["Rarity"];
         else rarity.value = 0;
         
     });
     $('.gear_rarity_holder').on("propertychange change click keyup input paste", function(event){
-        var rarity_holder = event.target;
+        let rarity_holder = event.target;
         if(rarity_holder.value > 5) rarity_holder.value = 5;
         if(rarity_holder.value < 0) rarity_holder.value = 0;
 
-        var target_id = event.target.getAttribute("id");
+        let target_id = event.target.getAttribute("id");
 
-        var edit_type = null;
-        var map_type = null;
-        var element_type = null;
+        let edit_type = null;
+        let map_type = null;
+        let element_type = null;
         if(target_id.startsWith('hed')){
             edit_type = "gear_head";
             map_type = "HaveGearHeadMap";
@@ -890,17 +890,17 @@ async function load_options(){
 
         if(edit_type == null || map_type == null || element_type == null) return;
 
-        var element = getSelectedElement(element_type);
+        let element = getSelectedElement(element_type);
         if(element.getAttribute("obtainable_state") == "no") return;
 
-        var rsdb_id = element.getAttribute("rsdb_id");
+        let rsdb_id = element.getAttribute("rsdb_id");
 
         ensureObtainableInDictEdits(element, edit_type, map_type);
         SaveEdits["dict_edits"][edit_type]["edit"][rsdb_id]["Rarity"] = rarity_holder.value;
     });
     $('.gear_ability').click(selectAbilityModal);
     $('.get_headgear_button').click( function(event){
-        var element = getSelectedElement("player_headgear");
+        let element = getSelectedElement("player_headgear");
         obtainGear(element, "gear_head");
         updateHeadgearObtainable(element);
     });
@@ -914,7 +914,7 @@ async function load_options(){
         removeObtainable("player_headgear", "gear_head", updateHeadgearObtainable);
     });
     $('.get_clothes_button').click( function(event){
-        var element = getSelectedElement("player_clothes");
+        let element = getSelectedElement("player_clothes");
         obtainGear(element, "gear_clothes");
         updateClothesObtainable(element);
     });
@@ -928,7 +928,7 @@ async function load_options(){
         removeObtainable("player_clothes", "gear_clothes", updateClothesObtainable);
     });
     $('.get_shoes_button').click( function(event){
-        var element = getSelectedElement("player_shoes");
+        let element = getSelectedElement("player_shoes");
         obtainGear(element, "gear_shoes");
         updateShoesObtainable(element);
     });
@@ -974,9 +974,9 @@ $(document).ready(async () => {
 });
 
 $(document).ready(function() {
-    var chosenOption = localStorage.getItem('accept_warning');
+    let chosenOption = localStorage.getItem('accept_warning');
     if (chosenOption === 'true') return;
-    var warningModal = new bootstrap.Modal(document.getElementById('warningModal'), {
+    let warningModal = new bootstrap.Modal(document.getElementById('warningModal'), {
         backdrop: 'static',
         keyboard: false
     })
