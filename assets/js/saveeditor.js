@@ -11,8 +11,9 @@ let langEUen;
 let SaveJson;
 let SaveRaw;
 
-
 let SaveEdits;
+
+let PlazaImgCustomPng = null;
 
 function resetEdits(){
     SaveEdits = {
@@ -110,23 +111,25 @@ function updatePlazaPostImg(pixels, isVertical){
         return;
     }
 
+    let w, h;
     if(isVertical){
-        let w = 120;
-        let h = 320;
+        w = 120;
+        h = 320;
     } else{
-        let w = 320;
-        let h = 120;
+        w = 320;
+        h = 120;
     }
 
     bmp = new Bitmap(w, h);
     for(let y = 0; y < h; y++){
         for(let x = 0; x < w; x++){
+            let i, j;
             if(isVertical){
-                let i = Math.floor(((w - x - 1) * h + y) / 64);
-                let j = BigInt(((w - x - 1) * h + y) % 64);
+                i = Math.floor(((w - x - 1) * h + y) / 64);
+                j = BigInt(((w - x - 1) * h + y) % 64);
             } else {
-                let i = Math.floor((y * w + x) / 64);
-                let j = BigInt((y * w + x) % 64);
+                i = Math.floor((y * w + x) / 64);
+                j = BigInt((y * w + x) % 64);
             }
             let pixel = 255;
             if(BigInt(BigInt(pixels[i]) & (1n << j)) != 0n) pixel = 0;
@@ -138,8 +141,6 @@ function updatePlazaPostImg(pixels, isVertical){
     post_img.setAttribute("width", w * 2);
     post_img.setAttribute("height", h * 2);
 }
-
-let PlazaImgCustomPng = null;
 
 function updateCustomImg(){
 
@@ -172,12 +173,13 @@ function updateCustomImg(){
     for(let y = 0; y < h; y++){
         for(let x = 0; x < w; x++){
             let pngPixel = PlazaImgCustomPng.getPixel(x, y);
+            let i, j;
             if(isVertical){
-                let i = Math.floor(((w - x - 1) * h + y) / 64);
-                let j = BigInt(((w - x - 1) * h + y) % 64);
+                i = Math.floor(((w - x - 1) * h + y) / 64);
+                j = BigInt(((w - x - 1) * h + y) % 64);
             } else {
-                let i = Math.floor((y * w + x) / 64);
-                let j = BigInt((y * w + x) % 64);
+                i = Math.floor((y * w + x) / 64);
+                j = BigInt((y * w + x) % 64);
             }
             let isBrightEnough = ((pngPixel[0] * r_power + pngPixel[1] * g_power + pngPixel[2] * b_power) * pngPixel[3] / dmul) > brightness;
             if(isBrightEnough ^ isInvert) pixels[i]|=(1n << j);
