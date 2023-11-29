@@ -241,7 +241,11 @@ function onConnect(){
         }
 
     };
-
+    wsock.onclose = (event) => {
+        setConnError("Connection closed.");
+        resetSock();
+        resetMenuInfo();
+    }
     wsock.onerror = (event) => {
         if (event.code == 3001) {
             setConnError("Connection closed.");
