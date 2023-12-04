@@ -46,7 +46,14 @@ async function onLoadCalicoConfig(configData){
         info["sett_rsdb"]["player_clothes"] = pinfo["gear_cloth"].toString();
         info["sett_rsdb"]["player_shoes"] = pinfo["gear_shoes"].toString();
         info["sett_rsdb"]["player_weapon"] = pinfo["weapon_main"].toString();
-        if(pinfo.hasOwnProperty("color")) info["sett_rsdb"]["color"] = pinfo["color"]
+        if(pinfo.hasOwnProperty("color")){
+            info["color"] = {
+                "r": Math.pow(pinfo["color"].r, 2.2),
+                "g": Math.pow(pinfo["color"].g, 2.2),
+                "b": Math.pow(pinfo["color"].b, 2.2),
+                "a": 1.0
+            };
+        }
         else{
             for (const [key, value] of Object.entries(defaultPlayerInfo["color"])) info["color"][key] = value;
         }
@@ -83,7 +90,12 @@ function downloadConfig(){
             "gear_shoes": Number(info["sett_rsdb"]["player_shoes"]),
             "weapon_main": Number(info["sett_rsdb"]["player_weapon"]),
             "anim_name": info["anim"],
-            "color": info["color"]
+            "color": {
+                "r": Math.pow(info["color"].r, 1.0 / 2.2),
+                "g": Math.pow(info["color"].g, 1.0 / 2.2),
+                "b": Math.pow(info["color"].b, 1.0 / 2.2),
+                "a": 1.0
+            }
         }
     }
     zip.file('PhotoForCalico/PlayerConfig.json', JSON.stringify(playerConfig, null, 2));
