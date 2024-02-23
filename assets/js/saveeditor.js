@@ -248,8 +248,6 @@ function loadSave(){
         if("JemNumInner" in s_inv) sdodr_prlz.value = s_inv["JemNumInner"];
         if("CoinLockerKeyNumInner" in s_inv) sdodr_keys.value = s_inv["CoinLockerKeyNumInner"];
     }
-    document.getElementById("sdodr_prlz_holder")
-    document.getElementById("sdodr_prlz_holder").value = SaveJson["client"]["Sdodr"]["Inventory"];
 
     let playerInfo = SaveJson["client"]["Common"]["Coordinates"];
     click_clickable_sett(getElementByRsdbId("player_playertype", playerInfo["ModelType"]));
