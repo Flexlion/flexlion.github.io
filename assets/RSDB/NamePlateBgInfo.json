@@ -3268,6 +3268,44 @@
     "__RowId": "Npl_Catalog_Season06_Lv02"
   },
   {
+    "HowToGet": "Catalog",
+    "Id": 17001,
+    "Order": 17001,
+    "Season": 7,
+    "TextColor": {
+      "A": 1.0,
+      "B": 1.0,
+      "G": 1.0,
+      "R": 1.0
+    },
+    "UrokoPrice": {
+      "BronzeUrokoNum": 0,
+      "GoldUrokoNum": 0,
+      "SilverUrokoNum": 0
+    },
+    "UrokoUhlockLevel": 1,
+    "__RowId": "Npl_Catalog_Season07_Lv01"
+  },
+  {
+    "HowToGet": "Catalog",
+    "Id": 17002,
+    "Order": 17002,
+    "Season": 7,
+    "TextColor": {
+      "A": 1.0,
+      "B": 1.0,
+      "G": 1.0,
+      "R": 1.0
+    },
+    "UrokoPrice": {
+      "BronzeUrokoNum": 0,
+      "GoldUrokoNum": 0,
+      "SilverUrokoNum": 0
+    },
+    "UrokoUhlockLevel": 1,
+    "__RowId": "Npl_Catalog_Season07_Lv02"
+  },
+  {
     "HowToGet": "Uroko",
     "Id": 2001,
     "Order": 2001,
@@ -3610,6 +3648,82 @@
     "__RowId": "Npl_Coop_Season05_Lv04"
   },
   {
+    "HowToGet": "Uroko",
+    "Id": 2301,
+    "Order": 2301,
+    "Season": 7,
+    "TextColor": {
+      "A": 1.0,
+      "B": 1.0,
+      "G": 1.0,
+      "R": 1.0
+    },
+    "UrokoPrice": {
+      "BronzeUrokoNum": 100,
+      "GoldUrokoNum": 0,
+      "SilverUrokoNum": 0
+    },
+    "UrokoUhlockLevel": 1,
+    "__RowId": "Npl_Coop_Season07_Lv01"
+  },
+  {
+    "HowToGet": "Uroko",
+    "Id": 2302,
+    "Order": 2302,
+    "Season": 7,
+    "TextColor": {
+      "A": 1.0,
+      "B": 1.0,
+      "G": 1.0,
+      "R": 1.0
+    },
+    "UrokoPrice": {
+      "BronzeUrokoNum": 0,
+      "GoldUrokoNum": 5,
+      "SilverUrokoNum": 0
+    },
+    "UrokoUhlockLevel": 2,
+    "__RowId": "Npl_Coop_Season07_Lv02"
+  },
+  {
+    "HowToGet": "Uroko",
+    "Id": 2303,
+    "Order": 2303,
+    "Season": 7,
+    "TextColor": {
+      "A": 1.0,
+      "B": 0.0,
+      "G": 0.02353,
+      "R": 0.05882
+    },
+    "UrokoPrice": {
+      "BronzeUrokoNum": 0,
+      "GoldUrokoNum": 333,
+      "SilverUrokoNum": 0
+    },
+    "UrokoUhlockLevel": 3,
+    "__RowId": "Npl_Coop_Season07_Lv03"
+  },
+  {
+    "HowToGet": "Uroko",
+    "Id": 2304,
+    "Order": 2304,
+    "Season": 7,
+    "TextColor": {
+      "A": 1.0,
+      "B": 0.0,
+      "G": 0.0,
+      "R": 0.0
+    },
+    "UrokoPrice": {
+      "BronzeUrokoNum": 800,
+      "GoldUrokoNum": 0,
+      "SilverUrokoNum": 0
+    },
+    "UrokoUhlockLevel": 3,
+    "__RowId": "Npl_Coop_Season07_Lv04"
+  },
+  {
     "HowToGet": "Other",
     "Id": 800,
     "Order": 800,
@@ -3741,6 +3855,25 @@
     },
     "UrokoUhlockLevel": 1,
     "__RowId": "Npl_Lot_Season06_Lv01"
+  },
+  {
+    "HowToGet": "Other",
+    "Id": 10007,
+    "Order": 10007,
+    "Season": 7,
+    "TextColor": {
+      "A": 1.0,
+      "B": 0.0,
+      "G": 0.02352941,
+      "R": 0.05490196
+    },
+    "UrokoPrice": {
+      "BronzeUrokoNum": 0,
+      "GoldUrokoNum": 0,
+      "SilverUrokoNum": 0
+    },
+    "UrokoUhlockLevel": 1,
+    "__RowId": "Npl_Lot_Season07_Lv01"
   },
   {
     "HowToGet": "Other",
@@ -3896,6 +4029,25 @@
   },
   {
     "HowToGet": "Other",
+    "Id": 971,
+    "Order": 971,
+    "Season": 7,
+    "TextColor": {
+      "A": 1.0,
+      "B": 0.1176471,
+      "G": 0.007843138,
+      "R": 0.1490196
+    },
+    "UrokoPrice": {
+      "BronzeUrokoNum": 0,
+      "GoldUrokoNum": 0,
+      "SilverUrokoNum": 0
+    },
+    "UrokoUhlockLevel": 1,
+    "__RowId": "Npl_News_Season07_Lv01"
+  },
+  {
+    "HowToGet": "Other",
     "Id": 810,
     "Order": 810,
     "Season": -1,
@@ -3912,6 +4064,139 @@
     },
     "UrokoUhlockLevel": 1,
     "__RowId": "Npl_Sdodr00"
+  },
+  {
+    "HowToGet": "Other",
+    "Id": 851,
+    "Order": 851,
+    "Season": -1,
+    "TextColor": {
+      "A": 1.0,
+      "B": 0.07059,
+      "G": 0.07059,
+      "R": 0.0902
+    },
+    "UrokoPrice": {
+      "BronzeUrokoNum": 0,
+      "GoldUrokoNum": 0,
+      "SilverUrokoNum": 0
+    },
+    "UrokoUhlockLevel": 1,
+    "__RowId": "Npl_Sdodr_Locker_Lv01"
+  },
+  {
+    "HowToGet": "Other",
+    "Id": 852,
+    "Order": 852,
+    "Season": -1,
+    "TextColor": {
+      "A": 1.0,
+      "B": 1.0,
+      "G": 1.0,
+      "R": 1.0
+    },
+    "UrokoPrice": {
+      "BronzeUrokoNum": 0,
+      "GoldUrokoNum": 0,
+      "SilverUrokoNum": 0
+    },
+    "UrokoUhlockLevel": 1,
+    "__RowId": "Npl_Sdodr_Locker_Lv02"
+  },
+  {
+    "HowToGet": "Other",
+    "Id": 853,
+    "Order": 853,
+    "Season": -1,
+    "TextColor": {
+      "A": 1.0,
+      "B": 0.01176471,
+      "G": 0.01568628,
+      "R": 0.01176471
+    },
+    "UrokoPrice": {
+      "BronzeUrokoNum": 0,
+      "GoldUrokoNum": 0,
+      "SilverUrokoNum": 0
+    },
+    "UrokoUhlockLevel": 1,
+    "__RowId": "Npl_Sdodr_Locker_Lv03"
+  },
+  {
+    "HowToGet": "Other",
+    "Id": 861,
+    "Order": 861,
+    "Season": -1,
+    "TextColor": {
+      "A": 1.0,
+      "B": 0.02352941,
+      "G": 0.02352941,
+      "R": 0.03529412
+    },
+    "UrokoPrice": {
+      "BronzeUrokoNum": 0,
+      "GoldUrokoNum": 0,
+      "SilverUrokoNum": 0
+    },
+    "UrokoUhlockLevel": 1,
+    "__RowId": "Npl_Sdodr_Shop_Lv01"
+  },
+  {
+    "HowToGet": "Other",
+    "Id": 862,
+    "Order": 862,
+    "Season": -1,
+    "TextColor": {
+      "A": 1.0,
+      "B": 0.9607843,
+      "G": 0.96078,
+      "R": 1.0
+    },
+    "UrokoPrice": {
+      "BronzeUrokoNum": 0,
+      "GoldUrokoNum": 0,
+      "SilverUrokoNum": 0
+    },
+    "UrokoUhlockLevel": 1,
+    "__RowId": "Npl_Sdodr_Shop_Lv02"
+  },
+  {
+    "HowToGet": "Other",
+    "Id": 863,
+    "Order": 863,
+    "Season": -1,
+    "TextColor": {
+      "A": 1.0,
+      "B": 0.07059,
+      "G": 0.07059,
+      "R": 0.0902
+    },
+    "UrokoPrice": {
+      "BronzeUrokoNum": 0,
+      "GoldUrokoNum": 0,
+      "SilverUrokoNum": 0
+    },
+    "UrokoUhlockLevel": 1,
+    "__RowId": "Npl_Sdodr_Shop_Lv03"
+  },
+  {
+    "HowToGet": "Other",
+    "Id": 864,
+    "Order": 864,
+    "Season": -1,
+    "TextColor": {
+      "A": 1.0,
+      "B": 0.07059,
+      "G": 0.07059,
+      "R": 0.0902
+    },
+    "UrokoPrice": {
+      "BronzeUrokoNum": 0,
+      "GoldUrokoNum": 0,
+      "SilverUrokoNum": 0
+    },
+    "UrokoUhlockLevel": 1,
+    "__RowId": "Npl_Sdodr_Shop_Lv04"
   },
   {
     "HowToGet": "Other",
@@ -4083,6 +4368,25 @@
     },
     "UrokoUhlockLevel": 1,
     "__RowId": "Npl_Trg_Season06_Lv01"
+  },
+  {
+    "HowToGet": "Other",
+    "Id": 936,
+    "Order": 936,
+    "Season": 7,
+    "TextColor": {
+      "A": 1.0,
+      "B": 1.0,
+      "G": 1.0,
+      "R": 1.0
+    },
+    "UrokoPrice": {
+      "BronzeUrokoNum": 0,
+      "GoldUrokoNum": 0,
+      "SilverUrokoNum": 0
+    },
+    "UrokoUhlockLevel": 1,
+    "__RowId": "Npl_Trg_Season07_Lv01"
   },
   {
     "HowToGet": "Other",

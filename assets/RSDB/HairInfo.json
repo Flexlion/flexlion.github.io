@@ -9,6 +9,15 @@
     "__RowId": "Har_OCT000"
   },
   {
+    "Id": 830,
+    "IsLong": false,
+    "IsSquid": false,
+    "Label": "[Sdodr]ワンレン(タコ)",
+    "MaxEnemyStainRt": 0.6,
+    "Order": 120,
+    "__RowId": "Har_OCT000_SdodrCstm00"
+  },
+  {
     "Id": 31,
     "IsLong": false,
     "IsSquid": false,
@@ -16,6 +25,15 @@
     "MaxEnemyStainRt": 0.7,
     "Order": 122,
     "__RowId": "Har_OCT001"
+  },
+  {
+    "Id": 831,
+    "IsLong": false,
+    "IsSquid": false,
+    "Label": "[Sdodr]タコポニテ(タコ)",
+    "MaxEnemyStainRt": 0.7,
+    "Order": 122,
+    "__RowId": "Har_OCT001_SdodrCstm00"
   },
   {
     "Id": 32,
@@ -27,6 +45,15 @@
     "__RowId": "Har_OCT002"
   },
   {
+    "Id": 832,
+    "IsLong": false,
+    "IsSquid": false,
+    "Label": "[Sdodr]モヒカン(タコ)",
+    "MaxEnemyStainRt": 0.5,
+    "Order": 121,
+    "__RowId": "Har_OCT002_SdodrCstm00"
+  },
+  {
     "Id": 33,
     "IsLong": false,
     "IsSquid": false,
@@ -34,6 +61,15 @@
     "MaxEnemyStainRt": 0.7,
     "Order": 123,
     "__RowId": "Har_OCT003"
+  },
+  {
+    "Id": 833,
+    "IsLong": false,
+    "IsSquid": false,
+    "Label": "[Sdodr]アフロ(タコ)",
+    "MaxEnemyStainRt": 0.7,
+    "Order": 123,
+    "__RowId": "Har_OCT003_SdodrCstm00"
   },
   {
     "Id": 34,
@@ -45,6 +81,15 @@
     "__RowId": "Har_OCT004"
   },
   {
+    "Id": 834,
+    "IsLong": false,
+    "IsSquid": false,
+    "Label": "[Sdodr]タテロール(タコ)",
+    "MaxEnemyStainRt": 0.5,
+    "Order": 100,
+    "__RowId": "Har_OCT004_SdodrCstm00"
+  },
+  {
     "Id": 35,
     "IsLong": false,
     "IsSquid": false,
@@ -52,6 +97,15 @@
     "MaxEnemyStainRt": 0.7,
     "Order": 102,
     "__RowId": "Har_OCT005"
+  },
+  {
+    "Id": 835,
+    "IsLong": false,
+    "IsSquid": false,
+    "Label": "[Sdodr]ドレッド(タコ)",
+    "MaxEnemyStainRt": 0.7,
+    "Order": 102,
+    "__RowId": "Har_OCT005_SdodrCstm00"
   },
   {
     "Id": 36,
@@ -63,6 +117,15 @@
     "__RowId": "Har_OCT006"
   },
   {
+    "Id": 836,
+    "IsLong": false,
+    "IsSquid": false,
+    "Label": "[Sdodr]ロンゲ(タコ)",
+    "MaxEnemyStainRt": 0.5,
+    "Order": 101,
+    "__RowId": "Har_OCT006_SdodrCstm00"
+  },
+  {
     "Id": 37,
     "IsLong": false,
     "IsSquid": false,
@@ -70,6 +133,15 @@
     "MaxEnemyStainRt": 0.5,
     "Order": 103,
     "__RowId": "Har_OCT007"
+  },
+  {
+    "Id": 837,
+    "IsLong": false,
+    "IsSquid": false,
+    "Label": "[Sdodr]リーゼント(タコ)",
+    "MaxEnemyStainRt": 0.5,
+    "Order": 103,
+    "__RowId": "Har_OCT007_SdodrCstm00"
   },
   {
     "Id": 600,
