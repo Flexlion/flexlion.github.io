@@ -734,9 +734,15 @@ async function load_options(){
     });
     $('.sdodr_prlz_holder').on("propertychange change click keyup input paste", function(event){
         let sdodr_prlz_holder = event.target;
-        if(sdodr_prlz_holder.value > 99999) sdodr_prlz_holder.value = 99999;
+        if(sdodr_prlz_holder.value > 9999) sdodr_prlz_holder.value = 9999;
         if(sdodr_prlz_holder.value < 0) sdodr_prlz_holder.value = 0;
         SaveEdits["default_edits"]["sdodr_prlz"] = sdodr_prlz_holder.value;
+    });
+    $('.sdodr_keys_holder').on("propertychange change click keyup input paste", function(event){
+        let sdodr_keys_holder = event.target;
+        if(sdodr_keys_holder.value > 99) sdodr_keys_holder.value = 99;
+        if(sdodr_keys_holder.value < 0) sdodr_keys_holder.value = 0;
+        SaveEdits["default_edits"]["sdodr_keys"] = sdodr_keys_holder.value;
     });
     $('.player_playertype').click( function(event){
         click_clickable_sett(event.target);
