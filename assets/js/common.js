@@ -84,12 +84,17 @@ function loadEyeColors(){
 };
 
 function loadHairs(){
-  loadClickableIdOptions("image_gallery_hair", "image_gallery_hair", "player_hair", HairInfo.length, 8, 
+  let validInfos = [];
+  for(let i = 0; i < HairInfo.length; i++){
+      if(HairInfo[i]["__RowId"].search("Sdodr") != -1) continue; // Only add non sdodr hair
+      validInfos.push(HairInfo[i]);
+  }
+  loadClickableIdOptions("image_gallery_hair", "image_gallery_hair", "player_hair", validInfos.length, 8, 
   idx => {
-      return "./assets/img/player/hair/" + HairInfo[idx]["__RowId"] + ".png";
+      return "./assets/img/player/hair/" + validInfos[idx]["__RowId"] + ".png";
   }, 
   idx => {
-      return HairInfo[idx]["Id"];
+      return validInfos[idx]["Id"];
   });
   hairOpts = document.getElementsByClassName("player_hair");
   for(let i = 0; i < hairOpts.length; i++){

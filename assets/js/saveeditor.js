@@ -238,7 +238,18 @@ function loadSave(){
 	document.getElementById("player_rank_exp_holder").value = SaveJson["server"]["PlayerRankExp"];
     document.getElementById("money_holder").value = SaveJson["server"]["Money"];
     document.getElementById("snail_holder").value = SaveJson["server"]["Shell"];
-    document.getElementById("sdodr_prlz_holder").value = SaveJson["server"]["sdodr_Prlz"];
+
+    const sdodr_prlz = document.getElementById("sdodr_prlz_holder");
+    const sdodr_keys = document.getElementById("sdodr_keys_holder");
+    sdodr_prlz.value = 0;
+    sdodr_keys.value = 0;
+    if("Sdodr" in SaveJson["client"] && "Inventory" in SaveJson["client"]["Sdodr"]){
+        const s_inv = SaveJson["client"]["Sdodr"]["Inventory"];
+        if("JemNumInner" in s_inv) sdodr_prlz.value = s_inv["JemNumInner"];
+        if("CoinLockerKeyNumInner" in s_inv) sdodr_keys.value = s_inv["CoinLockerKeyNumInner"];
+    }
+    document.getElementById("sdodr_prlz_holder")
+    document.getElementById("sdodr_prlz_holder").value = SaveJson["client"]["Sdodr"]["Inventory"];
 
     let playerInfo = SaveJson["client"]["Common"]["Coordinates"];
     click_clickable_sett(getElementByRsdbId("player_playertype", playerInfo["ModelType"]));
