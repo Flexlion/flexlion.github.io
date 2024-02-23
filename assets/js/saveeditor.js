@@ -238,6 +238,7 @@ function loadSave(){
 	document.getElementById("player_rank_exp_holder").value = SaveJson["server"]["PlayerRankExp"];
     document.getElementById("money_holder").value = SaveJson["server"]["Money"];
     document.getElementById("snail_holder").value = SaveJson["server"]["Shell"];
+    document.getElementById("sdodr_prlz_holder").value = SaveJson["server"]["sdodr_Prlz"];
 
     let playerInfo = SaveJson["client"]["Common"]["Coordinates"];
     click_clickable_sett(getElementByRsdbId("player_playertype", playerInfo["ModelType"]));
@@ -730,6 +731,12 @@ async function load_options(){
         if(snail_holder.value > 999) snail_holder.value = 999;
         if(snail_holder.value < 0) snail_holder.value = 0;
         SaveEdits["default_edits"]["snails"] = snail_holder.value;
+    });
+    $('.sdodr_prlz_holder').on("propertychange change click keyup input paste", function(event){
+        let sdodr_prlz_holder = event.target;
+        if(sdodr_prlz_holder.value > 99999) sdodr_prlz_holder.value = 99999;
+        if(sdodr_prlz_holder.value < 0) sdodr_prlz_holder.value = 0;
+        SaveEdits["default_edits"]["sdodr_prlz"] = sdodr_prlz_holder.value;
     });
     $('.player_playertype').click( function(event){
         click_clickable_sett(event.target);
