@@ -669,3 +669,42 @@
   .oekaki_b_power_slider::-moz-range-thumb {
     background: blue;
   }
+
+  .chosenEmt {
+    position: absolute;
+    transform: translate(33px, 245px);
+    z-index: 2;
+    color: #fff;
+    font-family: 'Splatfont2';
+    font-size: 17px;
+    white-space: nowrap;
+    text-shadow:
+    -1px -1px 0 black,
+     1px -1px 0 black,
+    -1px  1px 0 black,
+     1px  1px 0 black;
+     text-align: center;
+     justify-content: center;
+  }
+
+  .image_gallery_emote {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .player_emote {
+    border: 2px solid white;
+    cursor: pointer;
+    transition: 0.2s;
+    margin: 20px 20px;
+    border-radius: 23.5px;
+    scale: 120%;
+  }
+
+  .player_emote:hover {
+    border: 2px solid var(--bs-gray-500);
+  }
+
+  .player_emote[selected="true"]{
+    border: 2px solid var(--bs-primary);
+  }
