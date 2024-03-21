@@ -7,6 +7,7 @@ let HairInfo;
 let EyebrowInfo;
 let NameplateInfo;
 let langEUen;
+let EmoteInfo;
 
 let SaveJson;
 let SaveRaw;
@@ -41,6 +42,10 @@ function resetEdits(){
                 "remove": []
             },
             "oekaki_img": {
+                "edit": {},
+                "remove": []
+            },
+            "emote": {
                 "edit": {},
                 "remove": []
             }
@@ -263,6 +268,7 @@ function loadSave(){
     resetObtainableItems("player_clothes");
     resetObtainableItems("player_shoes");
     resetObtainableItems("nameplate_bg");
+    resetObtainableItems("player_emote");
 
     for(let rsdb_id in SaveJson["server"]["HaveWeaponMap"]) setHaveObtainableItemById("player_weapon", rsdb_id);
 
@@ -307,6 +313,14 @@ function loadSave(){
 
     if("Plaza" in SaveJson["client"] && "OekakiImage" in SaveJson["client"]["Plaza"] && "IsOekakiVertical" in SaveJson["client"]["Plaza"]) 
         updatePlazaPostImg(SaveJson["client"]["Plaza"]["OekakiImage"],  SaveJson["client"]["Plaza"]["IsOekakiVertical"]);
+
+    for (let rsdb_id in SaveJson["server"]["HaveEmoteMap"]) setHaveObtainableItemById("player_emote", rsdb_id);
+
+    element = getElementByRsdbId("player_emote", playerInfo["WinEmote"]);
+    if(element != null){
+        setEquippedObtainableItem(element);
+        element.click();
+    }
 }
 
 async function onDecryptSave(saveFile){
@@ -471,6 +485,29 @@ function loadAbilities(){
     );
 }
 
+
+function loadEmotes(){
+    loadClickableIdOptions(
+        "image_gallery_emote", "image_gallery_emote", "player_emote", EmoteInfo.length, 6, 
+        idx => {
+            return "./assets/img/player/emote/" + EmoteInfo[idx]["__RowId"] + ".png"
+        },
+        idx => {
+            return EmoteInfo[idx]["Id"];
+        },
+        90,
+        90
+    );
+    let elements = document.getElementsByClassName("player_emote");
+    for(let i = 0; i < elements.length; i++){
+        elements[i].onerror = function(event){
+            let target = event.target;
+            target.src = "./assets/img/player/emote/Dummy.png"; // No Icon
+        };
+    }
+    resetObtainableItems("player_emote");
+}
+
 function ensureObtainableInDictEdits(element, editType, mapName){
     let rsdb_id = element.getAttribute("rsdb_id");
     let edit_info = SaveEdits["dict_edits"][editType]["edit"];
@@ -525,6 +562,13 @@ function obtainWeapon(element){
         "RewardAcceptLevel": 0,
         "WinCount": 0
     };
+    setHaveObtainableItem(element);
+};
+
+function obtainEmote(element){
+    let rsdb_id = element.getAttribute("rsdb_id");
+    SaveEdits["dict_edits"]["emote"]["remove"].pop(rsdb_id);
+    SaveEdits["dict_edits"]["emote"]["edit"][rsdb_id] = true;
     setHaveObtainableItem(element);
 };
 
@@ -591,6 +635,14 @@ function updateNplBgObtainable(element){
     document.getElementById("remove_npl_bg_button").disabled = (obtainable_state == "no");
     document.getElementById("equip_npl_bg_button").disabled = (obtainable_state != "yes");
 };
+
+function updateEmoteObtainable(element){
+    obtainable_state = element.getAttribute("obtainable_state");
+    document.getElementById("get_emote_button").disabled = !(obtainable_state == "no");
+    document.getElementById("remove_emote_button").disabled = (obtainable_state == "no");
+    document.getElementById("equip_emote_button").disabled = (obtainable_state != "yes");
+}
+
 function obtainNplBg(element){
     let rsdb_id = element.getAttribute("rsdb_id");
     SaveEdits["dict_edits"]["nameplate_bg"]["remove"].pop(rsdb_id);
@@ -707,6 +759,7 @@ async function load_options(){
     loadGear("image_gallery_gear_clothes", "image_gallery_gear_clothes", "player_clothes", GearInfoClothes);
     loadGear("image_gallery_gear_shoes", "image_gallery_gear_shoes", "player_shoes", GearInfoShoes);
     loadAbilities();
+    loadEmotes();
 
 	$('.player_name_holder').on("propertychange change click keyup input paste", function(event){
         let name_holder = event.target;
@@ -980,6 +1033,23 @@ async function load_options(){
     $('.oekaki_is_inverted').on("propertychange change click", function(event){
         updateCustomImg();
     });
+    $('.player_emote').click( function(event){
+        clickObtainable(event.target, updateEmoteObtainable, "chosenEmoteImg", "chosenEmoteInfo", EmoteInfo, "CommonMsg/EmoteName")
+    });
+    $('.get_emote_button').click( function(event){
+        let element = getSelectedElement("player_emote");
+        obtainEmote(element);
+        updateEmoteObtainable(element);
+    });
+    $('.bulk_get_emote_button').click( function(event){
+        bulkGetObtainable("player_emote", obtainEmote);
+    });
+    $('.equip_emote_button').click( function(event){
+        equipObtainable("player_emote", "player_emote", updateEmoteObtainable);
+    });
+    $('.remove_emote_button').click( function(event){
+        removeObtainable("player_emote", "weapon", updateEmoteObtainable);
+    });
 }
 
 $(document).ready(async () => {
@@ -992,7 +1062,8 @@ $(document).ready(async () => {
         (async () => { HairInfo = await fetchJson("https://raw.githubusercontent.com/Flexlion/flexlion.github.io/master/assets/RSDB/HairInfo.json") })(),
         (async () => { EyebrowInfo = await fetchJson("https://raw.githubusercontent.com/Flexlion/flexlion.github.io/master/assets/RSDB/EyebrowInfo.json") })(),
         (async () => { BottomInfo = await fetchJson("https://raw.githubusercontent.com/Flexlion/flexlion.github.io/master/assets/RSDB/BottomInfo.json") })(),
-        (async () => { NameplateInfo = await fetchJson("https://raw.githubusercontent.com/Flexlion/flexlion.github.io/master/assets/RSDB/NamePlateBgInfo.json") })()
+        (async () => { NameplateInfo = await fetchJson("https://raw.githubusercontent.com/Flexlion/flexlion.github.io/master/assets/RSDB/NamePlateBgInfo.json") })(),
+        (async () => { EmoteInfo = await fetchJson("https://raw.githubusercontent.com/Flexlion/flexlion.github.io/master/assets/RSDB/EmoteInfo.json") })(),
     ]);
     await load_options();
 });
