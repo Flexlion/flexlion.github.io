@@ -1048,7 +1048,7 @@ async function load_options(){
         equipObtainable("player_emote", "player_emote", updateEmoteObtainable);
     });
     $('.remove_emote_button').click( function(event){
-        removeObtainable("player_emote", "weapon", updateEmoteObtainable);
+        removeObtainable("player_emote", "emote", updateEmoteObtainable);
     });
 }
 
