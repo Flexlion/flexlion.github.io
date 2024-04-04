@@ -55,7 +55,8 @@
     <a href="#" type="button" class="btn btn-outline-primary btn-lg px-4" data-bs-toggle="modal" data-bs-target="#modalGearHeadSett">Headgear</a><br><br>
     <a href="#" type="button" class="btn btn-outline-primary btn-lg px-4" data-bs-toggle="modal" data-bs-target="#modalGearClothesSett">Clothes</a><br><br>
     <a href="#" type="button" class="btn btn-outline-primary btn-lg px-4" data-bs-toggle="modal" data-bs-target="#modalGearShoesSett">Shoes</a><br><br>
-    <a href="#" type="button" class="btn btn-outline-primary btn-lg px-4" data-bs-toggle="modal" data-bs-target="#modalPlazaPost">Plaza Post</a>
+    <a href="#" type="button" class="btn btn-outline-primary btn-lg px-4" data-bs-toggle="modal" data-bs-target="#modalPlazaPost">Plaza Post</a><br><br>
+    <a href="#" type="button" class="btn btn-outline-primary btn-lg px-4" data-bs-toggle="modal" data-bs-target="#modalEmotesSett">Emotes</a>
     <hr>
     <button type="button" onclick="onEditSave(false)" class="btn btn-primary" id="edit_save_btn">Save</button>
     <button type="button" onclick="onEditSave(true)" class="btn btn-primary" id="edit_save_btn">Save to Flexlion CloudSave</button>
@@ -356,6 +357,34 @@
           <div class="modal-footer">
             <a class="btn btn-secondary" href="./index.html">Go Back</a>
             <button type="button" class="btn btn-danger" id="acceptModal">Accept</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal fade" id="modalEmotesSett" tabindex="-1" role="dialog" aria-labelledby="modalEmotesSettTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document" style="max-width: 850px;">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="modalEmotesSettTitle">Emotes</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-header">
+            <div class="CstContainer">
+              <img src="./assets/img/player/customize/BtnEmote.png" class="base">
+              <img src="./assets/img/player/gear/Dummy.png" width="128" height="128" class="item" id="chosenEmoteImg">
+              <p class="chosenEmt" id="chosenEmoteInfo" player_specific="true"></p>
+            </div>
+            <button type="button" class="btn btn-primary get_emote_button" style="translate: 300px 120px;position: absolute;" disabled="true" id="get_emote_button">Obtain</button>
+            <button type="button" class="btn btn-primary remove_emote_button" style="translate: 400px 120px;position: absolute;" disabled="true" id="remove_emote_button">Remove</button>
+            <button type="button" class="btn btn-primary equip_emote_button" style="translate: 500px 120px;position: absolute;" disabled="true" id="equip_emote_button">Equip</button>
+            <button type="button" class="btn btn-primary bulk_get_emote_button" id="bulk_get_emote_button">Bulk Obtain</button>
+          </div>
+          <div class="modal-body">
+            <div id="image_gallery_emote">
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
           </div>
         </div>
       </div>
