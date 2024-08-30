@@ -4219,6 +4219,63 @@
   },
   {
     "HowToGet": "Other",
+    "Id": 991,
+    "Order": 991,
+    "Season": 9,
+    "TextColor": {
+      "A": 1.0,
+      "B": 1.0,
+      "G": 1.0,
+      "R": 1.0
+    },
+    "UrokoPrice": {
+      "BronzeUrokoNum": 0,
+      "GoldUrokoNum": 0,
+      "SilverUrokoNum": 0
+    },
+    "UrokoUhlockLevel": 1,
+    "__RowId": "Npl_News_Season09_Lv01"
+  },
+  {
+    "HowToGet": "Other",
+    "Id": 992,
+    "Order": 992,
+    "Season": 9,
+    "TextColor": {
+      "A": 1.0,
+      "B": 1.0,
+      "G": 1.0,
+      "R": 1.0
+    },
+    "UrokoPrice": {
+      "BronzeUrokoNum": 0,
+      "GoldUrokoNum": 0,
+      "SilverUrokoNum": 0
+    },
+    "UrokoUhlockLevel": 1,
+    "__RowId": "Npl_News_Season09_Lv02"
+  },
+  {
+    "HowToGet": "Other",
+    "Id": 993,
+    "Order": 993,
+    "Season": 9,
+    "TextColor": {
+      "A": 1.0,
+      "B": 1.0,
+      "G": 1.0,
+      "R": 1.0
+    },
+    "UrokoPrice": {
+      "BronzeUrokoNum": 0,
+      "GoldUrokoNum": 0,
+      "SilverUrokoNum": 0
+    },
+    "UrokoUhlockLevel": 1,
+    "__RowId": "Npl_News_Season09_Lv03"
+  },
+  {
+    "HowToGet": "Other",
     "Id": 810,
     "Order": 810,
     "Season": -1,
@@ -4558,6 +4615,25 @@
     },
     "UrokoUhlockLevel": 1,
     "__RowId": "Npl_Trg_Season07_Lv01"
+  },
+  {
+    "HowToGet": "Other",
+    "Id": 937,
+    "Order": 937,
+    "Season": -1,
+    "TextColor": {
+      "A": 1.0,
+      "B": 1.0,
+      "G": 1.0,
+      "R": 1.0
+    },
+    "UrokoPrice": {
+      "BronzeUrokoNum": 0,
+      "GoldUrokoNum": 0,
+      "SilverUrokoNum": 0
+    },
+    "UrokoUhlockLevel": 1,
+    "__RowId": "Npl_Trg_Season08_Lv01"
   },
   {
     "HowToGet": "Other",

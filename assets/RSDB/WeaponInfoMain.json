@@ -910,7 +910,7 @@
     "ShopPrice": 11400,
     "ShopUnlockRank": 15,
     "SpecActor": "Work/Actor/WeaponBlasterLong.engine__actor__ActorParam.gyml",
-    "SpecialPoint": 200,
+    "SpecialPoint": 210,
     "SpecialWeapon": "Work/Gyml/SpCastle.spl__WeaponInfoSpecial.gyml",
     "SubWeapon": "Work/Gyml/Bomb_Splash.spl__WeaponInfoSub.gyml",
     "Type": "Versus",
@@ -1401,7 +1401,7 @@
       },
       {
         "Type": "Blaze",
-        "Value": 10
+        "Value": 15
       }
     ],
     "WeaponInfoForCoop": "Work/Gyml/Blaster_Precision_Coop.spl__WeaponInfoMain.gyml",
@@ -1470,7 +1470,7 @@
       },
       {
         "Type": "Blaze",
-        "Value": 10
+        "Value": 15
       }
     ],
     "WeaponInfoForCoop": "",
@@ -7248,7 +7248,7 @@
     "ShopPrice": 9200,
     "ShopUnlockRank": 7,
     "SpecActor": "Work/Actor/WeaponRollerNormal.engine__actor__ActorParam.gyml",
-    "SpecialPoint": 180,
+    "SpecialPoint": 170,
     "SpecialWeapon": "Work/Gyml/SpCastle.spl__WeaponInfoSpecial.gyml",
     "SubWeapon": "Work/Gyml/Beacon.spl__WeaponInfoSub.gyml",
     "Type": "Versus",
@@ -13343,7 +13343,7 @@
     "ShopPrice": 17600,
     "ShopUnlockRank": 23,
     "SpecActor": "Work/Actor/WeaponSlosherBathtub.engine__actor__ActorParam.gyml",
-    "SpecialPoint": 200,
+    "SpecialPoint": 190,
     "SpecialWeapon": "Work/Gyml/SpCastle.spl__WeaponInfoSpecial.gyml",
     "SubWeapon": "Work/Gyml/LineMarker.spl__WeaponInfoSub.gyml",
     "Type": "Versus",
@@ -14249,7 +14249,7 @@
     "ShopPrice": 2500,
     "ShopUnlockRank": 3,
     "SpecActor": "Work/Actor/WeaponSlosherStrong.engine__actor__ActorParam.gyml",
-    "SpecialPoint": 200,
+    "SpecialPoint": 210,
     "SpecialWeapon": "Work/Gyml/SpTripleTornado.spl__WeaponInfoSpecial.gyml",
     "SubWeapon": "Work/Gyml/Bomb_Splash.spl__WeaponInfoSub.gyml",
     "Type": "Versus",
@@ -14453,7 +14453,7 @@
     "ShopPrice": 0,
     "ShopUnlockRank": -1,
     "SpecActor": "Work/Actor/WeaponSlosherStrong.engine__actor__ActorParam.gyml",
-    "SpecialPoint": 200,
+    "SpecialPoint": 210,
     "SpecialWeapon": "Work/Gyml/SpTripleTornado.spl__WeaponInfoSpecial.gyml",
     "SubWeapon": "Work/Gyml/Bomb_Splash.spl__WeaponInfoSub.gyml",
     "Type": "Versus",
