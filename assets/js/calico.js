@@ -46,6 +46,9 @@ async function onLoadCalicoConfig(configData){
         info["sett_rsdb"]["player_clothes"] = pinfo["gear_cloth"].toString();
         info["sett_rsdb"]["player_shoes"] = pinfo["gear_shoes"].toString();
         info["sett_rsdb"]["player_weapon"] = pinfo["weapon_main"].toString();
+        info["sett_rsdb"]["player_headgear_variation"] = pinfo["gear_head_variation"].toString();
+        info["sett_rsdb"]["player_clothes_variation"] = pinfo["gear_cloth_variation"].toString();
+        info["sett_rsdb"]["player_shoes_variation"] = pinfo["gear_shoes_variation"].toString();
         if(pinfo.hasOwnProperty("color")){
             info["color"] = {
                 "r": Math.pow(pinfo["color"].r, 1.0 / 2.2),
@@ -86,8 +89,11 @@ function downloadConfig(){
             "eye_brows": Number(info["sett_clickable"]["player_eyebrow"]),
             "eye_color": Number(info["sett_clickable"]["player_eyecolor"]),
             "gear_head": Number(info["sett_rsdb"]["player_headgear"]),
+            "gear_head_variation": Number(info["sett_rsdb"]["player_headgear_variation"]),
             "gear_cloth": Number(info["sett_rsdb"]["player_clothes"]),
+            "gear_cloth_variation": Number(info["sett_rsdb"]["player_clothes_variation"]),
             "gear_shoes": Number(info["sett_rsdb"]["player_shoes"]),
+            "gear_shoes_variation": Number(info["sett_rsdb"]["player_shoes_variation"]),
             "weapon_main": Number(info["sett_rsdb"]["player_weapon"]),
             "anim_name": info["anim"],
             "color": {
@@ -104,6 +110,18 @@ function downloadConfig(){
     }).then(function(content) {
             window.location.href = "data:application/zip;base64," + content;
     });    
+}
+
+function click_adjust_gear(target) {
+    if(target == null) return;
+    target.classList.toggle('active');
+    let className = target.getAttribute("resultClass");
+    let curVar = playerInfos[curPlayer]["sett_rsdb"][className + "_variation"];
+    if(curPlayer != -1) {
+        playerInfos[curPlayer]["sett_rsdb"][className + "_variation"] = curVar ? 0 : 1;
+    } else {
+        playerInfos[curPlayer]["sett_rsdb"][className + "_variation"] = curVar ? 0 : 1;
+    }
 }
 
 function click_player_sett(target)
@@ -167,8 +185,18 @@ function onRsdbEntrySelect(target){
 
     let rsdb_id = target.getAttribute("rsdb_id");
     if(info.getAttribute("player_specific") == "true"){
-        if(curPlayer != -1) playerInfos[curPlayer]["sett_rsdb"][className] = rsdb_id;
-        else defaultPlayerInfo["sett_rsdb"][className] = rsdb_id;
+        let varEle = document.getElementById(target.getAttribute('resultImg').replace("Img", "Var"));
+        let variationNum = target.getAttribute("variationNum");
+        if (varEle) {
+            varEle.style.display = variationNum !== null ? 'block' : 'none';
+        }
+        if(curPlayer != -1) {
+            playerInfos[curPlayer]["sett_rsdb"][className] = rsdb_id;
+            if (playerInfos[curPlayer]["sett_rsdb"][className + "_variation"] == 1) varEle.classList.add('active');
+        } else {
+            defaultPlayerInfo["sett_rsdb"][className] = rsdb_id;
+            defaultPlayerInfo["sett_rsdb"][className + "_variation"] = 0;
+        }
     } else sessionInfo[className] = rsdb_id;
 }
 
@@ -239,6 +267,9 @@ function buildRsdbSelector(modalName, rsdbInfos, entryPerLine, getCodeNameFunc, 
             entry.setAttribute("resultImg", resultImg);
             entry.setAttribute("resultInfo", resultInfo);
             entry.setAttribute("class", classNameImg);
+            if (rsdbInfos[idx]["VariationNum"]) {
+                entry.setAttribute("variationNum", 0);
+            };
             entry.setAttribute("data-bs-dismiss", "modal");
             gallery.appendChild(entry);
 
