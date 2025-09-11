@@ -1,5 +1,6 @@
 [
   {
+    "CallSign": 130,
     "Id": 30,
     "IsLong": false,
     "IsSquid": false,
@@ -9,6 +10,7 @@
     "__RowId": "Har_OCT000"
   },
   {
+    "CallSign": 0,
     "Id": 830,
     "IsLong": false,
     "IsSquid": false,
@@ -18,6 +20,7 @@
     "__RowId": "Har_OCT000_SdodrCstm00"
   },
   {
+    "CallSign": 131,
     "Id": 31,
     "IsLong": false,
     "IsSquid": false,
@@ -27,6 +30,7 @@
     "__RowId": "Har_OCT001"
   },
   {
+    "CallSign": 0,
     "Id": 831,
     "IsLong": false,
     "IsSquid": false,
@@ -36,6 +40,7 @@
     "__RowId": "Har_OCT001_SdodrCstm00"
   },
   {
+    "CallSign": 132,
     "Id": 32,
     "IsLong": false,
     "IsSquid": false,
@@ -45,6 +50,7 @@
     "__RowId": "Har_OCT002"
   },
   {
+    "CallSign": 0,
     "Id": 832,
     "IsLong": false,
     "IsSquid": false,
@@ -54,6 +60,7 @@
     "__RowId": "Har_OCT002_SdodrCstm00"
   },
   {
+    "CallSign": 133,
     "Id": 33,
     "IsLong": false,
     "IsSquid": false,
@@ -63,6 +70,7 @@
     "__RowId": "Har_OCT003"
   },
   {
+    "CallSign": 0,
     "Id": 833,
     "IsLong": false,
     "IsSquid": false,
@@ -72,6 +80,7 @@
     "__RowId": "Har_OCT003_SdodrCstm00"
   },
   {
+    "CallSign": 134,
     "Id": 34,
     "IsLong": false,
     "IsSquid": false,
@@ -81,6 +90,7 @@
     "__RowId": "Har_OCT004"
   },
   {
+    "CallSign": 0,
     "Id": 834,
     "IsLong": false,
     "IsSquid": false,
@@ -90,6 +100,7 @@
     "__RowId": "Har_OCT004_SdodrCstm00"
   },
   {
+    "CallSign": 135,
     "Id": 35,
     "IsLong": false,
     "IsSquid": false,
@@ -99,6 +110,7 @@
     "__RowId": "Har_OCT005"
   },
   {
+    "CallSign": 0,
     "Id": 835,
     "IsLong": false,
     "IsSquid": false,
@@ -108,6 +120,7 @@
     "__RowId": "Har_OCT005_SdodrCstm00"
   },
   {
+    "CallSign": 136,
     "Id": 36,
     "IsLong": false,
     "IsSquid": false,
@@ -117,6 +130,7 @@
     "__RowId": "Har_OCT006"
   },
   {
+    "CallSign": 0,
     "Id": 836,
     "IsLong": false,
     "IsSquid": false,
@@ -126,6 +140,7 @@
     "__RowId": "Har_OCT006_SdodrCstm00"
   },
   {
+    "CallSign": 137,
     "Id": 37,
     "IsLong": false,
     "IsSquid": false,
@@ -135,6 +150,7 @@
     "__RowId": "Har_OCT007"
   },
   {
+    "CallSign": 0,
     "Id": 837,
     "IsLong": false,
     "IsSquid": false,
@@ -144,6 +160,7 @@
     "__RowId": "Har_OCT007_SdodrCstm00"
   },
   {
+    "CallSign": 0,
     "Id": 600,
     "IsLong": false,
     "IsSquid": false,
@@ -153,6 +170,7 @@
     "__RowId": "Har_OCT_RVL000"
   },
   {
+    "CallSign": 0,
     "Id": 601,
     "IsLong": false,
     "IsSquid": false,
@@ -162,6 +180,7 @@
     "__RowId": "Har_OCT_RVL001"
   },
   {
+    "CallSign": 100,
     "Id": 0,
     "IsLong": false,
     "IsSquid": true,
@@ -171,6 +190,7 @@
     "__RowId": "Har_SQD000"
   },
   {
+    "CallSign": 101,
     "Id": 1,
     "IsLong": false,
     "IsSquid": true,
@@ -180,6 +200,7 @@
     "__RowId": "Har_SQD001"
   },
   {
+    "CallSign": 102,
     "Id": 2,
     "IsLong": false,
     "IsSquid": true,
@@ -189,6 +210,7 @@
     "__RowId": "Har_SQD002"
   },
   {
+    "CallSign": 103,
     "Id": 3,
     "IsLong": false,
     "IsSquid": true,
@@ -198,6 +220,7 @@
     "__RowId": "Har_SQD003"
   },
   {
+    "CallSign": 104,
     "Id": 4,
     "IsLong": false,
     "IsSquid": true,
@@ -207,6 +230,7 @@
     "__RowId": "Har_SQD004"
   },
   {
+    "CallSign": 105,
     "Id": 5,
     "IsLong": false,
     "IsSquid": true,
@@ -216,6 +240,7 @@
     "__RowId": "Har_SQD005"
   },
   {
+    "CallSign": 106,
     "Id": 6,
     "IsLong": false,
     "IsSquid": true,
@@ -225,6 +250,7 @@
     "__RowId": "Har_SQD006"
   },
   {
+    "CallSign": 107,
     "Id": 7,
     "IsLong": false,
     "IsSquid": true,
@@ -234,6 +260,7 @@
     "__RowId": "Har_SQD007"
   },
   {
+    "CallSign": 108,
     "Id": 8,
     "IsLong": false,
     "IsSquid": true,
@@ -243,6 +270,7 @@
     "__RowId": "Har_SQD008"
   },
   {
+    "CallSign": 109,
     "Id": 9,
     "IsLong": false,
     "IsSquid": true,
@@ -252,6 +280,7 @@
     "__RowId": "Har_SQD009"
   },
   {
+    "CallSign": 110,
     "Id": 10,
     "IsLong": false,
     "IsSquid": true,
@@ -261,6 +290,7 @@
     "__RowId": "Har_SQD010"
   },
   {
+    "CallSign": 111,
     "Id": 11,
     "IsLong": false,
     "IsSquid": true,
@@ -270,6 +300,7 @@
     "__RowId": "Har_SQD011"
   },
   {
+    "CallSign": 112,
     "Id": 12,
     "IsLong": false,
     "IsSquid": true,
@@ -279,6 +310,7 @@
     "__RowId": "Har_SQD012"
   },
   {
+    "CallSign": 113,
     "Id": 13,
     "IsLong": false,
     "IsSquid": true,
@@ -288,6 +320,7 @@
     "__RowId": "Har_SQD013"
   },
   {
+    "CallSign": 114,
     "Id": 14,
     "IsLong": false,
     "IsSquid": true,
@@ -297,6 +330,7 @@
     "__RowId": "Har_SQD014"
   },
   {
+    "CallSign": 115,
     "Id": 15,
     "IsLong": false,
     "IsSquid": true,
@@ -306,6 +340,7 @@
     "__RowId": "Har_SQD015"
   },
   {
+    "CallSign": 0,
     "Id": 500,
     "IsLong": false,
     "IsSquid": true,
