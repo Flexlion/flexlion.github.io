@@ -878,7 +878,7 @@ async function load_options(){
     });
     $('.weapon_freshness_holder').on("propertychange change click keyup input paste", function(event){
         let freshness_holder = event.target;
-        if(freshness_holder.value > 5) freshness_holder.value = 5;
+        if(freshness_holder.value > 10) freshness_holder.value = 10;
         if(freshness_holder.value < 0) freshness_holder.value = 0;
 
         let element = getSelectedElement("player_weapon");
