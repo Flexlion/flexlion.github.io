@@ -172,7 +172,7 @@ function redirectAccount(){
   window.location.replace("https://flexlion.github.io/account");
 }
 function redirectLogin(){
-  window.location.replace("https://discord.com/oauth2/authorize?client_id=1098338471829065939&redirect_uri=https%3A%2F%2Fflexlion.github.io%2Flogin&response_type=code&scope=identify");
+  window.location.replace("https://discord.com/oauth2/authorize?client_id=1364253723601277031&response_type=code&redirect_uri=http%3A%2F%2Fflexlion.github.io%2Flogin&scope=identify");
 }
 function getFxToken(){
   return localStorage.getItem("fxtoken");
