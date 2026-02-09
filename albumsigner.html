@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="application-name" content="Flexlion">
+    <meta name="description" content="Switch Album Signer - Sign custom images and videos for the Nintendo Switch album.">
+    <link rel="shortcut icon" href="./assets/img/favico.ico">
+    <link rel="apple-touch-icon" href="./assets/img/favico.ico">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="stylesheet" href="./assets/css/main.css">
+    <link rel="stylesheet" href="./assets/css/master.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Switch Album Signer - Flexlion</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.4/font/bootstrap-icons.css">
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js" integrity="sha384-zYPOMqeu1DAVkHiLqWBUTcbYfZ8osu1Nd6Z89ify25QV9guujx43ITvfi12/QExE" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.min.js" integrity="sha384-Y4oOpwW3duJdCWv5ly8SCFYWqFDsfob/3GkgExXKV4idmbt98QcxXYs9UoXAB7BZ" crossorigin="anonymous"></script>
+    <style>
+        .drop-zone {
+            border: 2px dashed rgba(105, 158, 255, 0.4);
+            border-radius: 16px;
+            padding: 48px 24px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: rgba(105, 158, 255, 0.03);
+            min-height: 200px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .drop-zone:hover, .drop-zone.drag-over {
+            border-color: rgba(105, 158, 255, 0.8);
+            background: rgba(105, 158, 255, 0.08);
+            box-shadow: 0 0 20px 2px rgba(105, 158, 255, 0.15);
+        }
+        .drop-zone .bi {
+            font-size: 3rem;
+            color: rgba(105, 158, 255, 0.5);
+            transition: color 0.3s;
+        }
+        .drop-zone:hover .bi, .drop-zone.drag-over .bi {
+            color: rgba(105, 158, 255, 0.9);
+        }
+        .drop-zone.has-file {
+            border-color: rgba(40, 200, 120, 0.6);
+            background: rgba(40, 200, 120, 0.05);
+        }
+        .drop-zone.has-file .bi-cloud-arrow-up { display: none; }
+        .file-badge {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .file-badge.image { background: rgba(168, 85, 247, 0.2); color: #c084fc; }
+        .file-badge.video { background: rgba(251, 146, 60, 0.2); color: #fdba74; }
+        .preview-thumb {
+            max-width: 200px;
+            max-height: 120px;
+            border-radius: 8px;
+            margin-top: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+        }
+        .signer-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.2);
+        }
+        .status-area {
+            min-height: 60px;
+        }
+        #btn-sign {
+            transition: all 0.3s ease;
+        }
+        #btn-sign:not(:disabled):hover {
+            box-shadow: 0 0 15px 3px rgba(105, 158, 255, 0.5);
+            transform: translateY(-1px);
+        }
+        .spinner-border-sm { width: 1rem; height: 1rem; border-width: 0.15em; }
+        .form-control:focus, .form-select:focus {
+            border-color: rgba(105, 158, 255, 0.5);
+            box-shadow: 0 0 0 0.2rem rgba(105, 158, 255, 0.15);
+        }
+        .hero-title {
+            font-size: 2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #69aeff, #c084fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .toast-container { z-index: 9999; }
+    </style>
+</head>
+<body>
+  <div class="container">
+    <header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom">
+      <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-dark text-decoration-none">
+        <img src="./assets/img/favico.ico" width="50" height="43" alt="">
+        <span class="fs-4" style="padding-left: 10px;">Flexlion</span>
+      </a>
+      <ul class="nav nav-pills">
+        <li class="nav-item"><a href="./" class="nav-link">Home</a></li>
+        <li class="nav-item"><a href="./configurator.html" class="nav-link">Configurator</a></li>
+        <li class="nav-item"><a href="./saveeditor.html" class="nav-link">Save Editor</a></li>
+        <li class="nav-item"><a href="./fxnetctrl.html" class="nav-link">FXNETCTRL</a></li>
+        <li class="nav-item"><a href="./albumsigner.html" class="nav-link active" aria-current="page">Album Signer</a></li>
+        <li class="nav-item"><a href="./account.html" class="nav-link">Account</a></li>
+      </ul>
+    </header>
+  </div>
+
+  <div class="container mb-5 pb-5">
+    <div class="text-center mb-4">
+      <h1 class="hero-title mb-2">Switch Album Signer</h1>
+      <p class="text-secondary">Sign custom screenshots and clips so they appear in your Nintendo Switch album.</p>
+    </div>
+
+    <div class="row justify-content-center">
+      <div class="col-lg-7">
+        <div class="signer-card p-4">
+
+          <!-- Drop Zone -->
+          <div class="drop-zone" id="drop-zone">
+            <i class="bi bi-cloud-arrow-up mb-2"></i>
+            <div id="drop-label">
+              <p class="mb-1 fw-semibold">Drop an image or video here</p>
+              <small class="text-secondary">or click to browse &mdash; max 50 MB</small>
+            </div>
+            <div id="file-info" class="d-none">
+              <span class="file-badge mb-2" id="file-type-badge"></span>
+              <p class="mb-0 fw-semibold" id="file-name-display"></p>
+              <small class="text-secondary" id="file-size-display"></small>
+              <img id="preview-img" class="preview-thumb d-none" alt="Preview">
+            </div>
+            <input type="file" id="file-input" class="d-none" accept="image/*,video/mp4,video/quicktime,video/x-msvideo,video/x-matroska,video/webm">
+          </div>
+
+          <hr class="my-4 border-secondary opacity-25">
+
+          <!-- Options -->
+          <div class="row g-3 mb-4">
+            <div class="col-sm-6">
+              <label for="title-id" class="form-label text-secondary small">Title ID</label>
+              <input type="text" class="form-control" id="title-id" value="0100000000001000" placeholder="0100000000001000" spellcheck="false">
+              <div class="form-text text-secondary" style="font-size:0.75rem">Hex, e.g. 0100C2500FC20000 for Splatoon 3</div>
+            </div>
+            <div class="col-sm-6">
+              <label for="capture-datetime" class="form-label text-secondary small">Capture Date &amp; Time</label>
+              <input type="datetime-local" class="form-control" id="capture-datetime" min="1970-01-01T00:00">
+              <div class="form-text text-secondary" style="font-size:0.75rem">Defaults to current time if empty</div>
+            </div>
+          </div>
+
+          <!-- Submit -->
+          <div class="d-grid">
+            <button class="btn btn-primary btn-lg" id="btn-sign" disabled>
+              <span id="btn-sign-text"><i class="bi bi-pen me-2"></i>Sign &amp; Download</span>
+              <span id="btn-sign-loading" class="d-none"><span class="spinner-border spinner-border-sm me-2" role="status"></span>Processing...</span>
+            </button>
+          </div>
+
+          <!-- Status -->
+          <div class="status-area mt-3 text-center">
+            <div id="status-msg" class="d-none"></div>
+          </div>
+
+        </div>
+
+        <!-- Info -->
+        <div class="mt-4 text-center">
+          <small class="text-secondary">
+            Images are re-encoded to Nintendo-compatible JPEG. Videos are re-encoded to 720p H.264.<br>
+            Video processing may take a while depending on length.
+          </small>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div class="toast-container position-fixed bottom-0 end-0 p-3">
+    <div id="error-toast" class="toast align-items-center text-bg-danger border-0" role="alert">
+      <div class="d-flex">
+        <div class="toast-body" id="toast-msg"></div>
+        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+      </div>
+    </div>
+  </div>
+
+<footer class="border-top footer text-muted text-center">
+  <div class="container text-wrap lh-base p-2 p-lg-3">
+    This website is not affiliated with Nintendo Co., Ltd. All product names, logos, and brands are property of their respective owners.
+  </div>
+</footer>
+
+<script>
+const API_BASE = 'https://flexlion3.herokuapp.com';
+const MAX_SIZE = 50 * 1024 * 1024;
+const IMAGE_EXTS = ['jpg','jpeg','png','webp','bmp','gif','tiff','tif'];
+const VIDEO_EXTS = ['mp4','mov','avi','mkv','webm','m4v'];
+
+let selectedFile = null;
+let fileIsVideo = false;
+
+const dropZone = document.getElementById('drop-zone');
+const fileInput = document.getElementById('file-input');
+const btnSign = document.getElementById('btn-sign');
+const btnText = document.getElementById('btn-sign-text');
+const btnLoading = document.getElementById('btn-sign-loading');
+const dropLabel = document.getElementById('drop-label');
+const fileInfo = document.getElementById('file-info');
+const statusMsg = document.getElementById('status-msg');
+
+// Set default datetime to now (local)
+function setDefaultDatetime() {
+    const now = new Date();
+    now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+    document.getElementById('capture-datetime').value = now.toISOString().slice(0, 16);
+}
+setDefaultDatetime();
+
+function getExt(name) {
+    return (name || '').split('.').pop().toLowerCase();
+}
+
+function formatSize(bytes) {
+    if (bytes < 1024) return bytes + ' B';
+    if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+    return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+}
+
+function showToast(msg) {
+    document.getElementById('toast-msg').textContent = msg;
+    new bootstrap.Toast(document.getElementById('error-toast')).show();
+}
+
+function showStatus(msg, type) {
+    statusMsg.className = 'small ' + (type === 'error' ? 'text-danger' : type === 'success' ? 'text-success' : 'text-secondary');
+    statusMsg.textContent = msg;
+    statusMsg.classList.remove('d-none');
+}
+function hideStatus() { statusMsg.classList.add('d-none'); }
+
+function onFileSelected(file) {
+    hideStatus();
+    if (!file) return;
+
+    if (file.size > MAX_SIZE) {
+        showToast('File is too large. Maximum size is 50 MB.');
+        return;
+    }
+
+    const ext = getExt(file.name);
+    if (!IMAGE_EXTS.includes(ext) && !VIDEO_EXTS.includes(ext)) {
+        showToast('Unsupported file type. Use an image (JPG, PNG, WEBP...) or video (MP4, MOV...).');
+        return;
+    }
+
+    selectedFile = file;
+    fileIsVideo = VIDEO_EXTS.includes(ext);
+
+    const badge = document.getElementById('file-type-badge');
+    badge.textContent = fileIsVideo ? 'Video' : 'Image';
+    badge.className = 'file-badge mb-2 ' + (fileIsVideo ? 'video' : 'image');
+
+    document.getElementById('file-name-display').textContent = file.name;
+    document.getElementById('file-size-display').textContent = formatSize(file.size);
+
+    const previewImg = document.getElementById('preview-img');
+    previewImg.classList.add('d-none');
+    if (!fileIsVideo && file.size < 15 * 1024 * 1024) {
+        const reader = new FileReader();
+        reader.onload = e => { previewImg.src = e.target.result; previewImg.classList.remove('d-none'); };
+        reader.readAsDataURL(file);
+    }
+
+    dropLabel.classList.add('d-none');
+    fileInfo.classList.remove('d-none');
+    dropZone.classList.add('has-file');
+    btnSign.disabled = false;
+}
+
+// Drag & Drop
+dropZone.addEventListener('click', () => fileInput.click());
+dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('drag-over'); });
+dropZone.addEventListener('dragleave', () => dropZone.classList.remove('drag-over'));
+dropZone.addEventListener('drop', e => {
+    e.preventDefault();
+    dropZone.classList.remove('drag-over');
+    if (e.dataTransfer.files.length > 0) onFileSelected(e.dataTransfer.files[0]);
+});
+fileInput.addEventListener('change', () => { if (fileInput.files.length > 0) onFileSelected(fileInput.files[0]); });
+
+// Sign & Download
+btnSign.addEventListener('click', async () => {
+    if (!selectedFile) return;
+    hideStatus();
+
+    const titleId = document.getElementById('title-id').value.trim() || '0100000000001000';
+    if (!/^[0-9a-fA-F]{1,16}$/.test(titleId.replace(/^0x/i, ''))) {
+        showToast('Invalid Title ID. Enter a hex value like 0100C2500FC20000.');
+        return;
+    }
+
+    const dtInput = document.getElementById('capture-datetime').value;
+
+    const endpoint = fileIsVideo ? '/album/sign/video' : '/album/sign/image';
+
+    const formData = new FormData();
+    formData.append('file', selectedFile);
+    formData.append('title_id', titleId.replace(/^0x/i, ''));
+    if (dtInput) {
+        formData.append('datetime', dtInput.replace('T', 'T') + ':00');
+    }
+
+    btnSign.disabled = true;
+    btnText.classList.add('d-none');
+    btnLoading.classList.remove('d-none');
+    showStatus(fileIsVideo ? 'Uploading and re-encoding video... this may take a while.' : 'Processing image...', 'info');
+
+    try {
+        const response = await fetch(API_BASE + endpoint, { method: 'POST', body: formData });
+
+        if (!response.ok) {
+            let errMsg = 'Server error (' + response.status + ')';
+            try {
+                const err = await response.json();
+                if (err.error) errMsg = err.error;
+            } catch {}
+            showStatus(errMsg, 'error');
+            return;
+        }
+
+        const disposition = response.headers.get('Content-Disposition') || '';
+        const match = disposition.match(/filename="?([^"]+)"?/);
+        const filename = match ? match[1] : (fileIsVideo ? 'output.mp4' : 'output.jpg');
+
+        const blob = await response.blob();
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+
+        showStatus('Done! File downloaded as ' + filename, 'success');
+
+    } catch (e) {
+        showStatus('Network error: ' + e.message, 'error');
+    } finally {
+        btnSign.disabled = false;
+        btnText.classList.remove('d-none');
+        btnLoading.classList.add('d-none');
+    }
+});
+</script>
+</body>
+</html>
