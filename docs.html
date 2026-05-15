@@ -1,0 +1,1340 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="application-name" content="Flexlion">
+    <meta name="description" content="Flexlion Mod Menu Documentation - Complete guide to installation, features, modding, and tools.">
+    <link rel="shortcut icon" href="./assets/img/favico.ico">
+    <link rel="apple-touch-icon" href="./assets/img/favico.ico">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="stylesheet" href="./assets/css/main.css">
+    <link rel="stylesheet" href="./assets/css/master.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documentation - Flexlion</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.4/font/bootstrap-icons.css">
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js" integrity="sha384-zYPOMqeu1DAVkHiLqWBUTcbYfZ8osu1Nd6Z89ify25QV9guujx43ITvfi12/QExE" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.min.js" integrity="sha384-Y4oOpwW3duJdCWv5ly8SCFYWqFDsfob/3GkgExXKV4idmbt98QcxXYs9UoXAB7BZ" crossorigin="anonymous"></script>
+    <style>
+        .docs-sidebar {
+            position: sticky;
+            top: 20px;
+            max-height: calc(100vh - 80px);
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(105,158,255,0.3) transparent;
+        }
+        .docs-sidebar::-webkit-scrollbar { width: 4px; }
+        .docs-sidebar::-webkit-scrollbar-thumb { background: rgba(105,158,255,0.3); border-radius: 4px; }
+
+        .docs-nav .nav-link {
+            color: rgba(255,255,255,0.55);
+            padding: 0.3rem 0.75rem;
+            font-size: 0.875rem;
+            border-left: 2px solid transparent;
+            border-radius: 0;
+            transition: all 0.2s ease;
+            background: none !important;
+            box-shadow: none !important;
+        }
+        .docs-nav .nav-link:hover {
+            color: rgba(255,255,255,0.85);
+            border-left-color: rgba(105,158,255,0.5);
+            background: rgba(105,158,255,0.05) !important;
+            box-shadow: none !important;
+        }
+        .docs-nav .nav-link.active {
+            color: #699eff;
+            border-left-color: #699eff;
+            background: rgba(105,158,255,0.08) !important;
+            box-shadow: none !important;
+        }
+        .docs-nav .nav-link.sub-link {
+            padding-left: 1.5rem;
+            font-size: 0.8125rem;
+        }
+
+        .docs-section {
+            scroll-margin-top: 20px;
+        }
+
+        .doc-card {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(105,158,255,0.12);
+            border-radius: 12px;
+            padding: 1.25rem 1.5rem;
+            margin-bottom: 1rem;
+            transition: all 0.25s ease;
+        }
+        .doc-card:hover {
+            border-color: rgba(105,158,255,0.3);
+            background: rgba(105,158,255,0.04);
+            box-shadow: 0 0 15px 1px rgba(105,158,255,0.08);
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 1rem;
+        }
+
+        .feature-card {
+            background: rgba(255,255,255,0.025);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 10px;
+            padding: 1rem 1.25rem;
+            transition: all 0.25s ease;
+        }
+        .feature-card:hover {
+            border-color: rgba(105,158,255,0.25);
+            background: rgba(105,158,255,0.03);
+        }
+        .feature-card h6 {
+            margin-bottom: 0.35rem;
+        }
+        .feature-card p {
+            margin-bottom: 0;
+            font-size: 0.875rem;
+            color: rgba(255,255,255,0.6);
+        }
+
+        .badge-unsafe {
+            background: rgba(220,53,69,0.15);
+            color: #ff6b7a;
+            border: 1px solid rgba(220,53,69,0.3);
+            font-weight: 500;
+        }
+        .badge-safe {
+            background: rgba(25,135,84,0.15);
+            color: #5dd39e;
+            border: 1px solid rgba(25,135,84,0.3);
+            font-weight: 500;
+        }
+        .badge-info {
+            background: rgba(105,158,255,0.12);
+            color: #87b4ff;
+            border: 1px solid rgba(105,158,255,0.25);
+            font-weight: 500;
+        }
+
+        .tab-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            background: linear-gradient(135deg, rgba(105,158,255,0.12), rgba(163,105,255,0.12));
+            border: 1px solid rgba(105,158,255,0.2);
+            border-radius: 8px;
+            padding: 0.4rem 0.85rem;
+            font-size: 0.9375rem;
+            font-weight: 600;
+            color: #b3cdff;
+            margin-bottom: 0.75rem;
+        }
+
+        .key-badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.15);
+            border-radius: 5px;
+            padding: 0.1rem 0.45rem;
+            font-size: 0.8125rem;
+            font-family: monospace;
+            color: rgba(255,255,255,0.8);
+            line-height: 1.6;
+        }
+
+        .controls-table td, .controls-table th {
+            vertical-align: middle;
+        }
+
+        .section-divider {
+            border: none;
+            border-top: 1px solid rgba(105,158,255,0.12);
+            margin: 2.5rem 0;
+        }
+
+        .code-path {
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 6px;
+            padding: 0.15rem 0.5rem;
+            font-family: monospace;
+            font-size: 0.8125rem;
+            color: #87b4ff;
+            word-break: break-all;
+        }
+
+        .callout {
+            border-radius: 10px;
+            padding: 1rem 1.25rem;
+            margin-bottom: 1rem;
+        }
+        .callout-warning {
+            background: rgba(255,193,7,0.06);
+            border: 1px solid rgba(255,193,7,0.2);
+            border-left: 3px solid rgba(255,193,7,0.5);
+        }
+        .callout-danger {
+            background: rgba(220,53,69,0.06);
+            border: 1px solid rgba(220,53,69,0.2);
+            border-left: 3px solid rgba(220,53,69,0.5);
+        }
+        .callout-info {
+            background: rgba(105,158,255,0.06);
+            border: 1px solid rgba(105,158,255,0.15);
+            border-left: 3px solid rgba(105,158,255,0.4);
+        }
+
+        .hero-docs {
+            text-align: center;
+            padding: 2rem 0 1.5rem;
+        }
+        .hero-docs h1 {
+            font-size: 2.25rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #699eff, #c069ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .hero-docs p {
+            color: rgba(255,255,255,0.5);
+            max-width: 600px;
+            margin: 0.5rem auto 0;
+        }
+
+        h2.docs-heading {
+            font-size: 1.5rem;
+            font-weight: 700;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid rgba(105,158,255,0.15);
+            margin-bottom: 1.25rem;
+        }
+        h3.docs-subheading {
+            font-size: 1.15rem;
+            font-weight: 600;
+            color: rgba(255,255,255,0.85);
+            margin-bottom: 0.75rem;
+        }
+
+        .json-block {
+            background: rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 8px;
+            padding: 1rem 1.25rem;
+            font-family: monospace;
+            font-size: 0.8125rem;
+            overflow-x: auto;
+            white-space: pre;
+            color: rgba(255,255,255,0.75);
+        }
+
+        @media (max-width: 991.98px) {
+            .docs-sidebar { display: none; }
+            .feature-grid { grid-template-columns: 1fr; }
+        }
+
+        .toc-mobile {
+            display: none;
+        }
+        @media (max-width: 991.98px) {
+            .toc-mobile { display: block; }
+        }
+
+        footer {
+            position: relative !important;
+            margin-top: 2rem;
+        }
+    </style>
+</head>
+<body>
+  <div class="container">
+    <header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom">
+      <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-dark text-decoration-none">
+        <img src="./assets/img/favico.ico" width="50" height="43" alt="">
+        <span class="fs-4" style="padding-left: 10px;">Flexlion</span>
+      </a>
+      <ul class="nav nav-pills">
+        <li class="nav-item"><a href="./index.html" class="nav-link">Home</a></li>
+        <li class="nav-item"><a href="#" class="nav-link active" aria-current="page">Docs</a></li>
+        <li class="nav-item"><a href="./configurator.html" class="nav-link">Configurator</a></li>
+        <li class="nav-item"><a href="./saveeditor.html" class="nav-link">Save Editor</a></li>
+        <li class="nav-item"><a href="./fxnetctrl.html" class="nav-link">FXNETCTRL</a></li>
+        <li class="nav-item"><a href="./albumsigner.html" class="nav-link">Album Signer</a></li>
+        <li class="nav-item"><a href="./account.html" class="nav-link">Account</a></li>
+      </ul>
+    </header>
+  </div>
+
+  <div class="container">
+    <div class="hero-docs">
+      <h1>Flexlion Documentation</h1>
+      <p>Complete guide to installing, using, and modding with Flexlion for Splatoon 3</p>
+    </div>
+
+    <!-- Mobile TOC -->
+    <div class="toc-mobile mb-4">
+      <div class="accordion" id="mobileToc">
+        <div class="accordion-item" style="background:rgba(255,255,255,0.03); border-color:rgba(105,158,255,0.15);">
+          <h2 class="accordion-header">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#mobileTocBody" style="background:rgba(105,158,255,0.06); color:#b3cdff;">
+              <i class="bi bi-list me-2"></i> Table of Contents
+            </button>
+          </h2>
+          <div id="mobileTocBody" class="accordion-collapse collapse" data-bs-parent="#mobileToc">
+            <div class="accordion-body">
+              <nav class="docs-nav">
+                <a class="nav-link" href="#getting-started">Getting Started</a>
+                <a class="nav-link" href="#controls">Menu Controls</a>
+                <a class="nav-link" href="#online-safety">Online Safety</a>
+                <a class="nav-link" href="#features">Menu Features</a>
+                <a class="nav-link" href="#custom-mods">Custom Mods</a>
+                <a class="nav-link" href="#music">Custom Music</a>
+                <a class="nav-link" href="#clip-uploader">Clip Uploader</a>
+                <a class="nav-link" href="#save-editor">Save Editor</a>
+                <a class="nav-link" href="#shader-tools">Shader Tools</a>
+                <a class="nav-link" href="#kbm">Keyboard &amp; Mouse</a>
+                <a class="nav-link" href="#updater">Auto-Updater</a>
+                <a class="nav-link" href="#fxnetctrl">FxNetCtrl</a>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <!-- Sidebar -->
+      <div class="col-lg-3">
+        <div class="docs-sidebar">
+          <nav class="docs-nav nav flex-column">
+            <a class="nav-link" href="#getting-started"><i class="bi bi-rocket-takeoff me-1"></i> Getting Started</a>
+            <a class="nav-link sub-link" href="#installation">Installation</a>
+            <a class="nav-link sub-link" href="#emulator">Emulator (Ryujinx)</a>
+            <a class="nav-link sub-link" href="#troubleshooting">Troubleshooting</a>
+            <a class="nav-link" href="#controls"><i class="bi bi-controller me-1"></i> Menu Controls</a>
+            <a class="nav-link" href="#online-safety"><i class="bi bi-shield-exclamation me-1"></i> Online Safety</a>
+            <a class="nav-link" href="#features"><i class="bi bi-grid-3x3-gap me-1"></i> Menu Features</a>
+            <a class="nav-link sub-link" href="#feat-render">Render</a>
+            <a class="nav-link sub-link" href="#feat-playerinfo">Player Info</a>
+            <a class="nav-link sub-link" href="#feat-scenejumper">Scene Jumper</a>
+            <a class="nav-link sub-link" href="#feat-inkmods">Ink Mods</a>
+            <a class="nav-link sub-link" href="#feat-environment">Environment</a>
+            <a class="nav-link sub-link" href="#feat-misc">Misc</a>
+            <a class="nav-link sub-link" href="#feat-visuals">Visuals</a>
+            <a class="nav-link sub-link" href="#feat-other">Other</a>
+            <a class="nav-link sub-link" href="#feat-usermods">User Mods</a>
+            <a class="nav-link" href="#custom-mods"><i class="bi bi-puzzle me-1"></i> Custom Mods</a>
+            <a class="nav-link sub-link" href="#texture-shader-mods">Texture / Shader Mods</a>
+            <a class="nav-link" href="#music"><i class="bi bi-music-note-beamed me-1"></i> Custom Music</a>
+            <a class="nav-link" href="#clip-uploader"><i class="bi bi-cloud-upload me-1"></i> Clip Uploader</a>
+            <a class="nav-link" href="#save-editor"><i class="bi bi-floppy me-1"></i> Save Editor</a>
+            <a class="nav-link" href="#shader-tools"><i class="bi bi-code-slash me-1"></i> Shader Tools</a>
+            <a class="nav-link" href="#kbm"><i class="bi bi-keyboard me-1"></i> Keyboard &amp; Mouse</a>
+            <a class="nav-link" href="#updater"><i class="bi bi-arrow-repeat me-1"></i> Auto-Updater</a>
+            <a class="nav-link" href="#fxnetctrl"><i class="bi bi-wifi me-1"></i> FxNetCtrl</a>
+          </nav>
+        </div>
+      </div>
+
+      <!-- Main content -->
+      <div class="col-lg-9">
+
+        <!-- GETTING STARTED -->
+        <section id="getting-started" class="docs-section">
+          <h2 class="docs-heading">Getting Started</h2>
+          <p>Flexlion is a mod menu for Splatoon 3 on Nintendo Switch, developed by [forget me]. It provides camera tools, visual effects, custom ink shaders, environment tweaks, modding support, and much more.</p>
+
+          <h3 class="docs-subheading" id="installation">Installation</h3>
+          <div class="doc-card">
+            <ol class="mb-0">
+              <li class="mb-2">Your Nintendo Switch must be hacked (running custom firmware such as Atmosphere). If it isn't, find a guide for your console revision elsewhere.</li>
+              <li class="mb-2">Download the latest Flexlion build from <a href="https://gamebanana.com/dl/977999" target="_blank">GameBanana</a>.</li>
+              <li class="mb-2">Extract the contents of the <code>.rar</code> archive onto the <strong>root</strong> of your SD card (or virtual SD card folder if using an emulator). The archive contains <code>atmosphere</code> and <code>flexlion3</code> folders - both should end up at the root level of the SD card.</li>
+              <li>Launch Splatoon 3. The menu should be accessible in-game.</li>
+            </ol>
+          </div>
+
+          <h3 class="docs-subheading" id="emulator">Installation on Emulator (Ryujinx)</h3>
+          <div class="doc-card">
+            <p>The same mod works on emulator. If you are trying to use Flexlion on emulator, make sure:</p>
+            <ul>
+              <li>You are using <a href="https://git.ryujinx.app/projects/Ryubing/tags" target="_blank">Ryubing</a> (other emulators may work, but it is not guaranteed). The original Ryujinx was not updated to support new nnsdk changes for Splatoon 3, so that one will <strong>not</strong> work - you need the updated fork.</li>
+              <li>You put the <code>flexlion3</code> and <code>atmosphere</code> folders from the zip into the <strong>virtual SD card folder</strong>, not anywhere else like the mod folder. To do that: in the Ryujinx app, in the top left press <em>File</em>, press <em>"Open Ryujinx Folder"</em>, then open the <code>sdcard</code> folder (should already be there - if it isn't, something is wrong). Copy the <code>flexlion3</code> and <code>atmosphere</code> folders there directly, confirm overwrite if prompted.</li>
+              <li>You are using the <strong>latest version of the game</strong> (you can see which version is supported on GameBanana). Flexlion is typically updated to the latest version within a day, so unless an update just happened, assume it's current. Flexlion is <strong>not backwards compatible</strong> - you need the latest game version. Make sure Ryubing actually displays the correct version (e.g. <code>11.1.0</code>), and not something like <code>1.0.0</code>, or you didn't apply the update correctly.</li>
+              <li>You are using the <strong>latest version of Flexlion</strong>.</li>
+            </ul>
+            <p>With a stock install and no other mods, this should 100% work. If it doesn't, check if the game itself boots without Flexlion (if not, your PC may not be powerful enough to run the game).</p>
+            <p class="mb-0"><strong>Note:</strong> You may need to disable guest internet access in emulator settings if the game is infinitely looping on the boot screen (yellow and purple one) and not entering plaza.</p>
+          </div>
+
+          <h3 class="docs-subheading" id="troubleshooting">Troubleshooting</h3>
+          <div class="callout callout-info">
+            <strong><i class="bi bi-info-circle me-1"></i> If the game or menu stops working:</strong>
+            <ol class="mb-0 mt-2">
+              <li>Make sure you are using the <strong>latest game update</strong> and the <strong>latest Flexlion update</strong>.</li>
+              <li>If the game is crashing on boot, delete the <span class="code-path">flexlion3</span> folder on your SD card, re-extract the latest archive, and open the game again.</li>
+              <li>If a new game update just released, Flexlion may not have been updated yet - an update usually releases within a few hours.</li>
+            </ol>
+          </div>
+
+          <div class="doc-card mt-3">
+            <p><strong>My game crashes&hellip;</strong></p>
+            <ul class="mb-0">
+              <li>Are you using the <strong>latest Splatoon 3 game update</strong> (currently 11.1.0)? Make sure it shows the latest update version wherever you are using it.</li>
+              <li>If yes, are you sure you extracted the zip correctly? You need to take the <strong>flexlion3 and atmosphere folders</strong> from the zip and place them on your <strong>SD card root</strong> (or virtual SD card root for emulator), and choose replace for any overlapping files.</li>
+              <li>If yes but your menu <strong>previously worked</strong>, try deleting <span class="code-path">/flexlion3/config</span>.</li>
+            </ul>
+          </div>
+        </section>
+
+        <hr class="section-divider">
+
+        <!-- CONTROLS -->
+        <section id="controls" class="docs-section">
+          <h2 class="docs-heading">Menu Controls</h2>
+          <p>The mod menu is navigated entirely with the controller. In some game areas the input changes slightly to avoid conflicts.</p>
+
+          <div class="doc-card">
+            <table class="table table-borderless controls-table mb-0">
+              <thead><tr><th style="width:200px">Input</th><th>Action</th></tr></thead>
+              <tbody>
+                <tr><td><span class="key-badge">L</span></td><td>Open menu / Enter selected section / Toggle the selected module on or off</td></tr>
+                <tr><td><span class="key-badge">L Stick</span> press</td><td>Close the current section, or close the menu entirely if already at the top level</td></tr>
+                <tr><td><span class="key-badge">D-Pad Up / Down</span></td><td>Navigate sections or modules</td></tr>
+                <tr><td><span class="key-badge">D-Pad Right</span></td><td>Open a module's sub-settings (if it has any)</td></tr>
+                <tr><td><span class="key-badge">D-Pad Left</span></td><td>Go back from sub-settings</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h3 class="docs-subheading">Sub-settings Controls</h3>
+          <div class="doc-card">
+            <table class="table table-borderless controls-table mb-0">
+              <thead><tr><th style="width:200px">Input</th><th>Action</th></tr></thead>
+              <tbody>
+                <tr><td><span class="key-badge">Up / Down</span></td><td>Navigate between settings entries</td></tr>
+                <tr><td><span class="key-badge">D-Pad Right</span></td><td>Enter value-edit mode for the selected setting</td></tr>
+                <tr><td><span class="key-badge">D-Pad Left</span></td><td>Exit value-edit mode</td></tr>
+                <tr><td><span class="key-badge">Sticks</span></td><td>Used for color pickers</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="callout callout-warning">
+            <strong><i class="bi bi-exclamation-triangle me-1"></i> Alternate Input</strong><br>
+            In <strong>lobbies</strong>, <strong>shops</strong>, and <strong>versus replays</strong>, the <span class="key-badge">L</span> button has a game function. In these areas, you must <strong>hold <span class="key-badge">R</span> and press <span class="key-badge">L</span></strong> to open the menu. A notification will explain this the first time.
+          </div>
+        </section>
+
+        <hr class="section-divider">
+
+        <!-- ONLINE SAFETY -->
+        <section id="online-safety" class="docs-section">
+          <h2 class="docs-heading">Online Safety</h2>
+
+          <p>Flexlion is safe to use online, except for modules explicitly labeled <span class="badge badge-unsafe">UNSAFE</span> in the menu (such as TriColor in PBs, use at your own risk), or trying to load <code>patches.pchtxt</code> / IPS patches (having an IPS patch applied will be detected - if you are just using stock Flexlion you don't have to worry about this, it's only relevant if you're also installing a patches pchtxt file).</p>
+
+          <p>Flexlion does <strong>not</strong> disable the game's anticheat - it sidesteps detection. If you use detectable code patches or param edits alongside Flexlion, those will still be caught.</p>
+
+          <h3 class="docs-subheading">Features NOT safe online</h3>
+          <div class="doc-card">
+            <ul class="mb-0">
+              <li>Anything marked <span class="badge badge-unsafe">UNSAFE</span> in the menu</li>
+              <li>Loading pchtxt / IPS patches (having an IPS patch applied <strong>will</strong> be detected)</li>
+              <li>VideoModule (requires an extra executable in exefs, which anticheat checks for - even if the module is disabled)</li>
+              <li>Custom collision mods(legacy feature, not explained here anymore, and not to be confused with Collision Visualizer - that one is safe)</li>
+            </ul>
+          </div>
+
+          <p>Most cosmetic-only features (camera, environment tweaks, ink colors, menu visuals, trails, galaxy hair, etc.) operate client-side and are not known to be detected.</p>
+
+            <div class="callout callout-warning">
+            <strong><i class="bi bi-exclamation-triangle me-1"></i> Streamers beware:</strong> If you are a streamer and Nintendo sees your stream with the mod, they may manually ban you (this has happened to streamers specifically), likely based on the nickname visible in the stream. Using <strong>Name Spoofer</strong> is advised in this case - there have been no known bans when names were hidden.
+          </div>
+        </section>
+
+        <hr class="section-divider">
+
+        <!-- OVERCLOCKING -->
+        <section id="overclocking" class="docs-section">
+          <h2 class="docs-heading">Overclocking</h2>
+          <p>It is recommended to use overclocking when using Flexlion, since any visual modules you enable will strain the game more, while the game itself (even without Flexlion) already relies on dynamic resolution. A tool that can be recommended is <a href="https://github.com/Horizon-OC/Horizon-OC" target="_blank">Horizon-OC</a> (but note that overclocking obviously comes with risk depending on various factors - research it yourself).</p>
+
+          <div class="callout callout-info">
+            <strong><i class="bi bi-info-circle me-1"></i> Note:</strong> Flexlion doesn't use a lot of CPU, but it will help in places the base game lags (i.e. Salmon Run or some maps). Flexlion will use more GPU than the base game, but only when visual modules are enabled - not just stuff like kill notifs / K/D counter / motion blur / shaders, but also alternative ink types which use heavier shaders. Even if you don't use any visual modules, overclocking is recommended to reduce dynamic resolution usage. RAM overclocking shouldn't be done unless you're on an OLED model.
+          </div>
+
+          <h3 class="docs-subheading">OLED Consoles</h3>
+          <div class="doc-card">
+            <p>Personal recommendation (docked): <strong>1785 MHz CPU</strong>, <strong>1075 MHz GPU</strong>, <strong>1996 MHz RAM</strong>. I used it on 3 (oled) consoles with no lag, should be good as long as temps stay low enough (should be the case unless thermal paste has dried out). Lower settings like 921 or 998 MHz GPU will work well too(just I am also using Wallhack, which would like some extra gpu usage).</p>
+            <p>If you want to be on the safer side, you can run GPU at 998 MHz and RAM at 1866 MHz or stock 1600 MHz.</p>
+            <p class="mb-0"><strong>RAM note:</strong> In very rare cases, a RAM module may be faulty and barely passed lotcheck - if so, overclocking RAM could risk potential NAND corruption. Otherwise, all RAM modules in OLED Switches are designed to run at 2133 MHz (safely, with actual maxes of 2500&ndash;3200 MHz) and are underclocked by Nintendo, so 1996 should be fine.</p>
+          </div>
+
+          <h3 class="docs-subheading">Non-OLED Consoles (Erista / V1)</h3>
+          <div class="doc-card">
+            <p>Recommended settings: at most <strong>1785 MHz CPU</strong>, <strong>921 MHz GPU</strong>, <strong>1600 MHz RAM</strong> (stock, no RAM overclock).</p>
+            <div class="callout callout-danger mb-0">
+              <strong><i class="bi bi-exclamation-octagon me-1"></i> Important:</strong> GPU above 921 MHz is <strong>not safe</strong> on Erista/V1 consoles. RAM overclock is also <strong>not safe</strong> on non-OLED models. These settings should be fine unless your console is very old and overheating. CPU isn't as important as GPU here.
+            </div>
+          </div>
+        </section>
+
+        <hr class="section-divider">
+
+        <!-- FEATURES -->
+        <section id="features" class="docs-section">
+          <h2 class="docs-heading">Menu Features</h2>
+          <p>The menu is organized into <strong>tabs</strong> . Each tab contains modules that can be toggled or triggered.</p>
+
+          <!-- RENDER -->
+          <div id="feat-render" class="docs-section">
+            <div class="tab-badge"><i class="bi bi-camera-video"></i> Render</div>
+            <p>Camera and rendering tools for screenshots, cinematics, plus extra ui such as kd counter or kill notification.</p>
+            <div class="feature-grid">
+              <div class="feature-card">
+                <h6>Freecam</h6>
+                <p>Self explanatory.</p>
+              </div>
+              <div class="feature-card">
+                <h6>First Person View</h6>
+                <p>Self explanatory.</p>
+              </div>
+              <div class="feature-card">
+                <h6>FOV Changer</h6>
+                <p>Self explanatory.</p>
+              </div>
+              <div class="feature-card">
+                <h6>Camera Path</h6>
+                <p>Record and play back scripted camera paths for smooth cinematic sweeps. Press A to play.</p>
+              </div>
+              <div class="feature-card">
+                <h6>Lock Camera</h6>
+                <p>Locks camera position and orientation in place.</p>
+              </div>
+              <div class="feature-card">
+                <h6>Motion Blur</h6>
+                <p>Adds motion blur effect.</p>
+              </div>
+              <div class="feature-card">
+                <h6>Blur</h6>
+                <p>Depth of field blur effect.</p>
+              </div>
+              <div class="feature-card">
+                <h6>Ortho Projection</h6>
+                <p>Orthographic projection for whatever reason youd want that.</p>
+              </div>
+              <div class="feature-card">
+                <h6>Chroma Sky</h6>
+                <p>Replaces the sky(or optionally everything but players) with a solid color.</p>
+              </div>
+              <div class="feature-card">
+                <h6>No PFX</h6>
+                <p>Disables the game's post-processing shader.</p>
+              </div>
+              <div class="feature-card">
+                <h6>Hide Layout</h6>
+                <p>Hides the game's HUD(or parts of it).</p>
+              </div>
+              <div class="feature-card">
+                <h6>Hide Callout UI</h6>
+                <p>Hides the This Way/Booyah ui thing.</p>
+              </div>
+              <div class="feature-card">
+                <h6>K/D Counter</h6>
+                <p>Kill/death counter shown during matches.</p>
+              </div>
+              <div class="feature-card">
+                <h6>Kill Notifs</h6>
+                <p>Kill notification popups shown during matches.</p>
+              </div>
+              <div class="feature-card">
+                <h6>Vertical Minimap</h6>
+                <p>Rotates the minimap to a vertical orientation.</p>
+              </div>
+              <div class="feature-card">
+                <h6>Fixed Aim</h6>
+                <p>Used together with freecam to lock on to specific players/objects.</p>
+              </div>
+              <div class="feature-card">
+                <h6>Pause Calc</h6>
+                <p>Freezes the game(while still allowing Freecam to move around).</p>
+              </div>
+              <div class="feature-card">
+                <h6>Animation Viewer</h6>
+                <p>Inspect and control animation playback on character models.</p>
+              </div>
+              <div class="feature-card">
+                <h6>Force FPS Cap</h6>
+                <p>Force either 60 or 30 FPS everywhere.</p>
+              </div>
+              <div class="feature-card">
+                <h6>Collision Visualizer</h6>
+                <p>Renders Havok collision shapes and hitboxes.</p>
+              </div>
+            </div>
+          </div>
+
+          <hr class="section-divider">
+
+          <!-- PLAYER INFO -->
+          <div id="feat-playerinfo" class="docs-section">
+            <div class="tab-badge"><i class="bi bi-person-badge"></i> Player Info</div>
+            <p>Client side player info modifications, plus option to spawn bots for offline matches.</p>
+            <div class="feature-grid">
+              <div class="feature-card">
+                <h6>Spoof Player Info</h6>
+                <p>Spoof player type and hair(including to stuff like Rival or Sdodr Rival).</p>
+              </div>
+              <div class="feature-card">
+                <h6>Spoof Illegal Gear</h6>
+                <p>Spoof some illegal gear combinations.</p>
+              </div>
+              <div class="feature-card">
+                <h6>Force Bots</h6>
+                <p>Enable offline bot matches for use with Scene Jumper. Disable it before going into an online match.</p>
+              </div>
+              <div class="feature-card">
+                <h6>Namespoofer</h6>
+                <p>Client sided override of your, and/or others', splashtag names and tags, if you want to hide your name in clips for example.</p>
+              </div>
+            </div>
+          </div>
+
+          <hr class="section-divider">
+
+          <!-- SCENE JUMPER -->
+          <div id="feat-scenejumper" class="docs-section">
+            <div class="tab-badge"><i class="bi bi-signpost-split"></i> Scene Jumper</div>
+            <p>Instantly jump to different game scenes.</p>
+            <div class="feature-grid">
+              <div class="feature-card">
+                <h6>Plaza</h6>
+                <p>Jump to the plaza scene.</p>
+              </div>
+              <div class="feature-card">
+                <h6>Versus</h6>
+                <p>Jump to an offline match (may be useful for Force Bots from previous section).</p>
+              </div>
+              <div class="feature-card">
+                <h6>Shooting Range</h6>
+                <p>Jump to the shooting range.</p>
+              </div>
+              <div class="feature-card">
+                <h6>Lobby (Versus / Coop / Local-LAN)</h6>
+                <p>Jump to the respective lobby scene.</p>
+              </div>
+              <div class="feature-card">
+                <h6>PlayerViewer</h6>
+                <p>Jump to a custom recreation of Splatoon 2's developer PlayerViewer scene.</p>
+              </div>
+              <div class="feature-card">
+                <h6>PhotoForCalico</h6>
+                <p>Jump to a custom creation of an interpretation of Splatoon 2's developer PhotoForCalico scene. Configure via <a href="./configurator.html">Configurator</a>.</p>
+              </div>
+              <div class="feature-card">
+                <h6>Mission Scene</h6>
+                <p>Jump to a single-player scene from the available list of interesting ones.</p>
+              </div>
+              <div class="feature-card">
+                <h6>Grandfest Plaza</h6>
+                <p>Jump to the Grandfest event plaza.</p>
+              </div>
+              <div class="feature-card">
+                <h6>Coop</h6>
+                <p>Jump to Salmon run, including option to force a specific boss.</p>
+              </div>
+              <div class="feature-card">
+                <h6>Sdodr</h6>
+                <p>Jump to Side Order scenes from a list of interesting ones.</p>
+              </div>
+              <div class="feature-card">
+                <h6>Change Boot Scene</h6>
+                <p>Change which scene the game boots into. (i.e. LobbyVersus -> you boot into Lobby instead of Plaza).</p>
+              </div>
+            </div>
+          </div>
+
+          <hr class="section-divider">
+
+          <!-- INK MODS -->
+          <div id="feat-inkmods" class="docs-section">
+            <div class="tab-badge"><i class="bi bi-droplet-half"></i> Ink Mods</div>
+            <p>Customize ink colors, shaders, and paint effects.</p>
+            <div class="feature-grid">
+              <div class="feature-card">
+                <h6>Custom Color</h6>
+                <p>Open a color picker to choose a custom ink color, or apply it.</p>
+              </div>
+              <div class="feature-card">
+                <h6>Custom Ink Shader</h6>
+                <p>Replace the ground ink shader with a custom one. Types: <strong>Rainbow Ink S2</strong>, <strong>Galaxy</strong>, <strong>Heart</strong>. May affect your performance.</p>
+              </div>
+              <div class="feature-card">
+                <h6>Rainbow Ink</h6>
+                <p>Animated rainbow colors on ground ink(Splatoon 1 style/flat color).</p>
+              </div>
+              <div class="feature-card">
+                <h6>Rainbow Teamcolor</h6>
+                <p>Change teamcolors of players every frame to rainbow colors.</p>
+              </div>
+              <div class="feature-card">
+                <h6>Ink Type</h6>
+                <p>Change the ink rendering type. Available types: Default, Oil, Fuzzy, Splatoween, FrostyFest, SpringFest, SummerFest, GrandFest, GrandFest Plaza, SDODR (Side Order).</p>
+              </div>
+              <div class="feature-card">
+                <h6>Auto Use Custom Color</h6>
+                <p>Automatically apply your saved(with option for to random pick) custom color palette each match.</p>
+              </div>
+              <div class="feature-card">
+                <h6>Save / Load / Delete Ink Config</h6>
+                <p>Manage named ink color configurations on the SD card.</p>
+              </div>
+            </div>
+          </div>
+
+          <hr class="section-divider">
+
+          <!-- ENVIRONMENT -->
+          <div id="feat-environment" class="docs-section">
+            <div class="tab-badge"><i class="bi bi-cloud-sun"></i> Environment</div>
+            <p>Control time of day, fog, skybox, lighting, weather, and atmospheric effects.</p>
+            <div class="feature-grid">
+              <div class="feature-card">
+                <h6>Force Env Time</h6>
+                <p>Force a specific time of day for the environment lighting(Note that evening is "unused" and mostly not present on maps, use Day or Night).</p>
+              </div>
+              <div class="feature-card">
+                <h6>Skybox Config</h6>
+                <p>Customize skybox parameters and appearance.</p>
+              </div>
+              <div class="feature-card">
+                <h6>Depth Fog Config</h6>
+                <p>Tune distance-based fog density, color, and range.</p>
+              </div>
+              <div class="feature-card">
+                <h6>Height Fog Config</h6>
+                <p>Tune height-based fog for atmospheric depth effects.</p>
+              </div>
+              <div class="feature-card">
+                <h6>Light Config</h6>
+                <p>Adjust lighting parameters.</p>
+              </div>
+              <div class="feature-card">
+                <h6>Weather</h6>
+                <p>Use the game's unused weather functionality (Snow, Rain) with adjustable intensity.</p>
+              </div>
+              <div class="feature-card">
+                <h6>head empty</h6>
+                <p>i will never be free</p>
+              </div>
+              <div class="feature-card">
+                <h6>The World Revolving</h6>
+                <p>Makes your skybox spin.</p>
+              </div>
+              <div class="feature-card">
+                <h6>Rainbow Water</h6>
+                <p>Make water rainbow colored.</p>
+              </div>
+              <div class="feature-card">
+                <h6>Plaza Fest Mode</h6>
+                <p>Force Splatfest inside Plaza(with option to choose special fest type).</p>
+              </div>
+              <div class="feature-card">
+                <h6>Auto Use Random Env</h6>
+                <p>Randomize environment settings from your saved configs.</p>
+              </div>
+              <div class="feature-card">
+                <h6>Save / Load / Delete Env Config</h6>
+                <p>Manage named environment presets on the SD card.</p>
+              </div>
+            </div>
+          </div>
+
+          <hr class="section-divider">
+
+          <!-- MISC -->
+          <div id="feat-misc" class="docs-section">
+            <div class="tab-badge"><i class="bi bi-stars me-1"></i> Misc</div>
+            <p>Cosmetic effects, player modifications, gameplay tweaks, and utility features.</p>
+            <div class="feature-grid">
+              <div class="feature-card">
+                <h6>Freefly (Offline/Recon)</h6>
+                <p>Free movement / noclip in offline and recon modes. Should be safe to use(it wont let you use it where it wouldnt be safe)</p>
+              </div>
+              <div class="feature-card">
+                <h6>Trails</h6>
+                <p>Pretty player trails effect.</p>
+              </div>
+              <div class="feature-card">
+                <h6>Galaxy Hair</h6>
+                <p>Pretty player galaxy hair effect.</p>
+              </div>
+              <div class="feature-card">
+                <h6>Cosmic Lights</h6>
+                <p>Apply cosmic shader to player models.</p>
+              </div>
+              <div class="feature-card">
+                <h6>Aura</h6>
+                <p>Glowing aura visual effect around the player.</p>
+              </div>
+              <div class="feature-card">
+                <h6>Teardrop</h6>
+                <p>Special effect when you jump.</p>
+              </div>
+              <div class="feature-card">
+                <h6>Sigma Hat</h6>
+                <p>uhh some hat thing i forgor.</p>
+              </div>
+              <div class="feature-card">
+                <h6>Hologram Players / No Holograms</h6>
+                <p>Make non lobby players holograms, or make lobby players non holograms.</p>
+              </div>
+              <div class="feature-card">
+                <h6>Change Player Size</h6>
+                <p>Adjust visual size of the player model.</p>
+              </div>
+              <div class="feature-card">
+                <h6>Funky Weapon</h6>
+                <p>uhhh your weapon spins and stuff.</p>
+              </div>
+              <div class="feature-card">
+                <h6>Spawn Training Dummy</h6>
+                <p>Spawn a practice target dummy.</p>
+              </div>
+              <div class="feature-card">
+                <h6>No Death Zones</h6>
+                <p>Disable death zones, useful for freefly. Safe to use as it'll auto disable in places it wouldnt be safe.</p>
+              </div>
+              <div class="feature-card">
+                <h6>Show Matching Player</h6>
+                <p>Show the lobby players and their holograms during matchmaking in modes they are not normally visible (i.e. X Rank).</p>
+              </div>
+              <div class="feature-card">
+                <h6>Sdodr Drone</h6>
+                <p>Side Order drone entity/visual feature.</p>
+              </div>
+              <div class="feature-card">
+                <h6>Custom Boot</h6>
+                <p>Customize the boot sequence behavior.</p>
+              </div>
+              <div class="feature-card">
+                <h6>Two Player Mode</h6>
+                <p>Local two player mode with splitscreen.</p>
+              </div>
+              <div class="feature-card">
+                <h6>Spam Macro</h6>
+                <p>Configurable button spammer for various buttons.</p>
+              </div>
+              <div class="feature-card">
+                <h6>TriColor in PBs <span class="badge badge-unsafe">UNSAFE</span></h6>
+                <p>Add TriColor to mode select in Private Battles. You will likely get banned if you use this online(as in, actually start a tricolor match. accidentally enabling this wont get you banned).</p>
+              </div>
+              <div class="feature-card">
+                <h6>Mouse Keyboard Control</h6>
+                <p>Map USB keyboard and mouse to game input. See <a href="#kbm">KBM section</a>.</p>
+              </div>
+            </div>
+          </div>
+
+          <hr class="section-divider">
+
+          <!-- VISUALS -->
+          <div id="feat-visuals" class="docs-section">
+            <div class="tab-badge"><i class="bi bi-palette"></i> Visuals</div>
+            <p>Customize the appearance of the Flexlion menu itself.</p>
+            <div class="feature-grid">
+              <div class="feature-card">
+                <h6>Built-in Presets</h6>
+                <p>Apply a menu theme from a list of default presets made by me, featuring all the different available menu shaders.</p>
+              </div>
+              <div class="feature-card">
+                <h6>Menu Style</h6>
+                <p>Configure menu appearance: shader, colors, shader speed, Starlion style, rainbow text, logo spin, and more.</p>
+              </div>
+              <div class="feature-card">
+                <h6>Menu Glowing</h6>
+                <p>Outer glow effect around the menu panel. Adjust colors and speed.</p>
+              </div>
+              <div class="feature-card">
+                <h6>Flex Logo</h6>
+                <p>Flexlion logo overlay, plus option to globally change the text of the logo.</p>
+              </div>
+              <div class="feature-card">
+                <h6>Arraylist</h6>
+                <p>On-screen list of active modules.</p>
+              </div>
+              <div class="feature-card">
+                <h6>Font</h6>
+                <p>Choose the menu font style.</p>
+              </div>
+              <div class="feature-card">
+                <h6>Menu Scale</h6>
+                <p>Adjust the overall UI scale of the menu.</p>
+              </div>
+              <div class="feature-card">
+                <h6>Toggling Settings</h6>
+                <p>Toggle notifications for modules being enabled/disabled.</p>
+              </div>
+              <div class="feature-card">
+                <h6>Save / Load / Delete Menu Style Config</h6>
+                <p>Manage named menu style presets saved to <span class="code-path">/flexlion3/config/style/</span>.</p>
+              </div>
+            </div>
+          </div>
+
+          <hr class="section-divider">
+
+          <!-- OTHER -->
+          <div id="feat-other" class="docs-section">
+            <div class="tab-badge"><i class="bi bi-gear"></i> Other</div>
+            <p>Utilities, configuration management, audio tools, and advanced features.</p>
+            <div class="feature-grid">
+              <div class="feature-card">
+                <h6>Show Debug Info</h6>
+                <p>On-screen debug information, including FPS, memory usage and others. Also needed for shader dumping (see <a href="#shader-tools">Shader Tools</a>).</p>
+              </div>
+              <div class="feature-card">
+                <h6>Disable All</h6>
+                <p>Turn off all active modules at once (essentials like autosave and crash handler stay on).</p>
+              </div>
+              <div class="feature-card">
+                <h6>Save / Load Menu Config</h6>
+                <p>Save or load the full menu configuration as JSON in <span class="code-path">/flexlion3/config/</span>.</p>
+              </div>
+              <div class="feature-card">
+                <h6>AutoSave Menu Config</h6>
+                <p>Automatically persist menu state to config file.</p>
+              </div>
+              <div class="feature-card">
+                <h6>Check Updates</h6>
+                <p>Manually check for Flexlion updates. See <a href="#updater">Auto-Updater</a>.</p>
+              </div>
+              <div class="feature-card">
+                <h6>FX Crash Handler</h6>
+                <p>Catches and reports crashes. Keep this on.</p>
+              </div>
+              <div class="feature-card">
+                <h6>Cstm Music</h6>
+                <p>Custom background music. See <a href="#music">Custom Music</a>.</p>
+              </div>
+              <div class="feature-card">
+                <h6>No Music</h6>
+                <p>Mute the game's background music entirely.</p>
+              </div>
+              <div class="feature-card">
+                <h6>Sound Pitch Changer</h6>
+                <p>Self explanatory.</p>
+              </div>
+              <div class="feature-card">
+                <h6>Clip Uploader</h6>
+                <p>Auto-upload clips and screenshots. See <a href="#clip-uploader">Clip Uploader</a>.</p>
+              </div>
+              <div class="feature-card">
+                <h6>Retry Clip Uploads</h6>
+                <p>Re-queue any failed clip uploads.</p>
+              </div>
+              <div class="feature-card">
+                <h6>FxNetCtrl</h6>
+                <p>Local TCP control server for remote interaction. See <a href="#fxnetctrl">FxNetCtrl</a>.</p>
+              </div>
+              <div class="feature-card">
+                <h6>No CtrlChecker</h6>
+                <p>Disable restriction for connecting 1+ controllers.</p>
+              </div>
+              <div class="feature-card">
+                <h6>Force Loadable SDODR</h6>
+                <p>Make Side Order content loadable when it otherwise wouldn't be.</p>
+              </div>
+              <div class="feature-card">
+                <h6>VideoModule <span class="badge badge-unsafe">UNSAFE</span></h6>
+                <p>Render a video file as ink on the floor (offline only). See <a href="#videomodule">details below</a>.</p>
+              </div>
+            </div>
+
+            <div class="mt-3" id="videomodule">
+              <h3 class="docs-subheading">VideoModule Details</h3>
+              <div class="callout callout-danger">
+                <strong><i class="bi bi-exclamation-octagon me-1"></i> Do NOT use VideoModule online.</strong> It requires an extra multimedia executable in exefs, which anticheat will detect even if the module is disabled. The checks runs if you go into an online match, so make sure to not go into an online match with the multimedia nso still in your exefs folder.
+              </div>
+              <div class="doc-card">
+                <p><strong>Setup:</strong></p>
+                <ol>
+                  <li>Obtain the multimedia NSO of a sufficiently close SDK version (available as <code>subsdk0</code> from latest TOTK). Rename it to <code>subsdk8</code> (or any subsdk1-9) and place it in your exefs folder.</li>
+                  <li>Place video files in <span class="code-path">/flexlion3/video/</span>. Supported formats: <strong>WebM</strong> (VP8, VP9) and <strong>MP4</strong> (may have compatibility issues - use WebM if MP4 won't load).</li>
+                  <li>The video renders as ink on the floor in LobbyVersus. To enter the lobby offline, use Coxxs patches (not online-safe).</li>
+                </ol>
+              </div>
+            </div>
+          </div>
+
+          <hr class="section-divider">
+
+          <!-- USER MODS -->
+          <div id="feat-usermods" class="docs-section">
+            <div class="tab-badge"><i class="bi bi-box-seam"></i> User Mods</div>
+            <p>The User Mods tab appears when you have custom mods installed. Each mod loaded from <span class="code-path">/flexlion3/mods/</span> becomes a toggleable entry here. PchTxt patches loaded from <span class="code-path">/flexlion3/patches.pchtxt</span> also appear as individual entries.</p>
+          </div>
+        </section>
+
+        <hr class="section-divider">
+
+        <!-- CUSTOM MODS -->
+        <section id="custom-mods" class="docs-section">
+          <h2 class="docs-heading">Custom Mods</h2>
+
+          <div id="texture-shader-mods">
+            <h3 class="docs-subheading">Texture / Shader Replacement Mods</h3>
+            <p>You can create and share texture and shader replacement mods. To install a mod, place the mod folder inside <span class="code-path">/flexlion3/mods/</span> on your SD card (create the <code>mods</code> folder if it doesn't exist). Each mod folder must contain a <code>config.json</code>.</p>
+
+            <h3 class="docs-subheading mt-3">config.json Format</h3>
+            <div class="doc-card">
+              <p>All file paths are relative to your mod folder (start with <code>/</code>).</p>
+              <div class="json-block">{
+  "mod_name": "My Cool Mod",
+  "options": ["Variant 1", "Variant 2"],
+  "default_option": "Variant 1",
+  "use_options": true,
+  "textures": {
+    "Albedo": {
+      "target_texture": "/target/M_MSK007_Alb.bftex",
+      "options": {
+        "Variant 1": "/var1/M_MSK007_Alb.bftex",
+        "Variant 2": "/var2/M_MSK007_Alb.bftex"
+      }
+    },
+    "Roughness": {
+      "target_texture": "/target/M_MSK007_Rgh.bftex",
+      "options": {
+        "Variant 1": "/var1/M_MSK007_Rgh.bftex",
+        "Variant 2": "/var2/M_MSK007_Rgh.bftex"
+      }
+    }
+  },
+  "shaders": {
+    "MyShader": {
+      "target_shader": "/target/original_shader.bin",
+      "options": {
+        "Variant 1": "/shaders/replacement1.epicshf",
+        "Variant 2": "/shaders/replacement2.epicshf"
+      }
+    }
+  }
+}</div>
+
+              <p class="mt-3"><strong>Top-level keys:</strong></p>
+              <ul>
+                <li><code>"mod_name"</code> - <strong>required</strong>. The name shown in the menu.</li>
+                <li><code>"options"</code> - array of variant names (strings). These are the selectable options in the menu.</li>
+                <li><code>"default_option"</code> - which variant to select by default. Must match one of the <code>options</code> strings exactly.</li>
+                <li><code>"use_options"</code> - if <code>true</code> (default), the user can switch between variants in the menu. If <code>false</code>, the first option is auto-selected and the user can't open the options sub-menu.</li>
+                <li><code>"textures"</code> - texture replacement groups (see below). Optional.</li>
+                <li><code>"shaders"</code> - shader replacement groups (see below). Optional.</li>
+              </ul>
+
+              <p class="mt-2"><strong>Texture groups</strong> (<code>"textures"</code>):</p>
+              <p>An object where each key is a label (any name you want) and the value contains:</p>
+              <ul>
+                <li><code>"target_texture"</code> - path to the original <code>.bftex</code> file that this group replaces. This file must be included in your mod and must be the original unmodified texture.</li>
+                <li><code>"options"</code> - object mapping each variant name to a replacement <code>.bftex</code> file path. Keys must exactly match the top-level <code>options</code> array strings. Replacement textures must have the same dimensions and format as the original.</li>
+              </ul>
+
+              <p class="mt-2"><strong>Shader groups</strong> (<code>"shaders"</code>):</p>
+              <p>Same structure, but with <code>"target_shader"</code> instead of <code>"target_texture"</code>. The target file is the original shader dump, and replacement files should be compiled with <a href="#shader-tools">UAM-nvn</a> in epicsh format.</p>
+
+              <p class="mt-2 mb-0"><strong>Note on bftex textures:</strong> they must match the original dimensions (width/height) and format. If the target texture uses ASTC format in Switch Toolbox, you may need an external converter to produce ASTC first, then import into Toolbox and export as bftex.</p>
+            </div>
+          </div>
+
+          <div id="pchtxt-patches" class="mt-4">
+            <h3 class="docs-subheading">Loading PchTxt / IPS Patches</h3>
+            <div class="callout callout-danger">
+              <strong><i class="bi bi-exclamation-octagon me-1"></i> Do NOT use pchtxt/IPS patches on sysnand or online - you WILL get banned.</strong>
+            </div>
+            <div class="doc-card">
+              <p>Place your pchtxt file as <span class="code-path">/flexlion3/patches.pchtxt</span> on your SD card. Patches can be toggled live from the menu. Some patches (e.g., Splatfest mode) require a game reboot, but most work immediately.</p>
+            </div>
+          </div>
+        </section>
+
+        <hr class="section-divider">
+
+        <!-- CUSTOM MUSIC -->
+        <section id="music" class="docs-section">
+          <h2 class="docs-heading">Custom Music</h2>
+          <p>Enable <strong>Cstm Music</strong> in the Other tab to use custom background music. This is a work-in-progress feature and defaults/configs may change.</p>
+
+          <h3 class="docs-subheading">Directory Structure</h3>
+          <div class="doc-card">
+            <p>All music files go under <span class="code-path">/flexlion3/music/</span>. Supported formats: <code>.wav</code>, <code>.mp3</code>, <code>.flac</code>. Here is an example structure:</p>
+
+            <div class="json-block">flexlion3/music/
+├── playlist/
+│   ├── MyPlaylist1/           Each subfolder = a playlist
+│   │   ├── song1.mp3
+│   │   ├── song1.json         Optional per-track config
+│   │   ├── song2.flac
+│   │   └── default.json       Optional default config for this playlist
+│   └── MyPlaylist2/
+│       └── ...
+├── last1min/                  Last 1 min (Now Or Never) replacement
+│   └── my_last1min.mp3
+├── startdemo/                 Match start music replacement
+│   └── my_startdemo.wav
+├── result_win/                Victory music replacement
+│   └── my_win.mp3
+└── result_lose/               Defeat music replacement
+    └── my_lose.mp3</div>
+
+            <p class="mt-3"><strong>Playlists:</strong> Each subfolder inside <span class="code-path">/flexlion3/music/playlist/</span> becomes a selectable playlist. The folder name is the playlist name. Audio files inside are the tracks.</p>
+
+            <p><strong>Special tracks:</strong> The folders below replace music for specific in-game moments. You can put multiple files in each - one will be picked randomly.</p>
+            <ul class="mb-0">
+              <li><span class="code-path">last1min/</span> - replaces "Now Or Never" (last 1 minute of a match)</li>
+              <li><span class="code-path">startdemo/</span> - replaces match start music</li>
+              <li><span class="code-path">result_win/</span> - replaces victory result music</li>
+              <li><span class="code-path">result_lose/</span> - replaces defeat result music</li>
+            </ul>
+          </div>
+
+          <div class="callout callout-info mt-3">
+            <strong><i class="bi bi-info-circle me-1"></i> Recommendation:</strong> Convert all your music files to <code>.wav</code>. Other formats (mp3, flac) may cause momentary lag when the audio starts playing. WAV files also support embedded loop points, which Flexlion will automatically read if present.
+          </div>
+
+          <h3 class="docs-subheading mt-3">Audio Configuration</h3>
+          <div class="doc-card">
+            <p>By default, audio loops from start to end and uses <code>-10.64 dB</code> volume. Embedded loop points in WAV files are read automatically. You can also create a JSON config for any audio file to customize playback (JSON config values override embedded loops).</p>
+            <p>If your audio file is <code>CoolAudio.mp3</code>, name the config <code>CoolAudio.json</code>. You can also add a <code>default.json</code> to set defaults for the entire folder (individual configs override it).</p>
+
+            <p class="mt-2"><strong>Example config:</strong></p>
+            <div class="json-block">{
+  "VolumeDB": 13.5,
+  "Pitch": 0.85,
+  "Loop Start": "00:48:05",
+  "Loop End": "01:20"
+}</div>
+
+            <p class="mt-3"><strong>Config options:</strong></p>
+            <ul>
+              <li><strong>Volume</strong> - float (0.0 = silent, 1.0 = 100%, can go above 1.0), OR <strong>VolumeDB</strong> - float in decibels (default: <code>-10.64</code>)</li>
+              <li><strong>Pitch</strong> - float value for audio pitch (default: <code>1.0</code>)</li>
+              <li><strong>Loop Start / Loop End</strong> - timestamp in <code>MM:SS:cc</code> (centiseconds, 2 digits), <code>MM:SS:mmm</code> (milliseconds, 3 digits), or <code>MM:SS</code>. If omitted, loops from start to end of track.</li>
+            </ul>
+          </div>
+        </section>
+
+        <hr class="section-divider">
+
+        <!-- CLIP UPLOADER -->
+        <section id="clip-uploader" class="docs-section">
+          <h2 class="docs-heading">Clip Uploader</h2>
+          <p>Automatically upload Switch album clips and screenshots to Discord via a webhook.</p>
+
+          <div class="doc-card">
+            <p><strong>Setup:</strong></p>
+            <ol>
+              <li>In any Discord server you own, create a webhook on any channel (search online for "How to create Discord webhook" if needed) and copy its URL.</li>
+              <li>On your SD card, open <span class="code-path">/flexlion3/extra_config.json</span> and paste the webhook URL into the <code>"clip_webhook"</code> field.</li>
+              <li>Enable <strong>Clip Uploader</strong> in the Other section of the menu.</li>
+            </ol>
+          </div>
+
+          <h3 class="docs-subheading mt-3">How It Works</h3>
+          <div class="doc-card">
+            <ul>
+              <li><strong>Concurrency:</strong> Default is 3 uploaders outside of matches, 1 during online matches. Adjustable in module settings (set to 0 to pause uploads during matches).</li>
+              <li><strong>Screenshots vs. Clips:</strong> Of 3 concurrent uploaders, only 1 handles video clips while 2 handle screenshots. If concurrency is 1, it handles both, prioritizing screenshots.</li>
+              <li><strong>Video hosting:</strong> Clips (~18 MB) are uploaded to Catbox since they exceed Discord's 10 MB limit. Catbox links embed on Discord.</li>
+              <li><strong>Privacy:</strong> Nintendo's hidden metadata (containing your account ID - thats not a flexlion thing, thats actually how secretly all your switch album screenshots/videos work) is automatically stripped from clips and screenshots before upload.</li>
+              <li><strong>Notifications:</strong> Notification style can be adjusted in the module's settings.</li>
+            </ul>
+          </div>
+        </section>
+
+        <hr class="section-divider">
+
+        <!-- SAVE EDITOR -->
+        <section id="save-editor" class="docs-section">
+          <h2 class="docs-heading">Save Editor</h2>
+
+          <div class="callout callout-warning">
+            <strong><i class="bi bi-exclamation-triangle me-1"></i> Editing your save can get you banned.</strong> Some edits (weapons, gear, gear abilities, name, money, etc.) will be reset if you connect to the internet. Plaza post editing is probably safe, but no guarantees.
+          </div>
+
+          <p>Flexlion includes a <a href="./saveeditor.html">Save Editor</a> that integrates with CloudSave so you don't need external tools to dump/inject saves.</p>
+
+          <div class="doc-card">
+            <p><strong>Setup:</strong></p>
+            <ol>
+              <li>Log in with your Discord account on <a href="https://flexlion.github.io/">flexlion.github.io</a>.</li>
+              <li>In the <a href="./account.html">Account section</a>, press <strong>"Get fxtoken.epic"</strong> and place the file in <span class="code-path">/flexlion3/</span> on your SD card.</li>
+              <li>In Account, press <strong>"Enable CloudSave"</strong>.</li>
+              <li>Launch the game - your save will automatically upload to the server (and whenever the game saves while you play).</li>
+            </ol>
+            <p class="mt-2"><strong>Editing flow:</strong></p>
+            <ol>
+              <li>Close the game.</li>
+              <li>In the <a href="./saveeditor.html">Save Editor</a>, press <strong>"Use Flexlion CloudSave"</strong> to load your save.</li>
+              <li>Make your edits.</li>
+              <li>Press <strong>"Save to Flexlion CloudSave"</strong>.</li>
+              <li>Boot the game - changes apply automatically.</li>
+            </ol>
+          </div>
+        </section>
+
+        <hr class="section-divider">
+
+        <!-- SHADER TOOLS -->
+        <section id="shader-tools" class="docs-section">
+          <h2 class="docs-heading">Shader Tools</h2>
+          <p>Flexlion provides tools for dumping, decompiling, and compiling custom NVN shaders.</p>
+
+          <h3 class="docs-subheading">Creating a Shader Mod</h3>
+          <div class="doc-card">
+            <ol>
+              <li><strong>Dump</strong> the shader you want to modify (see below).</li>
+              <li><strong>Decompile</strong> it with the decompiler script from the mod downloads.</li>
+              <li><strong>Edit</strong> the decompiled shader. You can use Flexlion's helper uniform available on Replacement Shaders.</li>
+              <li>Set the correct extension (<code>.frag</code> for fragment, <code>.vert</code> for vertex) and <strong>compile</strong> it with UAM-nvn. You need to export in <strong>epicsh</strong> format (<code>.epicshf</code> for fragment, <code>.epicshv</code> for vertex).</li>
+              <li>Package it as a shader mod (see <a href="#texture-shader-mods">Texture/Shader Mods</a> format).</li>
+            </ol>
+          </div>
+
+          <h3 class="docs-subheading mt-3">UAM-nvn Shader Compiler</h3>
+          <div class="doc-card">
+            <p><a href="https://github.com/nvnprogram/uam-nvn" target="_blank">UAM-nvn</a> is a modified version of the deko3d shader compiler that can compile NVN shaders. Flexlion shader mods use the <strong>epicsh</strong> format (NVN shader control + program in one file).</p>
+
+            <p class="mt-2"><strong>Usage:</strong></p>
+            <div class="json-block">uam [options] file
+Options:
+  -s, --stage=&lt;name&gt;    Pipeline stage (vert, frag, geom, tess_ctrl, tess_eval, comp)
+                        If not specified, deduced from file extension (.vert, .frag, etc.)
+  -e, --epicsh=&lt;file&gt;   Output Epic shader format file (what Flexlion uses)
+  -b, --glslcbinds      Use GLSLC uniform binding scheme (add 1 to all ids)
+  -v, --version         Version information</div>
+
+            <p class="mt-3"><strong>Example - compile a fragment shader in epicsh format:</strong></p>
+            <div class="json-block">uam --glslcbinds --epicsh=output.epicshf shader.frag</div>
+            <p class="mt-2"><strong>Known issues:</strong> Only fragment and vertex shaders are fully tested. Shaders with bitwise operations (e.g., gsys vertex shaders) may not compile correctly due to a CSE/register allocation issue.</p>
+          </div>
+
+          <h3 class="docs-subheading mt-3">Dumping Shaders In-Game</h3>
+          <div class="doc-card">
+            <p>Shaders are searched by their fragment shader hash and saved to <span class="code-path">/flexlion3/shadertest/</span>.</p>
+            <ol>
+              <li>Enable <strong>SHADER DEBUG</strong> in "Show Debug Info" (Other tab). Debug text will appear in the top-left corner.</li>
+              <li>Press <span class="key-badge">X</span> to enter binary search mode. All shaders are initially selected and you'll see visual glitches - this is normal.</li>
+              <li>Press <span class="key-badge">A</span> to halve the selection. If your target shader is no longer affected, press <span class="key-badge">Up</span> to move to the next block.</li>
+              <li>Repeat halving and navigating until only 1 shader remains (takes about 20 seconds once you get the hang of it).</li>
+              <li>The fragment shader hash is displayed in the top-left. Press <span class="key-badge">A</span> to save it with all its stages.</li>
+            </ol>
+            <p class="mb-0">Then use the decompiler script to convert it into compileable code.</p>
+          </div>
+
+          <h3 class="docs-subheading mt-3">Shader Decompiler</h3>
+          <div class="doc-card">
+            <p>The decompiler script takes shader bytecode + control data and produces code compileable for NVN via UAM-nvn. You need Ryujinx ShaderTools - set <code>SHADERTOOLS_DIR</code> inside the script to the path of Ryujinx's build directory (use <a href="https://git.ryujinx.app/projects/Ryubing/commit/d604e982276105db043ca495a16f1b047bb2d0f6" target="_blank">this commit</a>).</p>
+          </div>
+        </section>
+
+        <hr class="section-divider">
+
+        <!-- KBM -->
+        <section id="kbm" class="docs-section">
+          <h2 class="docs-heading">Keyboard &amp; Mouse</h2>
+          <p>Flexlion supports USB keyboard and mouse input. The configuration is in <span class="code-path">/flexlion3/FxKbmConfig.json</span>. Enable <strong>Mouse Keyboard Control</strong> in the Misc tab.</p>
+
+          <div class="doc-card">
+            <p>The config maps keyboard/mouse inputs to controller buttons. Each entry has a controller button name as the key and a keyboard/mouse input name as the value.</p>
+
+            <p class="mt-2"><strong>Controller button names (map TO these):</strong></p>
+            <p><code>A</code> <code>B</code> <code>X</code> <code>Y</code> <code>LStick</code> <code>RStick</code> <code>L</code> <code>R</code> <code>ZL</code> <code>ZR</code> <code>Plus</code> <code>Minus</code> <code>Left</code> <code>Up</code> <code>Right</code> <code>Down</code> <code>LStickLeft</code> <code>LStickUp</code> <code>LStickRight</code> <code>LStickDown</code></p>
+
+            <p class="mt-2"><strong>Keyboard/mouse input names (map FROM these):</strong></p>
+            <p><em>Mouse:</em> <code>MouseLeft</code> <code>MouseRight</code> <code>MouseMiddle</code> <code>MouseExtra1</code> <code>MouseExtra2</code></p>
+            <p style="word-break:break-word;"><em>Keyboard:</em> <code>A</code>&ndash;<code>Z</code>, <code>0</code>&ndash;<code>9</code>, <code>Escape</code>, <code>Backspace</code>, <code>Tab</code>, <code>Space</code>, <code>Minus</code>, <code>Plus</code>, <code>CapsLock</code>, <code>F1</code>&ndash;<code>F12</code>, <code>RightArrow</code>, <code>LeftArrow</code>, <code>DownArrow</code>, <code>UpArrow</code>, <code>NumPad0</code>&ndash;<code>NumPad9</code>, <code>NumPadDivide</code>, <code>NumPadMultiply</code>, <code>NumPadSubtract</code>, <code>NumPadAdd</code>, <code>NumPadEnter</code>, <code>LeftControl</code>, <code>LeftShift</code>, <code>LeftAlt</code>, <code>RightControl</code>, <code>RightShift</code>, <code>RightAlt</code></p>
+          </div>
+        </section>
+
+        <hr class="section-divider">
+
+        <!-- AUTO-UPDATER -->
+        <section id="updater" class="docs-section">
+          <h2 class="docs-heading">Auto-Updater</h2>
+          <p>Flexlion can check for and download updates directly on the Switch.</p>
+
+          <div class="doc-card">
+            <ul>
+              <li><strong>Manual check:</strong> Use <strong>Other &rarr; Check Updates</strong> in the menu.</li>
+              <li><strong>Auto-check on boot:</strong> Set <code>"updateonboot": true</code> in <span class="code-path">/flexlion3/internal_config.json</span>.</li>
+            </ul>
+            <p class="mt-2">When an update is found, you'll be prompted to confirm the download. Press <span class="key-badge">A</span> to confirm, <span class="key-badge">B</span> to cancel. When complete, you'll be prompted to restart.</p>
+          </div>
+        </section>
+
+        <hr class="section-divider">
+
+        <!-- FXNETCTRL -->
+        <section id="fxnetctrl" class="docs-section">
+          <h2 class="docs-heading">FxNetCtrl</h2>
+          <p>FxNetCtrl is a local TCP control server that lets you interact with Flexlion remotely from a PC or the <a href="./fxnetctrl.html">web interface</a>.</p>
+
+          <div class="doc-card">
+            <ul>
+              <li><strong>Port:</strong> Default <code>8882</code> (configurable in module settings)</li>
+              <li><strong>Password:</strong> Optional password for connections</li>
+              <li>When enabled, the console's IP address is shown on screen</li>
+              <li>You need to run <a href="https://github.com/Flexlion/FlexClient" target="_blank">FlexClient</a> on your PC in the background</li>
+            </ul>
+            <p class="mb-0"><strong>Note:</strong> Enabling FxNetCtrl will disable <code>nvnforge</code> and vice versa.</p>
+          </div>
+        </section>
+
+
+      </div>
+    </div>
+  </div>
+
+<footer class="border-top footer text-muted text-center">
+  <div class="container text-wrap lh-base p-2 p-lg-3">
+    This website is not affiliated with Nintendo Co., Ltd. All product names, logos, and brands are property of their respective owners.
+  </div>
+</footer>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const sections = document.querySelectorAll('.docs-section');
+  const navLinks = document.querySelectorAll('.docs-sidebar .docs-nav .nav-link');
+
+  function updateActiveLink() {
+    let current = '';
+    sections.forEach(section => {
+      const top = section.getBoundingClientRect().top;
+      if (top <= 80) current = section.id;
+    });
+    navLinks.forEach(link => {
+      link.classList.remove('active');
+      const href = link.getAttribute('href');
+      if (href === '#' + current) link.classList.add('active');
+    });
+  }
+
+  window.addEventListener('scroll', updateActiveLink);
+  updateActiveLink();
+
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function(e) {
+      const target = document.querySelector(this.getAttribute('href'));
+      if (target) {
+        e.preventDefault();
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        history.pushState(null, '', this.getAttribute('href'));
+      }
+    });
+  });
+});
+</script>
+</body>
+</html>
