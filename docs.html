@@ -350,7 +350,7 @@
           <div class="doc-card">
             <ol class="mb-0">
               <li class="mb-2">Your Nintendo Switch must be hacked (running custom firmware such as Atmosphere). If it isn't, find a guide for your console revision elsewhere.</li>
-              <li class="mb-2">Download the latest Flexlion build from <a href="https://gamebanana.com/dl/977999" target="_blank">GameBanana</a>.</li>
+              <li class="mb-2">Download the latest Flexlion build from <a href="https://gamebanana.com/wips/70362" target="_blank">GameBanana</a>.</li>
               <li class="mb-2">Extract the contents of the <code>.rar</code> archive onto the <strong>root</strong> of your SD card (or virtual SD card folder if using an emulator). The archive contains <code>atmosphere</code> and <code>flexlion3</code> folders - both should end up at the root level of the SD card.</li>
               <li>Launch Splatoon 3. The menu should be accessible in-game.</li>
             </ol>
@@ -1044,7 +1044,9 @@
               <p class="mt-2"><strong>Shader groups</strong> (<code>"shaders"</code>):</p>
               <p>Same structure, but with <code>"target_shader"</code> instead of <code>"target_texture"</code>. The target file is the original shader dump, and replacement files should be compiled with <a href="#shader-tools">UAM-nvn</a> in epicsh format.</p>
 
-              <p class="mt-2 mb-0"><strong>Note on bftex textures:</strong> they must match the original dimensions (width/height) and format. If the target texture uses ASTC format in Switch Toolbox, you may need an external converter to produce ASTC first, then import into Toolbox and export as bftex.</p>
+              <p class="mt-2"><strong>Note on bftex textures:</strong> they must match the original dimensions (width/height) and format. If the target texture uses ASTC format in Switch Toolbox, you may need an external converter to produce ASTC first, then import into Toolbox and export as bftex.</p>
+
+              <p class="mb-0"><a href="./assets/example_mods.rar" class="btn btn-outline-primary btn-sm"><i class="bi bi-download me-1"></i> Download Example Mods</a></p>
             </div>
           </div>
 
@@ -1097,6 +1099,8 @@
               <li><span class="code-path">result_win/</span> - replaces victory result music</li>
               <li><span class="code-path">result_lose/</span> - replaces defeat result music</li>
             </ul>
+
+            <p class="mt-3 mb-0"><a href="./assets/example_music_mod.rar" class="btn btn-outline-primary btn-sm"><i class="bi bi-download me-1"></i> Download Example Music Mod</a></p>
           </div>
 
           <div class="callout callout-info mt-3">
@@ -1236,6 +1240,8 @@ Options:
           <h3 class="docs-subheading mt-3">Shader Decompiler</h3>
           <div class="doc-card">
             <p>The decompiler script takes shader bytecode + control data and produces code compileable for NVN via UAM-nvn. You need Ryujinx ShaderTools - set <code>SHADERTOOLS_DIR</code> inside the script to the path of Ryujinx's build directory (use <a href="https://git.ryujinx.app/projects/Ryubing/commit/d604e982276105db043ca495a16f1b047bb2d0f6" target="_blank">this commit</a>).</p>
+
+            <p class="mb-0"><a href="./assets/shader_decompiler_scripts.rar" class="btn btn-outline-primary btn-sm"><i class="bi bi-download me-1"></i> Download Decompiler Scripts</a></p>
           </div>
         </section>
 
