@@ -725,7 +725,7 @@ const PAD=8;
 let regX=0, regY=0, regW=410, regH=410;
 let ptData=null, ptTex=null, padBuf=null;
 let paintCh=0;
-let brushImg=null, brushSize=30, brushOpacity=0.7;
+let brushImg=null, brushSize=30, brushOpacity=1.0;
 let painting=false, lastUV=null, paintRafPending=false;
 function paintFlush(){paintRafPending=false;uploadPaint();render();}
 const undoStack=[], MAX_UNDO=30;
