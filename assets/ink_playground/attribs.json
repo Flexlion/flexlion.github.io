@@ -1,0 +1,16 @@
+{
+  "stride": 92,
+  "vertexCount": 79,
+  "indexCount": 150,
+  "primitiveType": "Triangles",
+  "attributes": [
+    { "name": "_p0", "offset": 0, "elementCount": 3, "stride": 12, "shaderLocation": 0 },
+    { "name": "_n0", "offset": 12, "elementCount": 3, "stride": 12, "shaderLocation": 1 },
+    { "name": "_t0", "offset": 24, "elementCount": 4, "stride": 16, "shaderLocation": 2 },
+    { "name": "_u0", "offset": 40, "elementCount": 2, "stride": 8, "shaderLocation": 8 },
+    { "name": "_u1", "offset": 48, "elementCount": 2, "stride": 8, "shaderLocation": 9 },
+    { "name": "_pu0", "offset": 56, "elementCount": 3, "stride": 12, "shaderLocation": 14 },
+    { "name": "_pu1", "offset": 68, "elementCount": 3, "stride": 12, "shaderLocation": 15 },
+    { "name": "_pu2", "offset": 80, "elementCount": 3, "stride": 12, "shaderLocation": 13 }
+  ]
+}

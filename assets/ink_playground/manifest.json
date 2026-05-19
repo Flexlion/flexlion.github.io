@@ -1,0 +1,173 @@
+{
+  "mesh": {
+    "vbo": "vbo.bin",
+    "ibo": "ibo.bin",
+    "attribs": "attribs.json"
+  },
+  "shaders": {
+    "vertex": "shader.vert",
+    "fragment": "shader.frag"
+  },
+  "ubo_bindings": {
+    "vp_c3": {
+      "file": "vp_c3.bin",
+      "block": "vp_c3"
+    },
+    "vp_c4": {
+      "file": "vp_c4.bin",
+      "block": "vp_c4"
+    },
+    "vp_c5": {
+      "file": "vp_c5.bin",
+      "block": "vp_c5"
+    },
+    "fp_c3": {
+      "file": "fp_c3.bin",
+      "block": "fp_c3"
+    },
+    "fp_c5": {
+      "file": "fp_c5.bin",
+      "block": "fp_c5"
+    },
+    "fp_c6": {
+      "file": "fp_c6.bin",
+      "block": "fp_c6"
+    },
+    "fp_c7": {
+      "file": "fp_c7.bin",
+      "block": "fp_c7"
+    },
+    "fp_c8": {
+      "file": "fp_c8.bin",
+      "block": "fp_c8"
+    },
+    "fp_c10": {
+      "file": "fp_c10.bin",
+      "block": "fp_c10"
+    }
+  },
+  "textures": {
+    "fp_tex_tcb_A": {
+      "file": "textures/fp_t_tcb_A.png",
+      "unit": 0
+    },
+    "fp_tex_tcb_E": {
+      "file": "textures/fp_t_tcb_E.png",
+      "unit": 1
+    },
+    "fp_tex_tcb_10": {
+      "file": "textures/fp_t_tcb_10.png",
+      "unit": 2
+    },
+    "fp_tex_tcb_12": {
+      "file": "textures/fp_t_tcb_12.png",
+      "unit": 3
+    },
+    "fp_tex_tcb_22": {
+      "file": "textures/fp_t_tcb_22.png",
+      "unit": 4
+    },
+    "fp_tex_tcb_24": {
+      "file": "textures/fp_t_tcb_24.png",
+      "unit": 5
+    },
+    "fp_tex_tcb_28": {
+      "file": "textures/fp_t_tcb_28.png",
+      "unit": 6
+    },
+    "fp_tex_tcb_2A": {
+      "file": "textures/fp_t_tcb_2A.png",
+      "unit": 7
+    },
+    "fp_tex_tcb_38": {
+      "file": "textures/fp_t_tcb_38.png",
+      "unit": 9
+    },
+    "fp_tex_tcb_3C": {
+      "file": "textures/fp_t_tcb_3C.png",
+      "unit": 10
+    },
+    "fp_tex_tcb_3E": {
+      "file": "textures/fp_t_tcb_3E.png",
+      "unit": 11
+    },
+    "fp_tex_tcb_40": {
+      "file": "textures/fp_t_tcb_40.png",
+      "unit": 12
+    },
+    "fp_tex_tcb_44": {
+      "file": "textures/fp_t_tcb_44.png",
+      "unit": 13
+    }
+  },
+  "ink_presets": [
+    {
+      "folder": "default_ink0",
+      "label": "Default (0)",
+      "id": 0
+    },
+    {
+      "folder": null,
+      "label": "Side Order (2)",
+      "id": 2
+    },
+    {
+      "folder": "oil_ink3",
+      "label": "Oil (3)",
+      "id": 3
+    },
+    {
+      "folder": "keba_ink4",
+      "label": "Keba (4)",
+      "id": 4
+    },
+    {
+      "folder": "spookyfest_ink5",
+      "label": "Spookyfest (5)",
+      "id": 5
+    },
+    {
+      "folder": "frostyfest_ink6",
+      "label": "Frostyfest (6)",
+      "id": 6
+    },
+    {
+      "folder": "springfest_ink7",
+      "label": "Springfest (7)",
+      "id": 7
+    },
+    {
+      "folder": "summerfest_ink8",
+      "label": "Summerfest (8)",
+      "id": 8
+    },
+    {
+      "folder": "grandfest_ink9",
+      "label": "Grandfest (9)",
+      "id": 9
+    }
+  ],
+  "sdodr_subtexes": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+  ],
+  "ink_overridable_buffers": [
+    "fp_c6.bin",
+    "fp_c7.bin",
+    "fp_c8.bin",
+    "fp_c10.bin"
+  ],
+  "ink_overridable_textures": [
+    "fp_t_tcb_3E.png",
+    "fp_t_tcb_40.png"
+  ],
+  "resolution": [
+    1920,
+    1080
+  ]
+}
