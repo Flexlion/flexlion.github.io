@@ -725,7 +725,7 @@ const PAD=8;
 let regX=0, regY=0, regW=410, regH=410;
 let ptData=null, ptTex=null, padBuf=null;
 let paintCh=0;
-let brushImg=null, brushSize=30, brushOpacity=1.0;
+let brushImg=null, brushSize=30, brushOpacity=0.7;
 let painting=false, lastUV=null, paintRafPending=false;
 function paintFlush(){paintRafPending=false;uploadPaint();render();}
 const undoStack=[], MAX_UNDO=30;
@@ -1387,7 +1387,16 @@ async function switchInk(pi,si){
   }
   patchPointLight();patchPointLightColor();patchPointLightRadius();
   if(inkId===2){patchGlitter();patchAccentColor();}
-  if(ubos.fp_c8)initTC(ubos.fp_c8.data);
+  if(ubos.fp_c8){
+    const sa=document.getElementById('colorAlpha').value;
+    const sb=document.getElementById('colorBravo').value;
+    const sc=document.getElementById('colorCharlie').value;
+    initTC(ubos.fp_c8.data);
+    document.getElementById('colorAlpha').value=sa;
+    document.getElementById('colorBravo').value=sb;
+    document.getElementById('colorCharlie').value=sc;
+    patchTC();
+  }
   for(const tf of(manifest.ink_overridable_textures||[])){
     const u=TF[tf];if(u===undefined)continue;
     const nearest=(tf==='fp_t_tcb_3E.png'&&use3eNearest);
