@@ -725,7 +725,7 @@ const PAD=8;
 let regX=0, regY=0, regW=410, regH=410;
 let ptData=null, ptTex=null, padBuf=null;
 let paintCh=0;
-let brushImg=null, brushSize=30, brushOpacity=1.0;
+let brushImg=null, brushSize=90, brushOpacity=1.0;
 let painting=false, lastUV=null, paintHoldId=0, paintDirty=false;
 function paintFlush(){if(!paintDirty)return;paintDirty=false;uploadPaint();render();}
 function markPaintDirty(){if(!paintDirty){paintDirty=true;requestAnimationFrame(paintFlush);}}
