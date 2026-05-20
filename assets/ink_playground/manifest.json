@@ -102,8 +102,13 @@
   },
   "ink_presets": [
     {
-      "folder": "default_ink0",
-      "label": "Default (0)",
+      "folder": "default_ink0_night",
+      "label": "Default Night (0)",
+      "id": 0
+    },
+    {
+      "folder": "default_ink0_day",
+      "label": "Default Day (0)",
       "id": 0
     },
     {

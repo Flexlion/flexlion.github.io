@@ -348,6 +348,19 @@ function linkProg(v,f){const p=gl.createProgram();gl.attachShader(p,v);gl.attach
 function mkUBO(d){const b=gl.createBuffer();gl.bindBuffer(gl.UNIFORM_BUFFER,b);gl.bufferData(gl.UNIFORM_BUFFER,d,gl.DYNAMIC_DRAW);gl.bindBuffer(gl.UNIFORM_BUFFER,null);return b;}
 function updUBO(b,d){gl.bindBuffer(gl.UNIFORM_BUFFER,b);gl.bufferData(gl.UNIFORM_BUFFER,d,gl.DYNAMIC_DRAW);gl.bindBuffer(gl.UNIFORM_BUFFER,null);}
 function mkTex(img,nearest){const t=gl.createTexture();gl.bindTexture(gl.TEXTURE_2D,t);gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA8,gl.RGBA,gl.UNSIGNED_BYTE,img);if(nearest){gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MIN_FILTER,gl.NEAREST);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MAG_FILTER,gl.NEAREST);}else{gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MIN_FILTER,gl.LINEAR_MIPMAP_LINEAR);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MAG_FILTER,gl.LINEAR);gl.generateMipmap(gl.TEXTURE_2D);}gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_S,gl.REPEAT);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_T,gl.REPEAT);return t;}
+function mkTexSNORM(img){
+  const c=document.createElement('canvas');c.width=img.width;c.height=img.height;
+  const ctx=c.getContext('2d',{willReadFrequently:true});ctx.drawImage(img,0,0);
+  const px=ctx.getImageData(0,0,img.width,img.height).data;
+  const signed=new Int8Array(px.buffer,px.byteOffset,px.byteLength);
+  const t=gl.createTexture();gl.bindTexture(gl.TEXTURE_2D,t);
+  gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA8_SNORM,img.width,img.height,0,gl.RGBA,gl.BYTE,signed);
+  gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MIN_FILTER,gl.NEAREST);
+  gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MAG_FILTER,gl.NEAREST);
+  gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_S,gl.REPEAT);
+  gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_T,gl.REPEAT);
+  return t;
+}
 function mk1x1(r,g,b,a){const t=gl.createTexture();gl.bindTexture(gl.TEXTURE_2D,t);gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,1,1,0,gl.RGBA,gl.UNSIGNED_BYTE,new Uint8Array([r,g,b,a]));gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MIN_FILTER,gl.NEAREST);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MAG_FILTER,gl.NEAREST);return t;}
 
 /* --- State --- */
@@ -1044,7 +1057,7 @@ async function init(){
       const f=manifest.ubo_bindings[nm]?.file||`${nm}.bin`;
       const sz=gl.getActiveUniformBlockParameter(program,idx,gl.UNIFORM_BLOCK_DATA_SIZE);
       const bn=f.split('/').pop();
-      let raw;try{raw=await fetchBin(`${BASE}/${f}`);}catch{try{raw=await fetchBin(`${BASE}/default_ink0/${bn}`);}catch{raw=new Uint8Array(sz);}}
+      let raw;try{raw=await fetchBin(`${BASE}/defaults/${f}`);}catch{try{raw=await fetchBin(`${BASE}/default_ink0/${bn}`);}catch{raw=new Uint8Array(sz);}}
       let d=raw;if(raw.length<sz){d=new Uint8Array(sz);d.set(raw);}
       const buf=mkUBO(d); ubos[nm]={glBuf:buf,bindingPoint:bp,data:new Uint8Array(d)}; bp++;
     }
@@ -1410,13 +1423,13 @@ async function switchInk(pi,si){
   }
   for(const tf of(manifest.ink_overridable_textures||[])){
     const u=TF[tf];if(u===undefined)continue;
-    const nearest=(tf==='fp_t_tcb_3E.png'&&use3eNearest);
+    const snorm3e=(tf==='fp_t_tcb_3E.png'&&use3eNearest);
     let loaded=false;
     if(folder){
-      try{const im=await loadImg(`${BASE}/${folder}/${tf}`);texImgs[tf]=im;if(textures[tf])gl.deleteTexture(textures[tf]);const tx=mkTex(im,nearest);gl.activeTexture(gl.TEXTURE0+u);gl.bindTexture(gl.TEXTURE_2D,tx);textures[tf]=tx;loaded=true;}catch{}
+      try{const im=await loadImg(`${BASE}/${folder}/${tf}`);texImgs[tf]=im;if(textures[tf])gl.deleteTexture(textures[tf]);const tx=snorm3e?mkTexSNORM(im):mkTex(im,false);gl.activeTexture(gl.TEXTURE0+u);gl.bindTexture(gl.TEXTURE_2D,tx);textures[tf]=tx;loaded=true;}catch{}
     }
     if(!loaded){
-      try{const im=await loadImg(`${BASE}/textures/${tf}`);texImgs[tf]=im;if(textures[tf])gl.deleteTexture(textures[tf]);const tx=mkTex(im,nearest);gl.activeTexture(gl.TEXTURE0+u);gl.bindTexture(gl.TEXTURE_2D,tx);textures[tf]=tx;}catch{}
+      try{const im=await loadImg(`${BASE}/textures/${tf}`);texImgs[tf]=im;if(textures[tf])gl.deleteTexture(textures[tf]);const tx=snorm3e?mkTexSNORM(im):mkTex(im,false);gl.activeTexture(gl.TEXTURE0+u);gl.bindTexture(gl.TEXTURE_2D,tx);textures[tf]=tx;}catch{}
     }
   }
   render();
