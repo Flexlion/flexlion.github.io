@@ -726,18 +726,9 @@ let regX=0, regY=0, regW=410, regH=410;
 let ptData=null, ptTex=null, padBuf=null;
 let paintCh=0;
 let brushImg=null, brushSize=90, brushOpacity=1.0;
-let painting=false, lastUV=null, paintHoldId=0, paintDirty=false;
+let painting=false, lastUV=null, paintDirty=false;
 function paintFlush(){if(!paintDirty)return;paintDirty=false;uploadPaint();render();}
 function markPaintDirty(){if(!paintDirty){paintDirty=true;requestAnimationFrame(paintFlush);}}
-function startPaintHold(){
-  stopPaintHold();
-  paintHoldId=setInterval(()=>{
-    if(!painting||!lastUV)return;
-    stamp(lastUV.u,lastUV.v);
-    markPaintDirty();
-  },30);
-}
-function stopPaintHold(){if(paintHoldId){clearInterval(paintHoldId);paintHoldId=0;}}
 const undoStack=[], MAX_UNDO=30;
 function pushUndo(){if(!ptData)return;if(undoStack.length>=MAX_UNDO)undoStack.shift();undoStack.push(new Uint8Array(ptData));}
 function popUndo(){if(!undoStack.length||!ptData)return;ptData.set(undoStack.pop());uploadPaint();render();}
@@ -1086,7 +1077,7 @@ async function init(){
     gl.viewport(0,0,RENDER_W,RENDER_H);gl.enable(gl.DEPTH_TEST);gl.depthFunc(gl.LEQUAL);
     gl.enable(gl.CULL_FACE);gl.cullFace(gl.BACK);
 
-    setupUI(); await loadBrushes();
+    setupUI(); loadBrushes();
     await switchInk(-1, 0);
     readGlitter(); readAccentColor();
     updateCamera();
@@ -1224,12 +1215,12 @@ function setupControls(){
     }
     if(e.button===0 && !e.shiftKey){
       const hit=hitTopFace(e.clientX,e.clientY);
-      if(hit){pushUndo();painting=true;lastUV=hit;resetDirty();stamp(hit.u,hit.v);markPaintDirty();startPaintHold();}
+      if(hit){pushUndo();painting=true;lastUV=hit;resetDirty();stamp(hit.u,hit.v);markPaintDirty();}
     }else if(e.button===2||e.button===1){dragBtn=e.button;lx=e.clientX;ly=e.clientY;}
     e.preventDefault();
   });
   window.addEventListener('mouseup',e=>{
-    if(e.button===0){if(painting){painting=false;stopPaintHold();paintDirty=true;paintFlush();}if(gizmoDragAxis>=0){gizmoDragAxis=-1;gizmoDragStart=null;drawGizmo();}}
+    if(e.button===0){if(painting){painting=false;paintDirty=true;paintFlush();}if(gizmoDragAxis>=0){gizmoDragAxis=-1;gizmoDragStart=null;drawGizmo();}}
     if(e.button===dragBtn)dragBtn=-1;
   });
   window.addEventListener('mousemove',e=>{
@@ -1307,10 +1298,10 @@ function setupControls(){
     if(ts.length===1){
       const t=ts[0];
       const hit=hitTopFace(t.clientX,t.clientY);
-      if(hit){pushUndo();painting=true;lastUV=hit;resetDirty();stamp(hit.u,hit.v);markPaintDirty();startPaintHold();touchMode='paint';}
+      if(hit){pushUndo();painting=true;lastUV=hit;resetDirty();stamp(hit.u,hit.v);markPaintDirty();touchMode='paint';}
       else{touchMode='rotate';touchLast=[{x:t.clientX,y:t.clientY}];}
     }else if(ts.length===2){
-      if(painting){painting=false;stopPaintHold();paintDirty=true;paintFlush();}
+      if(painting){painting=false;paintDirty=true;paintFlush();}
       touchMode='panZoom';
       const dx=ts[1].clientX-ts[0].clientX, dy=ts[1].clientY-ts[0].clientY;
       touchDist0=Math.sqrt(dx*dx+dy*dy);
@@ -1380,7 +1371,7 @@ function setupControls(){
   },{passive:false});
   wrap.addEventListener('touchend',e=>{
     e.preventDefault();
-    if(touchMode==='paint'){painting=false;stopPaintHold();paintDirty=true;paintFlush();}
+    if(touchMode==='paint'){painting=false;paintDirty=true;paintFlush();}
     if(e.touches.length===0) touchMode=null;
     else if(e.touches.length===1){
       touchMode='rotate';
