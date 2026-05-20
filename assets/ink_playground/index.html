@@ -725,9 +725,19 @@ const PAD=8;
 let regX=0, regY=0, regW=410, regH=410;
 let ptData=null, ptTex=null, padBuf=null;
 let paintCh=0;
-let brushImg=null, brushSize=30, brushOpacity=0.7;
-let painting=false, lastUV=null, paintRafPending=false;
-function paintFlush(){paintRafPending=false;uploadPaint();render();}
+let brushImg=null, brushSize=30, brushOpacity=1.0;
+let painting=false, lastUV=null, paintHoldId=0, paintDirty=false;
+function paintFlush(){if(!paintDirty)return;paintDirty=false;uploadPaint();render();}
+function markPaintDirty(){if(!paintDirty){paintDirty=true;requestAnimationFrame(paintFlush);}}
+function startPaintHold(){
+  stopPaintHold();
+  paintHoldId=setInterval(()=>{
+    if(!painting||!lastUV)return;
+    stamp(lastUV.u,lastUV.v);
+    markPaintDirty();
+  },30);
+}
+function stopPaintHold(){if(paintHoldId){clearInterval(paintHoldId);paintHoldId=0;}}
 const undoStack=[], MAX_UNDO=30;
 function pushUndo(){if(!ptData)return;if(undoStack.length>=MAX_UNDO)undoStack.shift();undoStack.push(new Uint8Array(ptData));}
 function popUndo(){if(!undoStack.length||!ptData)return;ptData.set(undoStack.pop());uploadPaint();render();}
@@ -831,6 +841,7 @@ function stamp(u, v) {
   const decay=0.4, threshold=0.05;
   const half=sz/2;
   const cosA=Math.cos(camYaw), sinA=Math.sin(camYaw);
+  const szm1=sz-1;
 
   const rad=Math.ceil(half*1.42);
   const tx0=Math.max(0, Math.floor(centerU-rad));
@@ -843,12 +854,21 @@ function stamp(u, v) {
   for(let ty=ty0;ty<ty1;ty++){
     const dy=ty-centerV+0.5;
     const tyW=ty*regW;
+    const rA=dy*sinA+half, rB=dy*cosA+half;
     for(let tx=tx0;tx<tx1;tx++){
       const dx=tx-centerU+0.5;
-      const bx=Math.round( dx*cosA+dy*sinA+half);
-      const by=Math.round(-dx*sinA+dy*cosA+half);
-      if(bx<0||bx>=sz||by<0||by>=sz) continue;
-      const ba=px[(by*sz+bx)*4+3];
+      const fbx=dx*cosA+rA;
+      const fby=-dx*sinA+rB;
+      if(fbx<0||fbx>szm1||fby<0||fby>szm1) continue;
+      const ix=fbx|0, iy=fby|0;
+      const fx=fbx-ix, fy=fby-iy;
+      const ix1=ix<szm1?ix+1:ix, iy1=iy<szm1?iy+1:iy;
+      const ba=(
+        px[(iy*sz+ix)*4+3]*(1-fx)*(1-fy)+
+        px[(iy*sz+ix1)*4+3]*fx*(1-fy)+
+        px[(iy1*sz+ix)*4+3]*(1-fx)*fy+
+        px[(iy1*sz+ix1)*4+3]*fx*fy
+      );
       if(ba<3) continue;
       const strength=(ba/255)*brushOpacity;
       const idx=(tyW+tx)*4;
@@ -1204,12 +1224,12 @@ function setupControls(){
     }
     if(e.button===0 && !e.shiftKey){
       const hit=hitTopFace(e.clientX,e.clientY);
-      if(hit){pushUndo();painting=true;lastUV=hit;resetDirty();stamp(hit.u,hit.v);uploadPaint();render();}
+      if(hit){pushUndo();painting=true;lastUV=hit;resetDirty();stamp(hit.u,hit.v);markPaintDirty();startPaintHold();}
     }else if(e.button===2||e.button===1){dragBtn=e.button;lx=e.clientX;ly=e.clientY;}
     e.preventDefault();
   });
   window.addEventListener('mouseup',e=>{
-    if(e.button===0){if(painting){painting=false;if(paintRafPending){paintRafPending=false;uploadPaint();render();}}if(gizmoDragAxis>=0){gizmoDragAxis=-1;gizmoDragStart=null;drawGizmo();}}
+    if(e.button===0){if(painting){painting=false;stopPaintHold();paintDirty=true;paintFlush();}if(gizmoDragAxis>=0){gizmoDragAxis=-1;gizmoDragStart=null;drawGizmo();}}
     if(e.button===dragBtn)dragBtn=-1;
   });
   window.addEventListener('mousemove',e=>{
@@ -1230,11 +1250,11 @@ function setupControls(){
       if(hit){
         if(lastUV){
           const du=hit.u-lastUV.u,dv=hit.v-lastUV.v,dist=Math.sqrt(du*du+dv*dv);
-          const step=Math.max(brushSize/(regW*2), 1/(regW*2));
+          const step=2/regW;
           if(dist>step){const n=Math.ceil(dist/step);for(let i=1;i<n;i++){const t=i/n;stamp(lastUV.u+du*t,lastUV.v+dv*t);}}
         }
         stamp(hit.u,hit.v);lastUV=hit;
-        if(!paintRafPending){paintRafPending=true;requestAnimationFrame(paintFlush);}
+        markPaintDirty();
       }
       return;
     }
@@ -1287,10 +1307,10 @@ function setupControls(){
     if(ts.length===1){
       const t=ts[0];
       const hit=hitTopFace(t.clientX,t.clientY);
-      if(hit){pushUndo();painting=true;lastUV=hit;resetDirty();stamp(hit.u,hit.v);uploadPaint();render();touchMode='paint';}
+      if(hit){pushUndo();painting=true;lastUV=hit;resetDirty();stamp(hit.u,hit.v);markPaintDirty();startPaintHold();touchMode='paint';}
       else{touchMode='rotate';touchLast=[{x:t.clientX,y:t.clientY}];}
     }else if(ts.length===2){
-      if(painting){painting=false;if(paintRafPending){paintRafPending=false;uploadPaint();render();}}
+      if(painting){painting=false;stopPaintHold();paintDirty=true;paintFlush();}
       touchMode='panZoom';
       const dx=ts[1].clientX-ts[0].clientX, dy=ts[1].clientY-ts[0].clientY;
       touchDist0=Math.sqrt(dx*dx+dy*dy);
@@ -1306,11 +1326,11 @@ function setupControls(){
       if(hit){
         if(lastUV){
           const du=hit.u-lastUV.u,dv=hit.v-lastUV.v,dist=Math.sqrt(du*du+dv*dv);
-          const step=Math.max(brushSize/(regW*2),1/(regW*2));
+          const step=2/regW;
           if(dist>step){const n=Math.ceil(dist/step);for(let i=1;i<n;i++){const t2=i/n;stamp(lastUV.u+du*t2,lastUV.v+dv*t2);}}
         }
         stamp(hit.u,hit.v);lastUV=hit;
-        if(!paintRafPending){paintRafPending=true;requestAnimationFrame(paintFlush);}
+        markPaintDirty();
       }
     }else if(touchMode==='rotate'&&ts.length===1){
       const t=ts[0];
@@ -1360,7 +1380,7 @@ function setupControls(){
   },{passive:false});
   wrap.addEventListener('touchend',e=>{
     e.preventDefault();
-    if(touchMode==='paint'){painting=false;if(paintRafPending){paintRafPending=false;uploadPaint();render();}}
+    if(touchMode==='paint'){painting=false;stopPaintHold();paintDirty=true;paintFlush();}
     if(e.touches.length===0) touchMode=null;
     else if(e.touches.length===1){
       touchMode='rotate';
