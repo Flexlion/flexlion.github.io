@@ -864,7 +864,7 @@ async function renderPreview(cfg){
     dv10.setFloat32(PT_LIGHT_POS_BASE,-0.7,true);
     dv10.setFloat32(PT_LIGHT_POS_BASE+4,20.8,true);
     dv10.setFloat32(PT_LIGHT_POS_BASE+8,0.0,true);
-    const ptI=8.0;
+    const ptI=4.0;
     dv10.setFloat32(PT_LIGHT_COLOR_BASE,srgbToLin(0xa8/255)*ptI,true);
     dv10.setFloat32(PT_LIGHT_COLOR_BASE+4,srgbToLin(0xa8/255)*ptI,true);
     dv10.setFloat32(PT_LIGHT_COLOR_BASE+8,srgbToLin(0xa8/255)*ptI,true);
@@ -1156,7 +1156,7 @@ function initPointLight(){
 
   ptLightBaseColor=[srgbToLin(0xa8/255), srgbToLin(0xa8/255), srgbToLin(0xa8/255)];
   document.getElementById('ptLightColor').value='#a8a8a8';
-  const defaultInt=8.0;
+  const defaultInt=4.0;
   document.getElementById('ptLightInt').value=defaultInt.toFixed(1);
   document.getElementById('ptIntVal').textContent=defaultInt.toFixed(1);
   dv.setFloat32(PT_LIGHT_COLOR_BASE, ptLightBaseColor[0]*defaultInt, true);
