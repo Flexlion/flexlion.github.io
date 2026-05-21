@@ -147,6 +147,26 @@ canvas{position:absolute;top:0;left:0}
   color:var(--gold);font-size:18px;width:36px;height:36px;cursor:pointer;
   align-items:center;justify-content:center;
 }
+.pack-card{
+  background:var(--input);border:1px solid var(--border);border-radius:12px;
+  overflow:hidden;display:flex;flex-direction:column;transition:border-color .2s,box-shadow .2s;
+}
+.pack-card:hover{border-color:var(--gold-lo)}
+.pack-card img{width:100%;display:block;background:#0a0a0a;border-radius:8px 8px 0 0}
+.pack-card .card-info{padding:8px;display:flex;flex-direction:column;gap:4px}
+.pack-card .card-name{font-size:10px;color:var(--text);font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pack-card .card-sub{font-size:9px;color:var(--text-3)}
+.pack-card .card-btns{display:flex;gap:4px;padding:0 8px 8px}
+.pack-card .card-btns button{flex:1;font-size:9px;padding:4px 0}
+.toast{
+  pointer-events:auto;background:var(--panel);border:1px solid var(--border);border-radius:var(--rs);
+  padding:10px 14px;font-size:11px;color:var(--text);box-shadow:0 4px 16px rgba(0,0,0,.4);
+  max-width:320px;animation:toastIn .25s ease;
+}
+.toast.warn{border-color:var(--gold-lo);color:var(--gold)}
+.toast.error{border-color:var(--red);color:var(--red)}
+@keyframes toastIn{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:translateY(0)}}
+
 @media(max-width:700px){
   #sidebarToggle{display:flex}
   #sidebar{position:fixed;left:0;top:0;z-index:800;transform:translateX(-100%);transition:transform .25s ease;width:260px;min-width:260px}
@@ -165,7 +185,7 @@ canvas{position:absolute;top:0;left:0}
       <select id="subtexSelect" style="margin-top:4px"></select>
     </div>
     <div id="glitterRow" style="display:none">
-      <div class="srow"><label>Glitter</label><input type="range" id="glitterInt" min="0.2" max="5.0" value="1.0" step="0.01"><span id="glitterVal">1.00</span></div>
+      <div class="srow"><label>Glitter</label><input type="range" id="glitterInt" min="0.2" max="5.0" value="1.42" step="0.01"><span id="glitterVal">1.42</span></div>
       <div class="srow"><label>Glitter Color</label><input type="color" id="glitterColor" value="#ffca76"></div>
     </div>
     <div id="animRow" style="display:none">
@@ -180,6 +200,7 @@ canvas{position:absolute;top:0;left:0}
       <div class="color-cell"><input type="color" id="colorBravo"><span>Bravo</span></div>
       <div class="color-cell"><input type="color" id="colorCharlie"><span>Charlie</span></div>
     </div>
+    <label style="display:flex;align-items:center;gap:6px;font-size:10px;color:var(--text-2);cursor:pointer;text-transform:uppercase;letter-spacing:.5px"><input type="checkbox" id="gameCorrectionCb" checked style="accent-color:var(--gold)">Game Correction</label>
   </section>
 
   <section class="panel">
@@ -231,6 +252,18 @@ canvas{position:absolute;top:0;left:0}
   </section>
 
   <section class="panel">
+    <div class="ptitle">Config Pack</div>
+    <div class="btn-row">
+      <button class="btn gold" id="openPackBtn">Manage Configs</button>
+    </div>
+    <div class="btn-row">
+      <button class="btn" id="loadSingleCfgBtn">Load JSON</button>
+      <button class="btn" id="saveSingleCfgBtn">Save JSON</button>
+    </div>
+    <input type="file" id="loadSingleCfgInput" accept=".json" style="display:none">
+  </section>
+
+  <section class="panel">
     <div class="ptitle">View &amp; Export</div>
     <button class="btn gold" id="topDownBtn">Top Down View</button>
     <div class="btn-row">
@@ -255,6 +288,43 @@ canvas{position:absolute;top:0;left:0}
 </div>
 <input type="file" id="importInput" accept="image/png,image/jpeg,image/webp" style="display:none">
 
+<div id="packModal" class="modal-overlay hidden">
+  <div class="modal-backdrop"></div>
+  <div class="modal-panel" style="width:720px;max-width:92vw;max-height:88vh">
+    <div class="modal-header"><span>Config Pack</span><div style="display:flex;gap:6px;align-items:center"><button class="btn" id="packImportBtn" style="font-size:10px;padding:4px 10px">Import Zip</button><button class="btn" id="packNewBtn" style="font-size:10px;padding:4px 10px">New Config</button><button class="btn gold" id="packSaveBtn" style="font-size:10px;padding:4px 10px">Save Zip</button><button id="closePackModal" style="margin-left:8px">&times;</button></div></div>
+    <div id="packGrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px;padding:12px;overflow-y:auto;max-height:72vh;scrollbar-width:thin;scrollbar-color:var(--border-lt) transparent">
+      <div id="packEmpty" style="grid-column:1/-1;text-align:center;padding:40px 0;color:var(--text-3);font-size:11px">No configs loaded. Import a zip or create a new config.</div>
+    </div>
+  </div>
+</div>
+<input type="file" id="packZipInput" accept=".zip" style="display:none">
+
+<div id="nameDialog" class="modal-overlay hidden">
+  <div class="modal-backdrop"></div>
+  <div class="modal-panel" style="width:320px">
+    <div class="modal-header"><span id="nameDialogTitle">New Config</span><button id="closeNameDialog">&times;</button></div>
+    <div style="padding:14px;display:flex;flex-direction:column;gap:10px">
+      <input type="text" id="nameDialogInput" style="width:100%;padding:7px 10px;background:var(--input);color:var(--text);border:1px solid var(--border);border-radius:var(--rs);font-size:12px;outline:none" placeholder="Config name">
+      <div class="btn-row"><button class="btn" id="nameDialogCancel">Cancel</button><button class="btn gold" id="nameDialogOk">OK</button></div>
+    </div>
+  </div>
+</div>
+
+<div id="confirmDialog" class="modal-overlay hidden">
+  <div class="modal-backdrop"></div>
+  <div class="modal-panel" style="width:360px">
+    <div class="modal-header"><span>Unsaved Changes</span><button id="closeConfirmDialog">&times;</button></div>
+    <div style="padding:14px;display:flex;flex-direction:column;gap:10px">
+      <p style="font-size:11px;color:var(--text-2)">Current config pack has unsaved changes. Loading a new pack will discard them.</p>
+      <div class="btn-row"><button class="btn" id="confirmCancel">Cancel</button><button class="btn danger" id="confirmDiscard">Discard &amp; Load</button></div>
+    </div>
+  </div>
+</div>
+
+<div id="toastContainer" style="position:fixed;top:16px;right:16px;z-index:2000;display:flex;flex-direction:column;gap:8px;pointer-events:none"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script src="ink_convert.js"></script>
 <script>
 "use strict";
 const BASE = '.';
@@ -273,7 +343,7 @@ let CUBE_HS = 5, CUBE_H = 10;
 let camPos = [0, 6, 9];
 let camYaw = 0;
 let camPitch = -0.588;
-let origVpC3 = null, origFpC3 = null;
+let origVpC3 = null, origFpC3 = null, origFpC5 = null;
 let isTopDown = false, savedCam = null, topDownScale = 1.0;
 const TOP_FOV = 55*Math.PI/180;
 function topDownHeight(){
@@ -381,15 +451,551 @@ function initTC(d){
   document.getElementById('colorAlpha').value=ts(a);document.getElementById('colorBravo').value=ts(b);
   document.getElementById('colorCharlie').value=ts(c);
 }
+
+function getInkPreset(){
+  const sel=document.getElementById('inkSelect');
+  const v=parseInt(sel.value);
+  if(v<0||!manifest)return null;
+  return manifest.ink_presets[v]||null;
+}
+
 function patchTC(){
-  if(!tcRatios||!ubos.fp_c8)return;
+  if(!ubos.fp_c8)return;
   const d=new Uint8Array(ubos.fp_c8.data),dv=new DataView(d.buffer);
   const ac=hexToLin(document.getElementById('colorAlpha').value),bc=hexToLin(document.getElementById('colorBravo').value);
   const cc=hexToLin(document.getElementById('colorCharlie').value);
-  const w=(i,col,r)=>{const o=i*16;if(o+12>d.length)return;dv.setFloat32(o,col[0]*r,true);dv.setFloat32(o+4,col[1]*r,true);dv.setFloat32(o+8,col[2]*r,true);};
-  for(let i=0;i<7;i++)w(i,ac,tcRatios[i]);for(let i=7;i<14;i++)w(i,bc,tcRatios[i]);
-  for(let i=14;i<21;i++)w(i,cc,tcRatios[i]);
+  const w=(i,col)=>{const o=i*16;if(o+12>d.length)return;dv.setFloat32(o,col[0],true);dv.setFloat32(o+4,col[1],true);dv.setFloat32(o+8,col[2],true);};
+  const gc=document.getElementById('gameCorrectionCb').checked;
+  if(gc){
+    const p=getInkPreset();
+    const inkId=p?p.id:0;
+    const tod=(p&&p.tod==='day')?'Day':'Night';
+    const fnHD=window[`convertInk${inkId}${tod}_TeamColorHueDark`];
+    const fnHB=window[`convertInk${inkId}${tod}_TeamColorHueBright`];
+    for(const[base,col]of[[0,ac],[7,bc],[14,cc]]){
+      const hd=fnHD?fnHD(col[0],col[1],col[2]):col;
+      const hb=fnHB?fnHB(col[0],col[1],col[2]):col;
+      for(let i=0;i<7;i++){
+        if(i===3) w(base+i,hb);
+        else if(i===4) w(base+i,hd);
+        else w(base+i,col);
+      }
+    }
+  }else{
+    if(!tcRatios)return;
+    const wr=(i,col,r)=>{const o=i*16;if(o+12>d.length)return;dv.setFloat32(o,col[0]*r,true);dv.setFloat32(o+4,col[1]*r,true);dv.setFloat32(o+8,col[2]*r,true);};
+    for(let i=0;i<7;i++)wr(i,ac,tcRatios[i]);for(let i=7;i<14;i++)wr(i,bc,tcRatios[i]);
+    for(let i=14;i<21;i++)wr(i,cc,tcRatios[i]);
+  }
   updUBO(ubos.fp_c8.glBuf,d);ubos.fp_c8.data=d;
+  patchFrostyHighlight();
+}
+
+function computeHue(r,g,b){
+  let v619=g,v620=b,v621=r,v623,v624,v625,v626;
+  if(v619>=v620)v623=g;else v623=b;
+  if(v619<v620){v624=-1.0;}else{v619=b;v624=0.0;}
+  if(v621>=v623)v625=v623;else v625=r;
+  if(v621<v623){v621=v623;v624=-0.33333-v624;}
+  if(v625>=v619)v626=v619;else v626=v625;
+  let h=v624+(v625-v619)/((v621-v626)*6.0+1e-20);
+  h=Math.abs(h);
+  return Math.max(0,Math.min(1,h));
+}
+function adjustHue(h,off){return(h>0.2&&h<0.72)?h-off:h+off;}
+
+function patchFrostyHighlight(overrideInkId){
+  if(!ubos.fp_c7||!ubos.fp_c8)return;
+  let id;if(overrideInkId!==undefined)id=overrideInkId;else{const p=getInkPreset();if(!p)return;id=p.id;}
+  if(id!==6)return;
+  const dv8=new DataView(ubos.fp_c8.data.buffer,ubos.fp_c8.data.byteOffset);
+  const dv7=new DataView(ubos.fp_c7.data.buffer,ubos.fp_c7.data.byteOffset);
+  const P1=0.053,P2=0.009;
+  for(let t=0;t<3;t++){
+    const o8=t*7*16;
+    const h=computeHue(dv8.getFloat32(o8,true),dv8.getFloat32(o8+4,true),dv8.getFloat32(o8+8,true));
+    dv7.setFloat32(51*16+t*4,adjustHue(h,P1),true);
+    dv7.setFloat32(77*16+t*4,adjustHue(h,P2),true);
+  }
+  updUBO(ubos.fp_c7.glBuf,ubos.fp_c7.data);
+}
+
+/* --- Toast notifications --- */
+function showToast(msg,type='info',dur=3500){
+  const t=document.createElement('div');t.className='toast'+(type!=='info'?' '+type:'');t.textContent=msg;
+  document.getElementById('toastContainer').appendChild(t);
+  setTimeout(()=>{t.style.opacity='0';t.style.transition='opacity .3s';setTimeout(()=>t.remove(),300);},dur);
+}
+
+/* --- Config format helpers --- */
+function gammaToLin(v){return Math.pow(Math.max(0,v),2.2);}
+function linToGamma(v){return Math.pow(Math.max(0,v),1/2.2);}
+function linToHex(c){const th=v=>Math.round(Math.min(1,Math.max(0,v<=.0031308?v*12.92:1.055*Math.pow(v,1/2.4)-.055))*255).toString(16).padStart(2,'0');return'#'+th(c[0])+th(c[1])+th(c[2]);}
+const CFG_INK_MAP={0:0,1:3,2:4,3:5,4:6,5:7,6:8,7:9,9:2};
+const CFG_INK_REV={};for(const[k,v]of Object.entries(CFG_INK_MAP))CFG_INK_REV[v]=parseInt(k);
+function cfgInkToId(t){return CFG_INK_MAP[t];}
+function idToCfgInk(id){return CFG_INK_REV[id]!==undefined?CFG_INK_REV[id]:0;}
+function findNightPreset(inkId){if(!manifest)return 0;const i=manifest.ink_presets.findIndex(p=>p.id===inkId&&p.tod==='night');return i>=0?i:0;}
+
+function serializeCurrentConfig(name){
+  const p=getInkPreset();
+  const ac=hexToLin(document.getElementById('colorAlpha').value);
+  const bc=hexToLin(document.getElementById('colorBravo').value);
+  const cc=hexToLin(document.getElementById('colorCharlie').value);
+  const gc=document.getElementById('gameCorrectionCb').checked;
+  const inkId=p?p.id:0;
+  return {
+    name:name||'Untitled',
+    data:{
+      'Alpha':{r:linToGamma(ac[0]),g:linToGamma(ac[1]),b:linToGamma(ac[2])},
+      'Bravo':{r:linToGamma(bc[0]),g:linToGamma(bc[1]),b:linToGamma(bc[2])},
+      'Charlie':{r:linToGamma(cc[0]),g:linToGamma(cc[1]),b:linToGamma(cc[2])},
+      'Override Game Calc':!gc,
+      'Use Ink Type':true,
+      'Ink Type':idToCfgInk(inkId),
+      'Use Custom Ink Shader':false,
+      'Custom Ink Shader':0,
+      'SDODR Accent Color':{r:savedAccent?savedAccent[0]:1,g:savedAccent?savedAccent[1]:0.59,b:savedAccent?savedAccent[2]:0.18},
+      'SDODR Texture ID':parseInt(document.getElementById('subtexSelect').value),
+      'SDODR Glitter Intensity':savedGlitter||1.43
+    }
+  };
+}
+
+function parseConfig(json,name){
+  const d=typeof json==='string'?JSON.parse(json):json;
+  const errs=[];
+  if(d['Use Custom Ink Shader'])errs.push({type:'warn',msg:'Unsupported feature: Custom Ink Shader'});
+  const cfgInk=d['Ink Type']!==undefined?d['Ink Type']:0;
+  const inkId=cfgInkToId(cfgInk);
+  if(inkId===undefined)errs.push({type:'error',msg:`Unsupported ink type: ${cfgInk}`});
+  return{name:name||'Untitled',data:d,errs};
+}
+
+async function applyConfig(cfg){
+  const d=cfg.data;
+  for(const e of(cfg.errs||[]))showToast(e.msg,e.type);
+  if(cfg.errs&&cfg.errs.some(e=>e.type==='error'))return;
+  const cfgInk=d['Ink Type']!==undefined?d['Ink Type']:0;
+  const inkId=cfgInkToId(cfgInk);
+  const useInk=d['Use Ink Type']!==false;
+  if(useInk&&inkId!==undefined){
+    const pi=findNightPreset(inkId);
+    document.getElementById('inkSelect').value=String(pi);
+    const isSdodr=inkId===2;
+    document.getElementById('subtexRow').style.display=isSdodr?'block':'none';
+    document.getElementById('glitterRow').style.display=isSdodr?'block':'none';
+    const ANIMATED_IDS=new Set([3,4,5,8]);
+    document.getElementById('animRow').style.display=ANIMATED_IDS.has(inkId)?'block':'none';
+    let si=-1;
+    if(isSdodr&&d['SDODR Texture ID']!==undefined){
+      si=d['SDODR Texture ID'];
+      document.getElementById('subtexSelect').value=String(si);
+    }
+    await switchInk(pi,isSdodr?si:-1);
+  }
+  const setClr=(id,gc)=>{const r=gc.r!==undefined?gc.r:0,g=gc.g!==undefined?gc.g:0,b=gc.b!==undefined?gc.b:0;document.getElementById(id).value=linToHex([gammaToLin(r),gammaToLin(g),gammaToLin(b)]);};
+  if(d['Alpha'])setClr('colorAlpha',d['Alpha']);
+  if(d['Bravo'])setClr('colorBravo',d['Bravo']);
+  if(d['Charlie'])setClr('colorCharlie',d['Charlie']);
+  document.getElementById('gameCorrectionCb').checked=!d['Override Game Calc'];
+  if(d['SDODR Glitter Intensity']!==undefined){
+    savedGlitter=d['SDODR Glitter Intensity'];
+    document.getElementById('glitterInt').value=savedGlitter;
+    document.getElementById('glitterVal').textContent=savedGlitter.toFixed(2);
+    patchGlitter();
+  }
+  if(d['SDODR Accent Color']){
+    const ac=d['SDODR Accent Color'];
+    savedAccent=[ac.r||0,ac.g||0,ac.b||0];
+    document.getElementById('glitterColor').value=linToHex(savedAccent);
+    patchAccentColor();
+  }
+  patchTC();render();
+  showToast(`Loaded: ${cfg.name}`);
+}
+
+/* --- Config Pack state --- */
+let configPack=[];
+let packDirty=false;
+let previewImages={};
+let previewFBO=null,previewFBOTex=null,previewFBODepth=null;
+let pvW=384,pvH=384;
+const PREVIEW_MAX=384;
+
+/* --- UBO/Texture cache --- */
+let uboCache={};
+let texCache={};
+let cacheReady=false;
+async function cachePresetData(pi){
+  const p=manifest.ink_presets[pi];if(!p)return;
+  const key=p.folder||'_default';
+  if(uboCache[key])return;
+  uboCache[key]={ubos:{},texs:{}};
+  const inkId=p.id;
+  let folder=p.folder;
+  if(inkId===2)folder='sdodr_ink2_subtex0';
+  for(const bf of manifest.ink_overridable_buffers){
+    let d=null;
+    if(folder){try{d=await fetchBin(`${BASE}/${folder}/${bf}`);}catch{}}
+    if(!d){try{d=await fetchBin(`${BASE}/${bf}`);}catch{}}
+    if(d)uboCache[key].ubos[bf]=d;
+  }
+  for(const tf of(manifest.ink_overridable_textures||[])){
+    let im=null;
+    if(folder){try{im=await loadImg(`${BASE}/${folder}/${tf}`);}catch{}}
+    if(!im){try{im=await loadImg(`${BASE}/textures/${tf}`);}catch{}}
+    if(im)uboCache[key].texs[tf]=im;
+  }
+}
+async function cacheAllPresets(){
+  const seen=new Set();
+  for(let i=0;i<manifest.ink_presets.length;i++){
+    const k=manifest.ink_presets[i].folder||'_default';
+    if(seen.has(k))continue;seen.add(k);
+    await cachePresetData(i);
+  }
+  cacheReady=true;
+}
+
+/* --- Preview rendering --- */
+let previewPaintImg=null;
+let origUBOSnapshots=null;
+function initPreviewFBO(w,h){
+  if(previewFBO&&pvW===w&&pvH===h)return;
+  pvW=w;pvH=h;
+  if(!previewFBO)previewFBO=gl.createFramebuffer();
+  if(previewFBOTex)gl.deleteTexture(previewFBOTex);
+  if(previewFBODepth)gl.deleteRenderbuffer(previewFBODepth);
+  previewFBOTex=gl.createTexture();
+  gl.bindTexture(gl.TEXTURE_2D,previewFBOTex);
+  gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA8,w,h,0,gl.RGBA,gl.UNSIGNED_BYTE,null);
+  gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MIN_FILTER,gl.LINEAR);
+  gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MAG_FILTER,gl.LINEAR);
+  previewFBODepth=gl.createRenderbuffer();
+  gl.bindRenderbuffer(gl.RENDERBUFFER,previewFBODepth);
+  gl.renderbufferStorage(gl.RENDERBUFFER,gl.DEPTH_COMPONENT24,w,h);
+  gl.bindFramebuffer(gl.FRAMEBUFFER,previewFBO);
+  gl.framebufferTexture2D(gl.FRAMEBUFFER,gl.COLOR_ATTACHMENT0,gl.TEXTURE_2D,previewFBOTex,0);
+  gl.framebufferRenderbuffer(gl.FRAMEBUFFER,gl.DEPTH_ATTACHMENT,gl.RENDERBUFFER,previewFBODepth);
+  gl.bindFramebuffer(gl.FRAMEBUFFER,null);
+}
+async function loadPreviewPaint(){
+  if(previewPaintImg)return;
+  previewPaintImg=await loadImg(`${BASE}/paint_editor/preview.png`);
+}
+function saveUBOState(){
+  const snap={};
+  for(const[k,u]of Object.entries(ubos))snap[k]=new Uint8Array(u.data);
+  return snap;
+}
+function restoreUBOState(snap){
+  for(const[k,d]of Object.entries(snap)){
+    if(!ubos[k])continue;
+    ubos[k].data=d;updUBO(ubos[k].glBuf,d);
+  }
+}
+let previewCamCache=null;
+function computePreviewCamera(){
+  if(previewCamCache)return previewCamCache;
+  let fxMin=0,fyMin=0,fxMax=1,fyMax=1;
+  if(previewPaintImg){
+    const cv=document.createElement('canvas');cv.width=previewPaintImg.width;cv.height=previewPaintImg.height;
+    const ctx=cv.getContext('2d',{willReadFrequently:true});ctx.drawImage(previewPaintImg,0,0);
+    const px=ctx.getImageData(0,0,cv.width,cv.height).data;
+    let pxL=cv.width,pxR=0,pxT=cv.height,pxB=0;
+    for(let y=0;y<cv.height;y++)for(let x=0;x<cv.width;x++){
+      const i=(y*cv.width+x)*4;
+      if(px[i]>4||px[i+1]>4||px[i+2]>4){if(x<pxL)pxL=x;if(x>pxR)pxR=x;if(y<pxT)pxT=y;if(y>pxB)pxB=y;}
+    }
+    if(pxR>=pxL&&pxB>=pxT){
+      const pad=Math.max((pxR-pxL),(pxB-pxT))*0.08;
+      fxMin=Math.max(0,(pxL-pad)/cv.width);fxMax=Math.min(1,(pxR+pad)/cv.width);
+      fyMin=Math.max(0,(pxT-pad)/cv.height);fyMax=Math.min(1,(pxB+pad)/cv.height);
+    }
+  }
+  const meshSz=2*CUBE_HS;
+  const xMin=fxMin*meshSz-CUBE_HS,xMax=fxMax*meshSz-CUBE_HS;
+  const zMin=(2*fyMin-1)*CUBE_HS,zMax=(2*fyMax-1)*CUBE_HS;
+  const cx=(xMin+xMax)/2,cz=(zMin+zMax)/2;
+  const extW=xMax-xMin,extH=zMax-zMin;
+  const aspect=extW/extH;
+  const fov=55*Math.PI/180;
+  const halfFov=Math.tan(fov/2);
+  const h=Math.max((extH/2)/halfFov,(extW/2)/(halfFov*aspect))*1.05;
+  previewCamCache={pos:[cx,h,cz],pitch:-Math.PI/2+0.001,yaw:0,aspect};
+  return previewCamCache;
+}
+async function renderPreview(cfg){
+  if(!program||!ptData)return null;
+  await loadPreviewPaint();
+  if(!previewPaintImg)return null;
+  const cam=computePreviewCamera();
+  const asp=cam.aspect||1;
+  const fw=asp>=1?PREVIEW_MAX:Math.round(PREVIEW_MAX*asp);
+  const fh=asp>=1?Math.round(PREVIEW_MAX/asp):PREVIEW_MAX;
+  initPreviewFBO(fw,fh);
+
+  const snap=saveUBOState();
+  const savedTextures={};
+  for(const tf of(manifest.ink_overridable_textures||[])){if(textures[tf])savedTextures[tf]=textures[tf];}
+  const savedPtData=new Uint8Array(ptData);
+
+  const d=cfg.data;
+  const cfgInk=d['Ink Type']!==undefined?d['Ink Type']:0;
+  const inkId=cfgInkToId(cfgInk);
+  if(inkId===undefined){restoreUBOState(snap);return null;}
+  const pi=findNightPreset(inkId);
+  const p=manifest.ink_presets[pi];
+  const cacheKey=p?p.folder||'_default':'_default';
+  const cached=uboCache[cacheKey];
+  if(cached){
+    for(const bf of manifest.ink_overridable_buffers){
+      const bn=Object.keys(manifest.ubo_bindings).find(k=>{const f=manifest.ubo_bindings[k].file;return f===bf||f.endsWith('/'+bf);});
+      if(!bn||!ubos[bn])continue;
+      let dd=cached.ubos[bf];if(!dd)continue;
+      const sz=ubos[bn].data.length;
+      if(dd.length<sz){const pp=new Uint8Array(sz);pp.set(dd);dd=pp;}else dd=new Uint8Array(dd);
+      ubos[bn].data=dd;updUBO(ubos[bn].glBuf,dd);
+    }
+    for(const tf of(manifest.ink_overridable_textures||[])){
+      const u=TF[tf];if(u===undefined)continue;
+      const im=cached.texs[tf];if(!im)continue;
+      const use3eNearest=NEAREST_3E_IDS.has(inkId);
+      const snorm3e=(tf==='fp_t_tcb_3E.png'&&use3eNearest);
+      const tx=snorm3e?mkTexSNORM(im):mkTex(im,false);
+      gl.activeTexture(gl.TEXTURE0+u);gl.bindTexture(gl.TEXTURE_2D,tx);
+      textures[tf]=tx;
+    }
+  }
+  if(ubos.fp_c5){
+    const dd=origFpC5?new Uint8Array(origFpC5):new Uint8Array(ubos.fp_c5.data);
+    const dv5=new DataView(dd.buffer);
+    const az=100*Math.PI/180,el=-55*Math.PI/180;
+    dv5.setFloat32(ENV_REST1_OFFSET,Math.cos(el)*Math.sin(az),true);
+    dv5.setFloat32(ENV_REST1_OFFSET+4,Math.sin(el),true);
+    dv5.setFloat32(ENV_REST1_OFFSET+8,Math.cos(el)*Math.cos(az),true);
+    const dlR=srgbToLin(0x0A/255)*7,dlG=srgbToLin(0x13/255)*7,dlB=srgbToLin(0x3C/255)*7;
+    dv5.setFloat32(DIR_LIGHT_COLOR_OFFSET,dlR,true);
+    dv5.setFloat32(DIR_LIGHT_COLOR_OFFSET+4,dlG,true);
+    dv5.setFloat32(DIR_LIGHT_COLOR_OFFSET+8,dlB,true);
+    ubos.fp_c5.data=dd;updUBO(ubos.fp_c5.glBuf,dd);
+  }
+  if(ubos.fp_c10){
+    const dd=new Uint8Array(ubos.fp_c10.data);
+    const dv10=new DataView(dd.buffer);
+    dv10.setFloat32(PT_LIGHT_POS_BASE,-0.7,true);
+    dv10.setFloat32(PT_LIGHT_POS_BASE+4,20.8,true);
+    dv10.setFloat32(PT_LIGHT_POS_BASE+8,0.0,true);
+    const ptI=8.0;
+    dv10.setFloat32(PT_LIGHT_COLOR_BASE,srgbToLin(0x9d/255)*ptI,true);
+    dv10.setFloat32(PT_LIGHT_COLOR_BASE+4,srgbToLin(0x88/255)*ptI,true);
+    dv10.setFloat32(PT_LIGHT_COLOR_BASE+8,srgbToLin(0xa0/255)*ptI,true);
+    dv10.setFloat32(PT_LIGHT_RANGE_BASE,1/43,true);
+    ubos.fp_c10.data=dd;updUBO(ubos.fp_c10.glBuf,dd);
+  }
+  if(ubos.fp_c8){
+    const dd=new Uint8Array(ubos.fp_c8.data),dv=new DataView(dd.buffer);
+    const setC=(idx,r,g,b)=>{const o=idx*16;if(o+12>dd.length)return;dv.setFloat32(o,r,true);dv.setFloat32(o+4,g,true);dv.setFloat32(o+8,b,true);};
+    const teams=[['Alpha',0],['Bravo',7],['Charlie',14]];
+    const gc=!d['Override Game Calc'];
+    const tod='Night';
+    for(const[name,base]of teams){
+      const clr=d[name];if(!clr)continue;
+      const lr=gammaToLin(clr.r||0),lg=gammaToLin(clr.g||0),lb=gammaToLin(clr.b||0);
+      if(gc){
+        const fnHD=window[`convertInk${inkId}${tod}_TeamColorHueDark`];
+        const fnHB=window[`convertInk${inkId}${tod}_TeamColorHueBright`];
+        const hd=fnHD?fnHD(lr,lg,lb):[lr,lg,lb];
+        const hb=fnHB?fnHB(lr,lg,lb):[lr,lg,lb];
+        for(let i=0;i<7;i++){
+          if(i===3)setC(base+i,hb[0],hb[1],hb[2]);
+          else if(i===4)setC(base+i,hd[0],hd[1],hd[2]);
+          else setC(base+i,lr,lg,lb);
+        }
+      }else{
+        for(let i=0;i<7;i++)setC(base+i,lr,lg,lb);
+      }
+    }
+    ubos.fp_c8.data=dd;updUBO(ubos.fp_c8.glBuf,dd);
+    patchFrostyHighlight(inkId);
+  }
+  if(ubos.fp_c7&&inkId===2){
+    const dd=new Uint8Array(ubos.fp_c7.data),dv=new DataView(dd.buffer);
+    if(d['SDODR Glitter Intensity']!==undefined)dv.setFloat32(48*16+4,d['SDODR Glitter Intensity'],true);
+    if(d['SDODR Accent Color']){
+      const ac=d['SDODR Accent Color'];
+      dv.setFloat32(72*16,(ac.r||0),true);dv.setFloat32(72*16+4,(ac.g||0),true);dv.setFloat32(72*16+8,(ac.b||0),true);
+    }
+    ubos.fp_c7.data=dd;updUBO(ubos.fp_c7.glBuf,dd);
+  }
+  {
+    const c=document.createElement('canvas');c.width=regW;c.height=regH;
+    const x=c.getContext('2d',{willReadFrequently:true});
+    x.drawImage(previewPaintImg,0,0,regW,regH);
+    const id=x.getImageData(0,0,regW,regH);
+    for(let i=0;i<regW*regH;i++){
+      ptData[i*4]=id.data[i*4];ptData[i*4+1]=id.data[i*4+1];ptData[i*4+2]=id.data[i*4+2];ptData[i*4+3]=255;
+    }
+    resetDirty();uploadPaint();
+  }
+  const savedCamPos=[...camPos],savedYaw=camYaw,savedPitch=camPitch;
+  camPos=cam.pos;camYaw=cam.yaw;camPitch=cam.pitch;
+  const cvecs=getCameraVectors(),vw=buildView(cvecs);
+  const fov=55*Math.PI/180,n=.2,f=2000,t=1/Math.tan(fov/2),nf=1/(n-f);
+  const pj=new Float32Array([t/asp,0,0,0,0,t,0,0,0,0,(f+n)*nf,-1,0,0,2*f*n*nf,0]);
+  const vp=m4mul(pj,vw),vi=m4inv(vw);
+  if(vi&&ubos.vp_c3&&ubos.fp_c3){
+    const vpD=new Uint8Array(origVpC3);packCamUBO(vpD,vw,vp,pj,vi);ubos.vp_c3.data=vpD;updUBO(ubos.vp_c3.glBuf,vpD);
+    const fpD=new Uint8Array(origFpC3);packCamUBO(fpD,vw,vp,pj,vi);ubos.fp_c3.data=fpD;updUBO(ubos.fp_c3.glBuf,fpD);
+  }
+  gl.bindFramebuffer(gl.FRAMEBUFFER,previewFBO);
+  gl.viewport(0,0,fw,fh);
+  render();
+  const pixels=new Uint8Array(fw*fh*4);
+  gl.readPixels(0,0,fw,fh,gl.RGBA,gl.UNSIGNED_BYTE,pixels);
+  gl.bindFramebuffer(gl.FRAMEBUFFER,null);
+  gl.viewport(0,0,RENDER_W,RENDER_H);
+
+  for(const tf of(manifest.ink_overridable_textures||[])){
+    if(textures[tf]&&textures[tf]!==savedTextures[tf])gl.deleteTexture(textures[tf]);
+    if(savedTextures[tf]){textures[tf]=savedTextures[tf];const u=TF[tf];if(u!==undefined){gl.activeTexture(gl.TEXTURE0+u);gl.bindTexture(gl.TEXTURE_2D,savedTextures[tf]);}}
+  }
+  camPos=savedCamPos;camYaw=savedYaw;camPitch=savedPitch;
+  restoreUBOState(snap);
+  ptData.set(savedPtData);resetDirty();uploadPaint();
+  updateCamera();
+
+  const cv=document.createElement('canvas');cv.width=fw;cv.height=fh;
+  const ctx=cv.getContext('2d');
+  const imgData=ctx.createImageData(fw,fh);
+  for(let y=0;y<fh;y++){
+    const srcRow=(fh-1-y)*fw*4;
+    const dstRow=y*fw*4;
+    imgData.data.set(pixels.subarray(srcRow,srcRow+fw*4),dstRow);
+  }
+  ctx.putImageData(imgData,0,0);
+  const img=new Image();img.src=cv.toDataURL();
+  return img;
+}
+
+/* --- Config Pack UI --- */
+function openPackModal(){document.getElementById('packModal').classList.remove('hidden');}
+function closePackModal(){document.getElementById('packModal').classList.add('hidden');}
+function openNameDialog(title,defaultName){
+  return new Promise(resolve=>{
+    const dlg=document.getElementById('nameDialog');
+    document.getElementById('nameDialogTitle').textContent=title;
+    const inp=document.getElementById('nameDialogInput');inp.value=defaultName;
+    dlg.classList.remove('hidden');inp.focus();inp.select();
+    const cleanup=()=>{dlg.classList.add('hidden');okB.onclick=null;canB.onclick=null;clB.onclick=null;inp.onkeydown=null;};
+    const okB=document.getElementById('nameDialogOk');
+    const canB=document.getElementById('nameDialogCancel');
+    const clB=document.getElementById('closeNameDialog');
+    okB.onclick=()=>{cleanup();resolve(inp.value.trim()||null);};
+    canB.onclick=()=>{cleanup();resolve(null);};
+    clB.onclick=()=>{cleanup();resolve(null);};
+    inp.onkeydown=e=>{if(e.key==='Enter'){cleanup();resolve(inp.value.trim()||null);}if(e.key==='Escape'){cleanup();resolve(null);}};
+  });
+}
+function confirmDiscard(){
+  return new Promise(resolve=>{
+    const dlg=document.getElementById('confirmDialog');dlg.classList.remove('hidden');
+    const cleanup=()=>{dlg.classList.add('hidden');dB.onclick=null;cB.onclick=null;xB.onclick=null;};
+    const dB=document.getElementById('confirmDiscard');
+    const cB=document.getElementById('confirmCancel');
+    const xB=document.getElementById('closeConfirmDialog');
+    dB.onclick=()=>{cleanup();resolve(true);};
+    cB.onclick=()=>{cleanup();resolve(false);};
+    xB.onclick=()=>{cleanup();resolve(false);};
+  });
+}
+function rebuildPackGrid(){
+  const grid=document.getElementById('packGrid');
+  const empty=document.getElementById('packEmpty');
+  grid.querySelectorAll('.pack-card').forEach(c=>c.remove());
+  if(configPack.length===0){empty.style.display='block';return;}
+  empty.style.display='none';
+  for(let i=0;i<configPack.length;i++){
+    const cfg=configPack[i];
+    const card=document.createElement('div');card.className='pack-card';
+    const pvImg=previewImages[cfg.name];
+    if(pvImg){
+      const imgEl=pvImg.cloneNode(false);
+      imgEl.style.cssText='width:100%;display:block;background:#0a0a0a;border-radius:8px 8px 0 0';
+      card.appendChild(imgEl);
+    }else{
+      const ph=document.createElement('div');
+      ph.style.cssText='width:100%;aspect-ratio:16/9;display:flex;align-items:center;justify-content:center;background:#0a0a0a;border-radius:8px 8px 0 0;color:#333;font-size:11px';
+      ph.textContent='Rendering...';
+      card.appendChild(ph);
+    }
+    const info=document.createElement('div');info.className='card-info';
+    const nameRow=document.createElement('div');nameRow.style.cssText='display:flex;align-items:center;gap:4px';
+    const nm=document.createElement('div');nm.className='card-name';nm.style.flex='1';nm.textContent=cfg.name;nameRow.appendChild(nm);
+    const editB=document.createElement('button');editB.style.cssText='background:none;border:none;color:var(--text-3);cursor:pointer;font-size:11px;padding:0 2px;transition:color .2s';editB.textContent='\u270E';editB.title='Rename';
+    editB.onmouseenter=()=>{editB.style.color='var(--gold)';};editB.onmouseleave=()=>{editB.style.color='var(--text-3)';};
+    editB.onclick=async()=>{const n=await openNameDialog('Rename Config',cfg.name);if(n){delete previewImages[cfg.name];cfg.name=n;packDirty=true;rebuildPackGrid();}};
+    nameRow.appendChild(editB);info.appendChild(nameRow);
+    const sub=document.createElement('div');sub.className='card-sub';
+    const cInk=cfg.data['Ink Type']!==undefined?cfg.data['Ink Type']:0;
+    const iId=cfgInkToId(cInk);
+    const iName=iId!==undefined?(manifest.ink_presets.find(p=>p.id===iId)||{}).label||`Ink ${iId}`:'Unknown';
+    sub.textContent=iName.replace(/ Night| Day/,'');
+    info.appendChild(sub);card.appendChild(info);
+    const btns=document.createElement('div');btns.className='card-btns';
+    const applyB=document.createElement('button');applyB.className='btn gold';applyB.textContent='Apply';
+    applyB.onclick=()=>{applyConfig(cfg);closePackModal();};
+    const repB=document.createElement('button');repB.className='btn';repB.textContent='Replace';
+    repB.onclick=async()=>{const cur=serializeCurrentConfig(cfg.name);cfg.data=cur.data;packDirty=true;delete previewImages[cfg.name];const cv=await renderPreview(cfg);if(cv)previewImages[cfg.name]=cv;rebuildPackGrid();showToast(`Replaced: ${cfg.name}`);};
+    const delB=document.createElement('button');delB.className='btn danger';delB.textContent='Del';
+    delB.onclick=()=>{delete previewImages[cfg.name];configPack.splice(i,1);packDirty=true;rebuildPackGrid();};
+    btns.appendChild(applyB);btns.appendChild(repB);btns.appendChild(delB);card.appendChild(btns);
+    grid.appendChild(card);
+  }
+}
+async function renderAllPreviews(){
+  for(const cfg of configPack){
+    if(previewImages[cfg.name])continue;
+    const cv=await renderPreview(cfg);
+    if(cv)previewImages[cfg.name]=cv;
+  }
+  rebuildPackGrid();
+}
+
+async function importZip(file){
+  if(packDirty){const ok=await confirmDiscard();if(!ok)return;}
+  try{
+    const zip=await JSZip.loadAsync(file);
+    const newPack=[];const errs=[];
+    for(const[path,entry]of Object.entries(zip.files)){
+      if(entry.dir||!path.endsWith('.json'))continue;
+      const fname=path.split('/').pop().replace(/\.json$/i,'');
+      try{
+        const txt=await entry.async('string');
+        const parsed=parseConfig(txt,fname);
+        if(parsed.errs)errs.push(...parsed.errs);
+        newPack.push(parsed);
+      }catch(e){errs.push({type:'warn',msg:`Failed to parse ${fname}: ${e.message}`});}
+    }
+    if(newPack.length===0){showToast('No valid configs found in zip','warn');return;}
+    configPack=newPack;packDirty=false;previewImages={};
+    for(const e of errs)showToast(e.msg,e.type);
+    showToast(`Loaded ${newPack.length} config(s)`);
+    rebuildPackGrid();
+    renderAllPreviews();
+  }catch(e){showToast(`Failed to read zip: ${e.message}`,'error');}
+}
+
+async function exportZip(){
+  if(configPack.length===0){showToast('No configs to export','warn');return;}
+  const zip=new JSZip();
+  for(const cfg of configPack)zip.file(`${cfg.name}.json`,JSON.stringify(cfg.data,null,4));
+  const blob=await zip.generateAsync({type:'blob'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='config_pack.zip';a.click();
+  URL.revokeObjectURL(a.href);
+  packDirty=false;
+  showToast('Config pack saved');
 }
 
 /* --- Lighting --- */
@@ -622,7 +1228,7 @@ const FP_C7_GLITTER_OFFSET = 48*16+4;
 let savedGlitter=null, savedAccent=null;
 function patchGlitter(){
   if(!ubos.fp_c7) return;
-  const v=savedGlitter!==null?savedGlitter:parseFloat(document.getElementById('glitterInt').value);
+  const v=savedGlitter!==null?savedGlitter:parseFloat(document.getElementById('glitterInt').value) * 0.7;
   const dv=new DataView(ubos.fp_c7.data.buffer,ubos.fp_c7.data.byteOffset);
   dv.setFloat32(FP_C7_GLITTER_OFFSET, v, true);
   updUBO(ubos.fp_c7.glBuf,ubos.fp_c7.data);
@@ -630,7 +1236,7 @@ function patchGlitter(){
 function readGlitter(){
   if(!ubos.fp_c7) return;
   const dv=new DataView(ubos.fp_c7.data.buffer,ubos.fp_c7.data.byteOffset);
-  const v=dv.getFloat32(FP_C7_GLITTER_OFFSET,true);
+  const v=dv.getFloat32(FP_C7_GLITTER_OFFSET,true) / 0.7;
   savedGlitter=v;
   document.getElementById('glitterInt').value=v.toFixed(2);
   document.getElementById('glitterVal').textContent=v.toFixed(2);
@@ -671,8 +1277,8 @@ let animOrigValue=0, animInkId=0;
 function getAnimInkId(){
   const inkSel=document.getElementById('inkSelect');
   const v=parseInt(inkSel.value);
-  if(v===-1) return 2;
-  return manifest.ink_presets[v]?manifest.ink_presets[v].id:-1;
+  const p=manifest&&manifest.ink_presets[v];
+  return p?p.id:-1;
 }
 function startAnim(){
   if(animRunning) return; animRunning=true;
@@ -1063,6 +1669,7 @@ async function init(){
     }
     if(ubos.vp_c3) origVpC3=new Uint8Array(ubos.vp_c3.data);
     if(ubos.fp_c3) origFpC3=new Uint8Array(ubos.fp_c3.data);
+    if(ubos.fp_c5) origFpC5=new Uint8Array(ubos.fp_c5.data);
     if(ubos.fp_c8) initTC(ubos.fp_c8.data);
 
     for(const[sn,u]of Object.entries(SAM)){const l=gl.getUniformLocation(program,sn);if(l)gl.uniform1i(l,u);}
@@ -1091,10 +1698,15 @@ async function init(){
     gl.enable(gl.CULL_FACE);gl.cullFace(gl.BACK);
 
     setupUI(); loadBrushes();
-    await switchInk(-1, 0);
+    document.getElementById('inkSelect').value='3';
+    document.getElementById('subtexRow').style.display='block';
+    document.getElementById('glitterRow').style.display='block';
+    await switchInk(3, 0);
     readGlitter(); readAccentColor();
     updateCamera();
     document.getElementById('status').textContent='Ready';
+    cacheAllPresets().then(()=>console.log('All ink presets cached'));
+    loadPreviewPaint().catch(()=>{});
   }catch(e){document.getElementById('status').textContent=`Error: ${e}`;console.error(e);}
 }
 
@@ -1119,27 +1731,61 @@ function updateCamera(){
 /* --- UI --- */
 function setupUI(){
   const inkSel=document.getElementById('inkSelect');
-  const o0=document.createElement('option');o0.value='-1';o0.textContent='Side Order (2)';inkSel.appendChild(o0);
-  for(let i=0;i<manifest.ink_presets.length;i++){if(manifest.ink_presets[i].id===2)continue;const o=document.createElement('option');o.value=String(i);o.textContent=manifest.ink_presets[i].label;inkSel.appendChild(o);}
+  for(let i=0;i<manifest.ink_presets.length;i++){const o=document.createElement('option');o.value=String(i);o.textContent=manifest.ink_presets[i].label;inkSel.appendChild(o);}
   const stSel=document.getElementById('subtexSelect');
-  for(let i=0;i<=6;i++){const o=document.createElement('option');o.value=String(i);o.textContent=`Subtex ${i}`;if(i===0)o.selected=true;stSel.appendChild(o);}
+  for(let i=0;i<=8;i++){const o=document.createElement('option');o.value=String(i);o.textContent=i<=6?`Subtex ${i}`:i===7?'Random (All)':'Random (No None)';if(i===0)o.selected=true;stSel.appendChild(o);}
   const ANIMATED_IDS=new Set([3,4,5,8]);
   inkSel.addEventListener('change',()=>{
     const v=parseInt(inkSel.value);
-    const isSdodr=v===-1;
+    const p=manifest.ink_presets[v];
+    const inkId=p?p.id:-1;
+    const isSdodr=inkId===2;
     document.getElementById('subtexRow').style.display=isSdodr?'block':'none';
     document.getElementById('glitterRow').style.display=isSdodr?'block':'none';
-    const inkId=v===-1?2:(manifest.ink_presets[v]?manifest.ink_presets[v].id:-1);
     const isAnimated=ANIMATED_IDS.has(inkId);
     document.getElementById('animRow').style.display=isAnimated?'block':'none';
     stopAnim();
     switchInk(v,isSdodr?parseInt(stSel.value):-1).then(()=>{if(isAnimated)startAnim();});
   });
-  stSel.addEventListener('change',()=>{if(parseInt(inkSel.value)===-1)switchInk(-1,parseInt(stSel.value));});
-  document.getElementById('subtexRow').style.display='block';
-  document.getElementById('glitterRow').style.display='block';
+  stSel.addEventListener('change',()=>{const v=parseInt(inkSel.value);const p=manifest.ink_presets[v];if(p&&p.id===2)switchInk(v,parseInt(stSel.value));});
+  document.getElementById('subtexRow').style.display='none';
+  document.getElementById('glitterRow').style.display='none';
   for(const id of['colorAlpha','colorBravo','colorCharlie'])
     document.getElementById(id).addEventListener('input',()=>{patchTC();render();});
+  document.getElementById('gameCorrectionCb').addEventListener('change',()=>{patchTC();render();});
+
+  document.getElementById('openPackBtn').addEventListener('click',()=>{openPackModal();rebuildPackGrid();});
+  document.getElementById('closePackModal').addEventListener('click',closePackModal);
+  document.getElementById('packModal').querySelector('.modal-backdrop').addEventListener('click',closePackModal);
+  document.getElementById('packImportBtn').addEventListener('click',()=>document.getElementById('packZipInput').click());
+  document.getElementById('packZipInput').addEventListener('change',e=>{if(e.target.files[0])importZip(e.target.files[0]);e.target.value='';});
+  document.getElementById('packNewBtn').addEventListener('click',async()=>{
+    const n=await openNameDialog('New Config',`Config ${configPack.length+1}`);
+    if(!n)return;
+    const cfg=serializeCurrentConfig(n);
+    const parsed=parseConfig(cfg.data,n);
+    configPack.push(parsed);packDirty=true;
+    const cv=await renderPreview(parsed);if(cv)previewImages[n]=cv;
+    rebuildPackGrid();
+  });
+  document.getElementById('packSaveBtn').addEventListener('click',exportZip);
+  document.getElementById('loadSingleCfgBtn').addEventListener('click',()=>document.getElementById('loadSingleCfgInput').click());
+  document.getElementById('loadSingleCfgInput').addEventListener('change',async e=>{
+    const f=e.target.files[0];if(!f)return;e.target.value='';
+    try{
+      const txt=await f.text();
+      const cfg=parseConfig(txt,f.name.replace(/\.json$/i,''));
+      await applyConfig(cfg);
+    }catch(err){showToast(`Failed to load config: ${err.message}`,'error');}
+  });
+  document.getElementById('saveSingleCfgBtn').addEventListener('click',async()=>{
+    const n=await openNameDialog('Save Config','my_config');
+    if(!n)return;
+    const cfg=serializeCurrentConfig(n);
+    const blob=new Blob([JSON.stringify(cfg.data,null,4)],{type:'application/json'});
+    const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=n+'.json';a.click();
+    URL.revokeObjectURL(a.href);showToast('Config saved');
+  });
 
   document.querySelectorAll('.ch-btns button').forEach(b=>{
     b.addEventListener('click',()=>{
@@ -1395,10 +2041,15 @@ function setupControls(){
 
 const NEAREST_3E_IDS=new Set([2,6,9]);
 async function switchInk(pi,si){
-  let folder=null;
-  if(pi>=0)folder=manifest.ink_presets[pi].folder;
-  else if(si>=0)folder=`sdodr_ink2_subtex${si}`;
-  const inkId=pi===-1?2:(manifest.ink_presets[pi]?manifest.ink_presets[pi].id:-1);
+  const preset=manifest.ink_presets[pi];
+  const inkId=preset?preset.id:-1;
+  let folder=preset?preset.folder:null;
+  if(inkId===2&&si>=0){
+    let resolved=si;
+    if(si===7)resolved=Math.floor(Math.random()*7);
+    else if(si===8)resolved=1+Math.floor(Math.random()*6);
+    folder=`sdodr_ink2_subtex${resolved}`;
+  }
   const use3eNearest=NEAREST_3E_IDS.has(inkId);
   for(const bf of manifest.ink_overridable_buffers){
     const bn=Object.keys(manifest.ubo_bindings).find(k=>{const f=manifest.ubo_bindings[k].file;return f===bf||f.endsWith('/'+bf);});

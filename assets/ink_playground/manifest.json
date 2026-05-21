@@ -101,65 +101,27 @@
     }
   },
   "ink_presets": [
-    {
-      "folder": "default_ink0_night",
-      "label": "Default Night (0)",
-      "id": 0
-    },
-    {
-      "folder": "default_ink0_day",
-      "label": "Default Day (0)",
-      "id": 0
-    },
-    {
-      "folder": null,
-      "label": "Side Order (2)",
-      "id": 2
-    },
-    {
-      "folder": "oil_ink3",
-      "label": "Oil (3)",
-      "id": 3
-    },
-    {
-      "folder": "keba_ink4",
-      "label": "Keba (4)",
-      "id": 4
-    },
-    {
-      "folder": "spookyfest_ink5",
-      "label": "Spookyfest (5)",
-      "id": 5
-    },
-    {
-      "folder": "frostyfest_ink6",
-      "label": "Frostyfest (6)",
-      "id": 6
-    },
-    {
-      "folder": "springfest_ink7",
-      "label": "Springfest (7)",
-      "id": 7
-    },
-    {
-      "folder": "summerfest_ink8",
-      "label": "Summerfest (8)",
-      "id": 8
-    },
-    {
-      "folder": "grandfest_ink9",
-      "label": "Grandfest (9)",
-      "id": 9
-    }
+    { "folder": "default_ink0_day",   "label": "Default Day (0)",      "id": 0, "tod": "day" },
+    { "folder": "default_ink0_night", "label": "Default Night (0)",    "id": 0, "tod": "night" },
+    { "folder": null,                 "label": "Side Order Day (2)",   "id": 2, "tod": "day" },
+    { "folder": null,                 "label": "Side Order Night (2)", "id": 2, "tod": "night" },
+    { "folder": "oil_ink3",           "label": "Oil Day (3)",          "id": 3, "tod": "day" },
+    { "folder": "oil_ink3",           "label": "Oil Night (3)",        "id": 3, "tod": "night" },
+    { "folder": "keba_ink4",          "label": "Keba Day (4)",         "id": 4, "tod": "day" },
+    { "folder": "keba_ink4",          "label": "Keba Night (4)",       "id": 4, "tod": "night" },
+    { "folder": "spookyfest_ink5",    "label": "Spookyfest Day (5)",   "id": 5, "tod": "day" },
+    { "folder": "spookyfest_ink5",    "label": "Spookyfest Night (5)", "id": 5, "tod": "night" },
+    { "folder": "frostyfest_ink6",    "label": "Frostyfest Day (6)",   "id": 6, "tod": "day" },
+    { "folder": "frostyfest_ink6",    "label": "Frostyfest Night (6)", "id": 6, "tod": "night" },
+    { "folder": "springfest_ink7",    "label": "Springfest Day (7)",   "id": 7, "tod": "day" },
+    { "folder": "springfest_ink7",    "label": "Springfest Night (7)", "id": 7, "tod": "night" },
+    { "folder": "summerfest_ink8",    "label": "Summerfest Day (8)",   "id": 8, "tod": "day" },
+    { "folder": "summerfest_ink8",    "label": "Summerfest Night (8)", "id": 8, "tod": "night" },
+    { "folder": "grandfest_ink9",     "label": "Grandfest Day (9)",    "id": 9, "tod": "day" },
+    { "folder": "grandfest_ink9",     "label": "Grandfest Night (9)",  "id": 9, "tod": "night" }
   ],
   "sdodr_subtexes": [
-    0,
-    1,
-    2,
-    3,
-    4,
-    5,
-    6
+    0, 1, 2, 3, 4, 5, 6
   ],
   "ink_overridable_buffers": [
     "fp_c6.bin",
