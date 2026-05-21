@@ -177,8 +177,14 @@ canvas{position:absolute;top:0;left:0}
   .srow label{min-width:42px;font-size:9px}
   .srow span{min-width:26px;font-size:9px}
   .modal-header{flex-wrap:wrap;gap:6px}
-  .pack-card .card-btns button{font-size:8px;padding:5px 0}
   #packGrid{grid-template-columns:1fr !important;gap:8px !important;padding:8px !important}
+  .pack-card{flex-direction:row !important;flex-wrap:wrap !important;overflow:visible !important}
+  .pack-card>:first-child{width:100px !important;height:66px !important;object-fit:cover !important;border-radius:12px 0 0 0 !important;flex-shrink:0 !important;aspect-ratio:auto !important}
+  .pack-card .card-info{flex:1 !important;min-width:0 !important;padding:8px !important;justify-content:center !important}
+  .pack-card .card-name{font-size:12px !important}
+  .pack-card .card-sub{font-size:10px !important}
+  .pack-card .card-btns{flex-basis:100% !important;padding:6px 8px 8px !important;border-top:1px solid var(--border-lt);border-radius:0 0 12px 12px !important;background:var(--input)}
+  .pack-card .card-btns button{min-height:38px !important;font-size:11px !important;padding:6px 4px !important}
 }
 </style>
 </head>
@@ -2129,27 +2135,46 @@ function setupControls(){
   wrap.addEventListener('contextmenu',e=>e.preventDefault());
 
   /* --- Touch controls --- */
-  let touchMode=null, touchLast=[], touchDist0=0;
+  let touchMode=null, touchLast=[], touchDist0=0, pendingPaintHit=null;
+  function enterPanZoom(ts){
+    touchMode='panZoom';
+    const dx=ts[1].clientX-ts[0].clientX, dy=ts[1].clientY-ts[0].clientY;
+    touchDist0=Math.sqrt(dx*dx+dy*dy);
+    touchLast=[{x:(ts[0].clientX+ts[1].clientX)/2,y:(ts[0].clientY+ts[1].clientY)/2}];
+  }
   wrap.addEventListener('touchstart',e=>{
     e.preventDefault();
     const ts=[...e.touches];
     if(ts.length===1){
       const t=ts[0];
       const hit=hitTopFace(t.clientX,t.clientY);
-      if(hit){pushUndo();painting=true;lastUV=hit;resetDirty();stamp(hit.u,hit.v);markPaintDirty();touchMode='paint';}
+      if(hit){pendingPaintHit=hit;touchMode='pendingPaint';touchLast=[{x:t.clientX,y:t.clientY}];}
       else{touchMode='rotate';touchLast=[{x:t.clientX,y:t.clientY}];}
-    }else if(ts.length===2){
+    }else if(ts.length>=2){
+      if(touchMode==='pendingPaint') pendingPaintHit=null;
       if(painting){painting=false;paintDirty=true;paintFlush();}
-      touchMode='panZoom';
-      const dx=ts[1].clientX-ts[0].clientX, dy=ts[1].clientY-ts[0].clientY;
-      touchDist0=Math.sqrt(dx*dx+dy*dy);
-      touchLast=[{x:(ts[0].clientX+ts[1].clientX)/2,y:(ts[0].clientY+ts[1].clientY)/2}];
+      enterPanZoom(ts);
     }
   },{passive:false});
   wrap.addEventListener('touchmove',e=>{
     e.preventDefault();
     const ts=[...e.touches];
-    if(touchMode==='paint'&&ts.length===1){
+    if(touchMode==='pendingPaint'&&ts.length>=2){pendingPaintHit=null;enterPanZoom(ts);}
+    else if(touchMode==='pendingPaint'&&ts.length===1){
+      pushUndo();painting=true;lastUV=pendingPaintHit;resetDirty();
+      stamp(pendingPaintHit.u,pendingPaintHit.v);markPaintDirty();
+      pendingPaintHit=null;touchMode='paint';
+      const t=ts[0]; const hit=hitTopFace(t.clientX,t.clientY);
+      if(hit){
+        if(lastUV){
+          const du=hit.u-lastUV.u,dv=hit.v-lastUV.v,dist=Math.sqrt(du*du+dv*dv);
+          const step=2/regW;
+          if(dist>step){const n=Math.ceil(dist/step);for(let i=1;i<n;i++){const t2=i/n;stamp(lastUV.u+du*t2,lastUV.v+dv*t2);}}
+        }
+        stamp(hit.u,hit.v);lastUV=hit;
+        markPaintDirty();
+      }
+    }else if(touchMode==='paint'&&ts.length===1){
       const t=ts[0];
       const hit=hitTopFace(t.clientX,t.clientY);
       if(hit){
@@ -2193,7 +2218,8 @@ function setupControls(){
       const ddx=ts[1].clientX-ts[0].clientX, ddy=ts[1].clientY-ts[0].clientY;
       const dist=Math.sqrt(ddx*ddx+ddy*ddy);
       if(touchDist0>10){
-        const scale=dist/touchDist0;
+        const rawScale=dist/touchDist0;
+        const scale=1+(rawScale-1)*2.5;
         if(isTopDown){
           topDownScale*=scale;
           topDownScale=Math.max(0.2,Math.min(5,topDownScale));
@@ -2209,8 +2235,12 @@ function setupControls(){
   },{passive:false});
   wrap.addEventListener('touchend',e=>{
     e.preventDefault();
+    if(touchMode==='pendingPaint'&&e.touches.length===0&&pendingPaintHit){
+      pushUndo();resetDirty();stamp(pendingPaintHit.u,pendingPaintHit.v);markPaintDirty();
+      pendingPaintHit=null;paintDirty=true;paintFlush();
+    }
     if(touchMode==='paint'){painting=false;paintDirty=true;paintFlush();}
-    if(e.touches.length===0) touchMode=null;
+    if(e.touches.length===0){touchMode=null;pendingPaintHit=null;}
     else if(e.touches.length===1){
       touchMode='rotate';
       touchLast=[{x:e.touches[0].clientX,y:e.touches[0].clientY}];
