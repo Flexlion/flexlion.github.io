@@ -659,13 +659,16 @@ async function applyConfig(cfg){
     document.getElementById('subtexRow').style.display=isSdodr?'block':'none';
     document.getElementById('glitterRow').style.display=isSdodr?'block':'none';
     const ANIMATED_IDS=new Set([3,4,5,8]);
-    document.getElementById('animRow').style.display=ANIMATED_IDS.has(inkId)?'block':'none';
+    const isAnimated=ANIMATED_IDS.has(inkId);
+    document.getElementById('animRow').style.display=isAnimated?'block':'none';
     let si=-1;
     if(isSdodr&&d['SDODR Texture ID']!==undefined){
       si=d['SDODR Texture ID'];
       document.getElementById('subtexSelect').value=String(si);
     }
+    stopAnim();
     await switchInk(pi,isSdodr?si:-1);
+    if(isAnimated)startAnim();
   }
   const setClr=(id,gc)=>{const r=gc.r!==undefined?gc.r:0,g=gc.g!==undefined?gc.g:0,b=gc.b!==undefined?gc.b:0;document.getElementById(id).value=linToHex([gammaToLin(r),gammaToLin(g),gammaToLin(b)]);};
   if(d['Alpha'])setClr('colorAlpha',d['Alpha']);
