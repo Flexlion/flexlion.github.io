@@ -2730,6 +2730,5 @@ void main()
     vec3 finalColor = (fogMix * vec3(((clamp(-(exp2(((clamp((fogDist * env.cFog0EndDamp.x + env.cFog0DirStart.w), 0.0, 1.0)) * (-fp_c7_data[53].x) * 1.44269502))) + 1.0, 0.0, 1.0)) * env.cFog0Color.w)) + preFog);
     oFragColor = vec4(is_bgra[0] ? finalColor.bgr : finalColor.rgb, 1.0);
     oFragColor.rgb = oFragColor.rgb * (1.0 - extraBlock.selectionColor.a) + extraBlock.selectionColor.rgb * extraBlock.selectionColor.a;
-    oFragColor.rgb = mix(oFragColor.rgb * 12.92, 1.055 * pow(oFragColor.rgb, vec3(1.0/2.4)) - 0.055, step(vec3(0.0031308), oFragColor.rgb));
     return;
 }

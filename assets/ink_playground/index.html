@@ -226,6 +226,8 @@ canvas{position:absolute;top:0;left:0}
       <div class="srow"><label>Intensity</label><input type="range" id="ptLightInt" min="0" max="30" value="29" step="0.5"><span id="ptIntVal">29</span></div>
       <div class="srow"><label>Radius</label><input type="range" id="ptLightRad" min="5" max="200" value="43" step="1"><span id="ptRadVal">43</span></div>
     </div>
+    <div class="divider"></div>
+    <label style="display:flex;align-items:center;gap:6px;font-size:10px;color:var(--text-2);cursor:pointer;text-transform:uppercase;letter-spacing:.5px"><input type="checkbox" id="pfxCb" style="accent-color:var(--gold)">Color Correction</label>
   </section>
 
   <section class="panel">
@@ -335,6 +337,58 @@ canvas.width = RENDER_W; canvas.height = RENDER_H;
 const gl = canvas.getContext('webgl2', { antialias: false, premultipliedAlpha: false, preserveDrawingBuffer: true, alpha: false });
 if (!gl) { alert('WebGL2 not supported'); throw 'no webgl2'; }
 gl.pixelStorei(gl.UNPACK_COLORSPACE_CONVERSION_WEBGL, gl.NONE);
+gl.getExtension('EXT_color_buffer_float');
+
+const PFX_VERT_SRC=`#version 300 es
+layout(location=0) in vec2 aPos;
+out vec2 vUV;
+void main(){vUV=aPos*.5+.5;gl_Position=vec4(aPos,0,1);}`;
+
+const PFX_FRAG_SRGB=`#version 300 es
+precision highp float;
+in vec2 vUV;
+uniform sampler2D uColorBuf;
+out vec4 oColor;
+void main(){
+  vec4 c=texture(uColorBuf,vUV);
+  oColor=vec4(mix(c.rgb*12.92,1.055*pow(c.rgb,vec3(1.0/2.4))-0.055,step(vec3(0.0031308),c.rgb)),c.a);
+}`;
+
+const PFX_FRAG_CC=`#version 300 es
+precision highp float;
+precision highp sampler3D;
+in vec2 vUV;
+uniform sampler2D uColorBuf;
+uniform sampler2D uTexA;
+uniform sampler3D uLUT;
+uniform float uExposure;
+uniform float uLutScale;
+uniform float uLutOff;
+out vec4 oColor;
+void main(){
+  vec3 tA=texture(uTexA,vUV).xyz;
+  vec4 tC=texture(uColorBuf,vUV);
+  float r=tC.x*uExposure+tA.x;
+  float g=tC.y*uExposure+tA.y;
+  float b=tC.z*uExposure+tA.z;
+  float lum=b*0.1144+g*0.5866+r*0.2989;
+  float t37=1.0-exp2(lum*-1.44269502);
+  float t39=t37/max(lum,1e-10);
+  float t41=t37*t37;
+  float vR=r*t39,vG=g*t39,vB=b*t39;
+  vec3 res=vec3(
+    clamp((1.0-exp2(r*-1.44269502)-vR)*t41+vR,0.0,1.0),
+    clamp((1.0-exp2(g*-1.44269502)-vG)*t41+vG,0.0,1.0),
+    clamp((1.0-exp2(b*-1.44269502)-vB)*t41+vB,0.0,1.0));
+  oColor=vec4(texture(uLUT,res*uLutScale+uLutOff).xyz,tC.w);
+  oColor=vec4(mix(oColor.rgb*12.92,1.055*pow(oColor.rgb,vec3(1.0/2.4))-0.055,step(vec3(0.0031308),oColor.rgb)),oColor.a);
+}`;
+
+let pfxProgSRGB=null,pfxProgCC=null,pfxVAO=null;
+let sceneFBO=null,sceneColorTex=null,sceneDepthRB=null;
+let pfxTexA=null,pfxLUT=null;
+let pfxEnabled=false,pfxBypass=false;
+const PFX_EXPOSURE=1.515717,PFX_LUT_SCALE=0.875,PFX_LUT_OFF=0.0625;
 
 /* --- Cube geometry --- */
 let CUBE_HS = 5, CUBE_H = 10;
@@ -849,6 +903,7 @@ async function renderPreview(cfg){
     const vpD=new Uint8Array(origVpC3);packCamUBO(vpD,vw,vp,pj,vi);ubos.vp_c3.data=vpD;updUBO(ubos.vp_c3.glBuf,vpD);
     const fpD=new Uint8Array(origFpC3);packCamUBO(fpD,vw,vp,pj,vi);ubos.fp_c3.data=fpD;updUBO(ubos.fp_c3.glBuf,fpD);
   }
+  pfxBypass=true;
   gl.bindFramebuffer(gl.FRAMEBUFFER,previewFBO);
   gl.viewport(0,0,fw,fh);
   render();
@@ -856,6 +911,10 @@ async function renderPreview(cfg){
   gl.readPixels(0,0,fw,fh,gl.RGBA,gl.UNSIGNED_BYTE,pixels);
   gl.bindFramebuffer(gl.FRAMEBUFFER,null);
   gl.viewport(0,0,RENDER_W,RENDER_H);
+  pfxBypass=false;
+  for(let i=0;i<pixels.length;i+=4){
+    for(let c=0;c<3;c++){const v=pixels[i+c]/255;pixels[i+c]=Math.round((v<=0.0031308?v*12.92:1.055*Math.pow(v,1/2.4)-0.055)*255);}
+  }
 
   for(const tf of(manifest.ink_overridable_textures||[])){
     if(textures[tf]&&textures[tf]!==savedTextures[tf])gl.deleteTexture(textures[tf]);
@@ -1697,6 +1756,9 @@ async function init(){
     gl.viewport(0,0,RENDER_W,RENDER_H);gl.enable(gl.DEPTH_TEST);gl.depthFunc(gl.LEQUAL);
     gl.enable(gl.CULL_FACE);gl.cullFace(gl.BACK);
 
+    initPFX();gl.useProgram(program);
+    loadPFXTextures().then(()=>render()).catch(e=>console.warn('PFX textures failed:',e));
+
     setupUI(); loadBrushes();
     document.getElementById('inkSelect').value='3';
     document.getElementById('subtexRow').style.display='block';
@@ -1710,12 +1772,94 @@ async function init(){
   }catch(e){document.getElementById('status').textContent=`Error: ${e}`;console.error(e);}
 }
 
+function initPFX(){
+  const vs=compileSh(gl.VERTEX_SHADER,PFX_VERT_SRC);
+  const fsSrgb=compileSh(gl.FRAGMENT_SHADER,PFX_FRAG_SRGB);
+  const fsCC=compileSh(gl.FRAGMENT_SHADER,PFX_FRAG_CC);
+  pfxProgSRGB=linkProg(vs,fsSrgb);
+  pfxProgCC=linkProg(vs,fsCC);
+  gl.useProgram(pfxProgSRGB);gl.uniform1i(gl.getUniformLocation(pfxProgSRGB,'uColorBuf'),0);
+  gl.useProgram(pfxProgCC);
+  gl.uniform1i(gl.getUniformLocation(pfxProgCC,'uColorBuf'),0);
+  gl.uniform1i(gl.getUniformLocation(pfxProgCC,'uTexA'),1);
+  gl.uniform1i(gl.getUniformLocation(pfxProgCC,'uLUT'),2);
+  gl.uniform1f(gl.getUniformLocation(pfxProgCC,'uExposure'),PFX_EXPOSURE);
+  gl.uniform1f(gl.getUniformLocation(pfxProgCC,'uLutScale'),PFX_LUT_SCALE);
+  gl.uniform1f(gl.getUniformLocation(pfxProgCC,'uLutOff'),PFX_LUT_OFF);
+
+  pfxVAO=gl.createVertexArray();gl.bindVertexArray(pfxVAO);
+  const vb=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,vb);
+  gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,3,-1,-1,3]),gl.STATIC_DRAW);
+  gl.enableVertexAttribArray(0);gl.vertexAttribPointer(0,2,gl.FLOAT,false,0,0);
+  gl.bindVertexArray(null);
+
+  sceneFBO=gl.createFramebuffer();
+  sceneColorTex=gl.createTexture();
+  gl.bindTexture(gl.TEXTURE_2D,sceneColorTex);
+  gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA16F,RENDER_W,RENDER_H,0,gl.RGBA,gl.FLOAT,null);
+  gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MIN_FILTER,gl.LINEAR);
+  gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MAG_FILTER,gl.LINEAR);
+  gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_S,gl.CLAMP_TO_EDGE);
+  gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_T,gl.CLAMP_TO_EDGE);
+  sceneDepthRB=gl.createRenderbuffer();
+  gl.bindRenderbuffer(gl.RENDERBUFFER,sceneDepthRB);
+  gl.renderbufferStorage(gl.RENDERBUFFER,gl.DEPTH_COMPONENT24,RENDER_W,RENDER_H);
+  gl.bindFramebuffer(gl.FRAMEBUFFER,sceneFBO);
+  gl.framebufferTexture2D(gl.FRAMEBUFFER,gl.COLOR_ATTACHMENT0,gl.TEXTURE_2D,sceneColorTex,0);
+  gl.framebufferRenderbuffer(gl.FRAMEBUFFER,gl.DEPTH_ATTACHMENT,gl.RENDERBUFFER,sceneDepthRB);
+  gl.bindFramebuffer(gl.FRAMEBUFFER,null);
+}
+
+async function loadPFXTextures(){
+  try{
+    const imgA=await loadImg(`${BASE}/pfx/fp_t_tcb_A.png`);
+    pfxTexA=mkTex(imgA,false);
+  }catch{pfxTexA=mk1x1(0,0,0,255);}
+  const slices=[];
+  for(let i=0;i<8;i++){
+    try{slices.push(await loadImg(`${BASE}/pfx/fp_t_tcb_C_slice${i}.png`));}
+    catch{const c=document.createElement('canvas');c.width=8;c.height=8;slices.push(c);}
+  }
+  pfxLUT=gl.createTexture();
+  gl.bindTexture(gl.TEXTURE_3D,pfxLUT);
+  gl.texImage3D(gl.TEXTURE_3D,0,gl.RGBA8,8,8,8,0,gl.RGBA,gl.UNSIGNED_BYTE,null);
+  const tc=document.createElement('canvas');tc.width=8;tc.height=8;
+  const tx=tc.getContext('2d');
+  for(let z=0;z<8;z++){
+    tx.clearRect(0,0,8,8);tx.drawImage(slices[z],0,0);
+    const id=tx.getImageData(0,0,8,8);
+    gl.texSubImage3D(gl.TEXTURE_3D,0,0,0,z,8,8,1,gl.RGBA,gl.UNSIGNED_BYTE,new Uint8Array(id.data.buffer));
+  }
+  gl.texParameteri(gl.TEXTURE_3D,gl.TEXTURE_MIN_FILTER,gl.LINEAR);
+  gl.texParameteri(gl.TEXTURE_3D,gl.TEXTURE_MAG_FILTER,gl.LINEAR);
+  gl.texParameteri(gl.TEXTURE_3D,gl.TEXTURE_WRAP_S,gl.CLAMP_TO_EDGE);
+  gl.texParameteri(gl.TEXTURE_3D,gl.TEXTURE_WRAP_T,gl.CLAMP_TO_EDGE);
+  gl.texParameteri(gl.TEXTURE_3D,gl.TEXTURE_WRAP_R,gl.CLAMP_TO_EDGE);
+}
+
+function drawPFX(){
+  const prog=pfxEnabled&&pfxLUT?pfxProgCC:pfxProgSRGB;
+  gl.useProgram(prog);
+  gl.disable(gl.DEPTH_TEST);
+  gl.activeTexture(gl.TEXTURE0);gl.bindTexture(gl.TEXTURE_2D,sceneColorTex);
+  if(prog===pfxProgCC){
+    gl.activeTexture(gl.TEXTURE1);gl.bindTexture(gl.TEXTURE_2D,pfxTexA);
+    gl.activeTexture(gl.TEXTURE2);gl.bindTexture(gl.TEXTURE_3D,pfxLUT);
+  }
+  gl.bindVertexArray(pfxVAO);gl.drawArrays(gl.TRIANGLES,0,3);gl.bindVertexArray(null);
+  gl.enable(gl.DEPTH_TEST);
+}
+
 function render(){
-  if(!program)return; gl.useProgram(program);
+  if(!program)return;
+  const usePFX=sceneFBO&&!pfxBypass;
+  if(usePFX){gl.bindFramebuffer(gl.FRAMEBUFFER,sceneFBO);gl.viewport(0,0,RENDER_W,RENDER_H);}
+  gl.useProgram(program);
   gl.clearColor(.2,.2,.2,1); gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);
   for(const u of Object.values(ubos)) gl.bindBufferBase(gl.UNIFORM_BUFFER,u.bindingPoint,u.glBuf);
   for(const[f,u]of Object.entries(TF)){if(textures[f]){gl.activeTexture(gl.TEXTURE0+u);gl.bindTexture(gl.TEXTURE_2D,textures[f]);}}
   gl.bindVertexArray(vao); gl.drawElements(gl.TRIANGLES,idxCount,gl.UNSIGNED_SHORT,0); gl.bindVertexArray(null);
+  if(usePFX){gl.bindFramebuffer(gl.FRAMEBUFFER,null);gl.viewport(0,0,RENDER_W,RENDER_H);drawPFX();}
 }
 
 function updateCamera(){
@@ -1814,6 +1958,8 @@ function setupUI(){
   ptIntE.addEventListener('input',()=>{ptIntV.textContent=parseFloat(ptIntE.value).toFixed(1);patchPointLightColor();});
   const ptRadE=document.getElementById('ptLightRad'),ptRadV=document.getElementById('ptRadVal');
   ptRadE.addEventListener('input',()=>{ptRadV.textContent=ptRadE.value;patchPointLightRadius();});
+
+  document.getElementById('pfxCb').addEventListener('change',e=>{pfxEnabled=e.target.checked;render();});
 
   document.getElementById('undoBtn').addEventListener('click',popUndo);
   window.addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.key==='z'){e.preventDefault();popUndo();}});
