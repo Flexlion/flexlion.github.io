@@ -234,7 +234,7 @@ canvas{position:absolute;top:0;left:0}
     <span id="ptLyVal" style="display:none"></span>
     <span id="ptLzVal" style="display:none"></span>
     <div class="divider"></div>
-    <div class="srow"><label>Color</label><input type="color" id="ptLightColor" value="#9d88a0"><span style="min-width:0"></span></div>
+    <div class="srow"><label>Color</label><input type="color" id="ptLightColor" value="#a8a8a8"><span style="min-width:0"></span></div>
     <div class="sgroup">
       <div class="srow"><label>Intensity</label><input type="range" id="ptLightInt" min="0" max="30" value="29" step="0.5"><span id="ptIntVal">29</span></div>
       <div class="srow"><label>Radius</label><input type="range" id="ptLightRad" min="5" max="200" value="43" step="1"><span id="ptRadVal">43</span></div>
@@ -865,9 +865,9 @@ async function renderPreview(cfg){
     dv10.setFloat32(PT_LIGHT_POS_BASE+4,20.8,true);
     dv10.setFloat32(PT_LIGHT_POS_BASE+8,0.0,true);
     const ptI=8.0;
-    dv10.setFloat32(PT_LIGHT_COLOR_BASE,srgbToLin(0x9d/255)*ptI,true);
-    dv10.setFloat32(PT_LIGHT_COLOR_BASE+4,srgbToLin(0x88/255)*ptI,true);
-    dv10.setFloat32(PT_LIGHT_COLOR_BASE+8,srgbToLin(0xa0/255)*ptI,true);
+    dv10.setFloat32(PT_LIGHT_COLOR_BASE,srgbToLin(0xa8/255)*ptI,true);
+    dv10.setFloat32(PT_LIGHT_COLOR_BASE+4,srgbToLin(0xa8/255)*ptI,true);
+    dv10.setFloat32(PT_LIGHT_COLOR_BASE+8,srgbToLin(0xa8/255)*ptI,true);
     dv10.setFloat32(PT_LIGHT_RANGE_BASE,1/43,true);
     ubos.fp_c10.data=dd;updUBO(ubos.fp_c10.glBuf,dd);
   }
@@ -1154,8 +1154,8 @@ function initPointLight(){
   dv.setFloat32(PT_LIGHT_POS_BASE+4,dpy,true);
   dv.setFloat32(PT_LIGHT_POS_BASE+8,dpz,true);
 
-  ptLightBaseColor=[srgbToLin(0x9d/255), srgbToLin(0x88/255), srgbToLin(0xa0/255)];
-  document.getElementById('ptLightColor').value='#9d88a0';
+  ptLightBaseColor=[srgbToLin(0xa8/255), srgbToLin(0xa8/255), srgbToLin(0xa8/255)];
+  document.getElementById('ptLightColor').value='#a8a8a8';
   const defaultInt=8.0;
   document.getElementById('ptLightInt').value=defaultInt.toFixed(1);
   document.getElementById('ptIntVal').textContent=defaultInt.toFixed(1);
