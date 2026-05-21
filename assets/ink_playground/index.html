@@ -417,10 +417,10 @@ let camYaw = 0;
 let camPitch = -0.588;
 let origVpC3 = null, origFpC3 = null, origFpC5 = null;
 let isTopDown = false, savedCam = null, topDownScale = 1.0;
-const TOP_FOV = 55*Math.PI/180;
+function getFOV(){return (isPortrait()?80:55)*Math.PI/180;}
 function topDownHeight(){
   const asp=RENDER_W/RENDER_H;
-  const halfTan=Math.tan(TOP_FOV/2);
+  const halfTan=Math.tan(getFOV()/2);
   const dH=CUBE_HS/(halfTan*topDownScale);
   const dW=CUBE_HS/(halfTan*asp*topDownScale);
   return Math.max(dH,dW);
@@ -444,7 +444,7 @@ function buildView(cam) {
   return new Float32Array([r[0],u[0],b[0],0,r[1],u[1],b[1],0,r[2],u[2],b[2],0,-d(r,e),-d(u,e),-d(b,e),1]);
 }
 function buildProj() {
-  const fov=55*Math.PI/180,asp=RENDER_W/RENDER_H,n=.2,f=2000,t=1/Math.tan(fov/2),nf=1/(n-f);
+  const fov=getFOV(),asp=RENDER_W/RENDER_H,n=.2,f=2000,t=1/Math.tan(fov/2),nf=1/(n-f);
   return new Float32Array([t/asp,0,0,0,0,t,0,0,0,0,(f+n)*nf,-1,0,0,2*f*n*nf,0]);
 }
 function m4mul(a,b){const o=new Float32Array(16);for(let i=0;i<4;i++)for(let j=0;j<4;j++)for(let k=0;k<4;k++)o[j*4+i]+=a[k*4+i]*b[j*4+k];return o;}
@@ -2097,7 +2097,7 @@ function setupControls(){
     const dx=e.clientX-lx,dy=e.clientY-ly; lx=e.clientX;ly=e.clientY;
     if(dragBtn===2){
       if(isTopDown){
-        const halfTan=Math.tan(TOP_FOV/2);
+        const halfTan=Math.tan(getFOV()/2);
         const visH=camPos[1]*halfTan*2;
         const s=visH/RENDER_H;
         camPos[0]-=dx*s; camPos[2]-=dy*s;
@@ -2108,7 +2108,7 @@ function setupControls(){
       }
     }else if(dragBtn===1){
       if(isTopDown){
-        const halfTan=Math.tan(TOP_FOV/2);
+        const halfTan=Math.tan(getFOV()/2);
         const visH=camPos[1]*halfTan*2;
         const s=visH/RENDER_H;
         camPos[0]-=dx*s; camPos[2]-=dy*s;
@@ -2135,7 +2135,8 @@ function setupControls(){
   wrap.addEventListener('contextmenu',e=>e.preventDefault());
 
   /* --- Touch controls --- */
-  let touchMode=null, touchLast=[], touchDist0=0, pendingPaintHit=null;
+  let touchMode=null, touchLast=[], touchDist0=0, pendingPaintHit=null, pendingPaintOrigin=null;
+  const PENDING_PAINT_THRESH=8;
   function enterPanZoom(ts){
     touchMode='panZoom';
     const dx=ts[1].clientX-ts[0].clientX, dy=ts[1].clientY-ts[0].clientY;
@@ -2148,10 +2149,10 @@ function setupControls(){
     if(ts.length===1){
       const t=ts[0];
       const hit=hitTopFace(t.clientX,t.clientY);
-      if(hit){pendingPaintHit=hit;touchMode='pendingPaint';touchLast=[{x:t.clientX,y:t.clientY}];}
+      if(hit){pendingPaintHit=hit;pendingPaintOrigin={x:t.clientX,y:t.clientY};touchMode='pendingPaint';touchLast=[{x:t.clientX,y:t.clientY}];}
       else{touchMode='rotate';touchLast=[{x:t.clientX,y:t.clientY}];}
     }else if(ts.length>=2){
-      if(touchMode==='pendingPaint') pendingPaintHit=null;
+      if(touchMode==='pendingPaint'){pendingPaintHit=null;pendingPaintOrigin=null;}
       if(painting){painting=false;paintDirty=true;paintFlush();}
       enterPanZoom(ts);
     }
@@ -2159,11 +2160,13 @@ function setupControls(){
   wrap.addEventListener('touchmove',e=>{
     e.preventDefault();
     const ts=[...e.touches];
-    if(touchMode==='pendingPaint'&&ts.length>=2){pendingPaintHit=null;enterPanZoom(ts);}
+    if(touchMode==='pendingPaint'&&ts.length>=2){pendingPaintHit=null;pendingPaintOrigin=null;enterPanZoom(ts);}
     else if(touchMode==='pendingPaint'&&ts.length===1){
+      const pdx=ts[0].clientX-pendingPaintOrigin.x, pdy=ts[0].clientY-pendingPaintOrigin.y;
+      if(pdx*pdx+pdy*pdy<PENDING_PAINT_THRESH*PENDING_PAINT_THRESH) return;
       pushUndo();painting=true;lastUV=pendingPaintHit;resetDirty();
       stamp(pendingPaintHit.u,pendingPaintHit.v);markPaintDirty();
-      pendingPaintHit=null;touchMode='paint';
+      pendingPaintHit=null;pendingPaintOrigin=null;touchMode='paint';
       const t=ts[0]; const hit=hitTopFace(t.clientX,t.clientY);
       if(hit){
         if(lastUV){
@@ -2191,7 +2194,7 @@ function setupControls(){
       const dx=t.clientX-touchLast[0].x, dy=t.clientY-touchLast[0].y;
       touchLast=[{x:t.clientX,y:t.clientY}];
       if(isTopDown){
-        const halfTan=Math.tan(TOP_FOV/2);
+        const halfTan=Math.tan(getFOV()/2);
         const visH=camPos[1]*halfTan*2;
         const s=visH/RENDER_H;
         camPos[0]-=dx*s; camPos[2]-=dy*s;
@@ -2205,7 +2208,7 @@ function setupControls(){
       const dx=cx-touchLast[0].x, dy=cy-touchLast[0].y;
       touchLast=[{x:cx,y:cy}];
       if(isTopDown){
-        const halfTan=Math.tan(TOP_FOV/2);
+        const halfTan=Math.tan(getFOV()/2);
         const visH=camPos[1]*halfTan*2;
         const s=visH/RENDER_H;
         camPos[0]-=dx*s; camPos[2]-=dy*s;
@@ -2237,10 +2240,10 @@ function setupControls(){
     e.preventDefault();
     if(touchMode==='pendingPaint'&&e.touches.length===0&&pendingPaintHit){
       pushUndo();resetDirty();stamp(pendingPaintHit.u,pendingPaintHit.v);markPaintDirty();
-      pendingPaintHit=null;paintDirty=true;paintFlush();
+      pendingPaintHit=null;pendingPaintOrigin=null;paintDirty=true;paintFlush();
     }
     if(touchMode==='paint'){painting=false;paintDirty=true;paintFlush();}
-    if(e.touches.length===0){touchMode=null;pendingPaintHit=null;}
+    if(e.touches.length===0){touchMode=null;pendingPaintHit=null;pendingPaintOrigin=null;}
     else if(e.touches.length===1){
       touchMode='rotate';
       touchLast=[{x:e.touches[0].clientX,y:e.touches[0].clientY}];
