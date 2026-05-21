@@ -28,7 +28,7 @@ body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSy
 
 .panel{
   background:var(--panel);border:1px solid var(--border);border-radius:var(--r);
-  padding:12px;display:flex;flex-direction:column;gap:8px;
+  padding:12px;display:flex;flex-direction:column;gap:8px;overflow:hidden;
 }
 .ptitle{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:1.5px;color:var(--gold);margin:0}
 .ptitle.sub{font-size:9px;color:var(--gold-lo);margin-top:2px}
@@ -172,6 +172,13 @@ canvas{position:absolute;top:0;left:0}
   #sidebar{position:fixed;left:0;top:0;z-index:800;transform:translateX(-100%);transition:transform .25s ease;width:260px;min-width:260px}
   #sidebar.open{transform:translateX(0)}
   #help{font-size:8px}
+  .panel{padding:10px}
+  .srow{gap:5px}
+  .srow label{min-width:42px;font-size:9px}
+  .srow span{min-width:26px;font-size:9px}
+  .modal-header{flex-wrap:wrap;gap:6px}
+  .pack-card .card-btns button{font-size:8px;padding:5px 0}
+  #packGrid{grid-template-columns:1fr !important;gap:8px !important;padding:8px !important}
 }
 </style>
 </head>
@@ -210,7 +217,7 @@ canvas{position:absolute;top:0;left:0}
       <div class="srow"><label>Y Rot</label><input type="range" id="lightEl" min="-90" max="90" value="-55"><span id="elVal">-55</span></div>
     </div>
     <div class="srow"><label>Color</label><input type="color" id="dirLightColor" value="#0A133C"><span style="min-width:0"></span></div>
-    <div class="srow"><label>Strength</label><input type="range" id="dirLightStr" min="0.5" max="20" value="7.0" step="0.1"><span id="dirLightStrVal">7.0</span></div>
+    <div class="srow"><label>Strength</label><input type="range" id="dirLightStr" min="0.5" max="8" value="7.0" step="0.1"><span id="dirLightStrVal">7.0</span></div>
     <div class="divider"></div>
     <div class="ptitle sub">Point Light</div>
     <button class="btn" id="moveLightBtn" style="margin-bottom:6px">Move Light</button>
@@ -293,7 +300,7 @@ canvas{position:absolute;top:0;left:0}
 <div id="packModal" class="modal-overlay hidden">
   <div class="modal-backdrop"></div>
   <div class="modal-panel" style="width:720px;max-width:92vw;max-height:88vh">
-    <div class="modal-header"><span>Config Pack</span><div style="display:flex;gap:6px;align-items:center"><button class="btn" id="packImportBtn" style="font-size:10px;padding:4px 10px">Import Zip</button><button class="btn" id="packNewBtn" style="font-size:10px;padding:4px 10px">New Config</button><button class="btn gold" id="packSaveBtn" style="font-size:10px;padding:4px 10px">Save Zip</button><button id="closePackModal" style="margin-left:8px">&times;</button></div></div>
+    <div class="modal-header"><span style="display:flex;align-items:center;gap:10px">Config Pack<label style="display:flex;align-items:center;gap:3px;font-size:9px;color:var(--text-3);cursor:pointer;text-transform:uppercase;letter-spacing:.4px;margin-left:6px"><input type="checkbox" id="pvCCCb" style="accent-color:var(--gold)">CC</label><select id="pvTodSel" style="background:var(--bg-2);color:var(--text-2);border:1px solid var(--border-lt);border-radius:3px;padding:1px 4px;font-size:9px;cursor:pointer"><option value="night" selected>Night</option><option value="day">Day</option></select></span><div style="display:flex;gap:6px;align-items:center"><button class="btn" id="packImportBtn" style="font-size:10px;padding:4px 10px">Import Zip</button><button class="btn" id="packNewBtn" style="font-size:10px;padding:4px 10px">New Config</button><button class="btn gold" id="packSaveBtn" style="font-size:10px;padding:4px 10px">Save Zip</button><button id="closePackModal" style="margin-left:8px">&times;</button></div></div>
     <div id="packGrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px;padding:12px;overflow-y:auto;max-height:72vh;scrollbar-width:thin;scrollbar-color:var(--border-lt) transparent">
       <div id="packEmpty" style="grid-column:1/-1;text-align:center;padding:40px 0;color:var(--text-3);font-size:11px">No configs loaded. Import a zip or create a new config.</div>
     </div>
@@ -330,8 +337,10 @@ canvas{position:absolute;top:0;left:0}
 <script>
 "use strict";
 const BASE = '.';
-const RENDER_W = 1920, RENDER_H = 1080;
+let RENDER_W = 1920, RENDER_H = 1080;
+function isPortrait(){return window.innerWidth<700 && window.innerHeight>window.innerWidth;}
 
+if(isPortrait()){RENDER_W=1080;RENDER_H=1920;}
 const canvas = document.getElementById('c');
 canvas.width = RENDER_W; canvas.height = RENDER_H;
 const gl = canvas.getContext('webgl2', { antialias: false, premultipliedAlpha: false, preserveDrawingBuffer: true, alpha: false });
@@ -590,6 +599,7 @@ const CFG_INK_REV={};for(const[k,v]of Object.entries(CFG_INK_MAP))CFG_INK_REV[v]
 function cfgInkToId(t){return CFG_INK_MAP[t];}
 function idToCfgInk(id){return CFG_INK_REV[id]!==undefined?CFG_INK_REV[id]:0;}
 function findNightPreset(inkId){if(!manifest)return 0;const i=manifest.ink_presets.findIndex(p=>p.id===inkId&&p.tod==='night');return i>=0?i:0;}
+function findPreset(inkId,tod){if(!manifest)return 0;const i=manifest.ink_presets.findIndex(p=>p.id===inkId&&p.tod===tod);return i>=0?i:findNightPreset(inkId);}
 
 function serializeCurrentConfig(name){
   const p=getInkPreset();
@@ -655,8 +665,10 @@ async function applyConfig(cfg){
   document.getElementById('gameCorrectionCb').checked=!d['Override Game Calc'];
   if(d['SDODR Glitter Intensity']!==undefined){
     savedGlitter=d['SDODR Glitter Intensity'];
-    document.getElementById('glitterInt').value=savedGlitter;
+    const glEl=document.getElementById('glitterInt');
+    glEl.value=savedGlitter;
     document.getElementById('glitterVal').textContent=savedGlitter.toFixed(2);
+    updateSliderTrack(glEl);
     patchGlitter();
   }
   if(d['SDODR Accent Color']){
@@ -673,6 +685,8 @@ async function applyConfig(cfg){
 let configPack=[];
 let packDirty=false;
 let previewImages={};
+let previewTod='night';
+let previewCC=false;
 let previewFBO=null,previewFBOTex=null,previewFBODepth=null;
 let pvW=384,pvH=384;
 const PREVIEW_MAX=384;
@@ -799,7 +813,7 @@ async function renderPreview(cfg){
   const cfgInk=d['Ink Type']!==undefined?d['Ink Type']:0;
   const inkId=cfgInkToId(cfgInk);
   if(inkId===undefined){restoreUBOState(snap);return null;}
-  const pi=findNightPreset(inkId);
+  const pi=findPreset(inkId,previewTod);
   const p=manifest.ink_presets[pi];
   const cacheKey=p?p.folder||'_default':'_default';
   const cached=uboCache[cacheKey];
@@ -853,7 +867,7 @@ async function renderPreview(cfg){
     const setC=(idx,r,g,b)=>{const o=idx*16;if(o+12>dd.length)return;dv.setFloat32(o,r,true);dv.setFloat32(o+4,g,true);dv.setFloat32(o+8,b,true);};
     const teams=[['Alpha',0],['Bravo',7],['Charlie',14]];
     const gc=!d['Override Game Calc'];
-    const tod='Night';
+    const tod=previewTod==='day'?'Day':'Night';
     for(const[name,base]of teams){
       const clr=d[name];if(!clr)continue;
       const lr=gammaToLin(clr.r||0),lg=gammaToLin(clr.g||0),lb=gammaToLin(clr.b||0);
@@ -904,16 +918,27 @@ async function renderPreview(cfg){
     const fpD=new Uint8Array(origFpC3);packCamUBO(fpD,vw,vp,pj,vi);ubos.fp_c3.data=fpD;updUBO(ubos.fp_c3.glBuf,fpD);
   }
   pfxBypass=true;
-  gl.bindFramebuffer(gl.FRAMEBUFFER,previewFBO);
-  gl.viewport(0,0,fw,fh);
-  render();
+  if(previewCC&&sceneFBO){
+    gl.bindFramebuffer(gl.FRAMEBUFFER,sceneFBO);
+    gl.viewport(0,0,RENDER_W,RENDER_H);
+    render();
+    gl.bindFramebuffer(gl.FRAMEBUFFER,previewFBO);
+    gl.viewport(0,0,fw,fh);
+    drawPFX(true);
+  }else{
+    gl.bindFramebuffer(gl.FRAMEBUFFER,previewFBO);
+    gl.viewport(0,0,fw,fh);
+    render();
+  }
   const pixels=new Uint8Array(fw*fh*4);
   gl.readPixels(0,0,fw,fh,gl.RGBA,gl.UNSIGNED_BYTE,pixels);
   gl.bindFramebuffer(gl.FRAMEBUFFER,null);
   gl.viewport(0,0,RENDER_W,RENDER_H);
   pfxBypass=false;
-  for(let i=0;i<pixels.length;i+=4){
-    for(let c=0;c<3;c++){const v=pixels[i+c]/255;pixels[i+c]=Math.round((v<=0.0031308?v*12.92:1.055*Math.pow(v,1/2.4)-0.055)*255);}
+  if(!previewCC||!sceneFBO){
+    for(let i=0;i<pixels.length;i+=4){
+      for(let c=0;c<3;c++){const v=pixels[i+c]/255;pixels[i+c]=Math.round((v<=0.0031308?v*12.92:1.055*Math.pow(v,1/2.4)-0.055)*255);}
+    }
   }
 
   for(const tf of(manifest.ink_overridable_textures||[])){
@@ -1297,8 +1322,10 @@ function readGlitter(){
   const dv=new DataView(ubos.fp_c7.data.buffer,ubos.fp_c7.data.byteOffset);
   const v=dv.getFloat32(FP_C7_GLITTER_OFFSET,true) / 0.7;
   savedGlitter=v;
-  document.getElementById('glitterInt').value=v.toFixed(2);
+  const glEl=document.getElementById('glitterInt');
+  glEl.value=v.toFixed(2);
   document.getElementById('glitterVal').textContent=v.toFixed(2);
+  updateSliderTrack(glEl);
 }
 
 /* --- Glitter / accent color = fp_c7[72].xyz --- */
@@ -1796,7 +1823,7 @@ function initPFX(){
   sceneFBO=gl.createFramebuffer();
   sceneColorTex=gl.createTexture();
   gl.bindTexture(gl.TEXTURE_2D,sceneColorTex);
-  gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA16F,RENDER_W,RENDER_H,0,gl.RGBA,gl.FLOAT,null);
+  gl.texImage2D(gl.TEXTURE_2D,0,gl.R11F_G11F_B10F,RENDER_W,RENDER_H,0,gl.RGB,gl.FLOAT,null);
   gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MIN_FILTER,gl.LINEAR);
   gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MAG_FILTER,gl.LINEAR);
   gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_S,gl.CLAMP_TO_EDGE);
@@ -1837,8 +1864,9 @@ async function loadPFXTextures(){
   gl.texParameteri(gl.TEXTURE_3D,gl.TEXTURE_WRAP_R,gl.CLAMP_TO_EDGE);
 }
 
-function drawPFX(){
-  const prog=pfxEnabled&&pfxLUT?pfxProgCC:pfxProgSRGB;
+function drawPFX(forceCC){
+  const wantCC=forceCC!==undefined?forceCC:pfxEnabled;
+  const prog=wantCC&&pfxLUT?pfxProgCC:pfxProgSRGB;
   gl.useProgram(prog);
   gl.disable(gl.DEPTH_TEST);
   gl.activeTexture(gl.TEXTURE0);gl.bindTexture(gl.TEXTURE_2D,sceneColorTex);
@@ -1912,6 +1940,8 @@ function setupUI(){
     const cv=await renderPreview(parsed);if(cv)previewImages[n]=cv;
     rebuildPackGrid();
   });
+  document.getElementById('pvCCCb').addEventListener('change',e=>{previewCC=e.target.checked;previewImages={};renderAllPreviews();});
+  document.getElementById('pvTodSel').addEventListener('change',e=>{previewTod=e.target.value;previewImages={};renderAllPreviews();});
   document.getElementById('packSaveBtn').addEventListener('click',exportZip);
   document.getElementById('loadSingleCfgBtn').addEventListener('click',()=>document.getElementById('loadSingleCfgInput').click());
   document.getElementById('loadSingleCfgInput').addEventListener('change',async e=>{
@@ -2232,7 +2262,25 @@ async function switchInk(pi,si){
   render();
 }
 
+function updateRenderSize(){
+  const port=isPortrait();
+  const nw=port?1080:1920, nh=port?1920:1080;
+  if(nw===RENDER_W&&nh===RENDER_H)return;
+  RENDER_W=nw;RENDER_H=nh;
+  canvas.width=RENDER_W;canvas.height=RENDER_H;
+  if(sceneColorTex){
+    gl.bindTexture(gl.TEXTURE_2D,sceneColorTex);
+    gl.texImage2D(gl.TEXTURE_2D,0,gl.R11F_G11F_B10F,RENDER_W,RENDER_H,0,gl.RGB,gl.FLOAT,null);
+  }
+  if(sceneDepthRB){
+    gl.bindRenderbuffer(gl.RENDERBUFFER,sceneDepthRB);
+    gl.renderbufferStorage(gl.RENDERBUFFER,gl.DEPTH_COMPONENT24,RENDER_W,RENDER_H);
+  }
+  gl.viewport(0,0,RENDER_W,RENDER_H);
+  updateCamera();
+}
 function resizeCanvas(){
+  updateRenderSize();
   const w=document.getElementById('canvasWrap'),cw=w.clientWidth,ch=w.clientHeight;
   const asp=RENDER_W/RENDER_H;let rw=cw,rh=Math.round(cw/asp);
   if(rh>ch){rh=ch;rw=Math.round(ch*asp);}
