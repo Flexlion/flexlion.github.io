@@ -505,7 +505,5 @@ void main()
     );
 
     gl_Position = clipPos;
-
-    // Original decomp only writes x, y, and w.
     fClipPos.xyw = clipPos.xyw;
 }
