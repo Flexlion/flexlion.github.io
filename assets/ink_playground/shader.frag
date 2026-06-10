@@ -501,6 +501,10 @@ vec3 hsvToRgb(float hue, float sat, float value)
 
 // RGB to hue/saturation/value. The hue comes out negated for
 // blue-dominant colors; take abs() before feeding it back to hsvToRgb.
+// Quirk kept from the original: whenever red is NOT the max channel the
+// hue base collapses to -1/3, regardless of whether green or blue wins.
+// The Grandfest glitter (ink 9) uses the standard select instead, so its
+// hue extraction stays inline in that branch - do not unify the two.
 vec3 rgbToHsv(vec3 c)
 {
     float selGB = (c.g >= c.b) ? 1.0 : 0.0;
@@ -560,12 +564,81 @@ float clusterFloat(int idx)
     return cLightClusterData[idx >> 2][idx & 3];
 }
 
+vec3 clusterVec3(int idx)
+{
+    return vec3(clusterFloat(idx), clusterFloat(idx + 1), clusterFloat(idx + 2));
+}
+
+// Per-light record accessors: light attributes live in parallel tables
+// inside the cluster data, 4 floats per light record.
+vec3  lightColor(int i)    { return clusterVec3(1600 + i * 4); }
+float lightInvRange(int i) { return clusterFloat(1720 + i * 4); }
+float lightFalloff(int i)  { return clusterFloat(1721 + i * 4); }
+float lightSpotCos(int i)  { return clusterFloat(1722 + i * 4); }
+float lightSpotExp(int i)  { return clusterFloat(1723 + i * 4); }
+vec3  lightPosition(int i) { return clusterVec3(1840 + i * 4); }
+vec3  lightSpotDir(int i)  { return clusterVec3(1960 + i * 4); }
+bool  lightIsSpot(int i)   { return floatBitsToInt(clusterFloat(2080 + i * 4)) != 0; }
+
+// Schlick fresnel weight in spherical-gaussian form,
+// 2^(c * (-5.55473c - 6.98316)) ~= (1 - c)^5. Callers fold it into
+// F = F0 + (1 - F0) * weight.
+float fresnelWeight(float cosTheta)
+{
+    return exp2(cosTheta * (cosTheta * -5.554729939 + -6.98316002));
+}
+
+// GGX microfacet lobe shared by the sun, the cluster lights and the
+// ink sparkle passes (inputs pre-clamped by the callers):
+//   D   = a / (NdotH^2 * (a^2 - 1) + 1)            with a = roughness^2
+//   vis = 1 / ((k + NdotV*(1-k)) * (k + NdotL*(1-k))),
+//         k = (roughness*0.5 + 0.5)^2 * 0.5
+// Returns D^2 * vis; callers apply fresnel and the 1/(4pi) factor.
+float ggxSpecular(float NdotH, float NdotV, float NdotL, float roughness)
+{
+    float alphaSq = roughness * roughness;
+    float kBase = roughness * 0.5 + 0.5;
+    float k = kBase * 0.5 * kBase;
+    float geoV = k * (-NdotV) + NdotV;
+    float geoL = k * (-NdotL) + NdotL;
+    float NdotHsq = NdotH * NdotH;
+    float dNumer = (alphaSq * alphaSq) * NdotHsq + (-NdotHsq);
+    float dPart = alphaSq * (1.0 / max(dNumer + 1.0, 9.999999939e-09));
+    return ((1.0 / (k + geoV)) * (1.0 / (k + geoL))) * (dPart * dPart);
+}
+
+// Perturbs base normal n by a 2-channel tangent-space sample in the
+// frame (t, b); the z component is reconstructed from unit length.
+vec3 perturbNormal(vec3 n, vec3 t, vec3 b, vec2 s)
+{
+    float z = sqrt(clamp(1.0 - dot(s, s), 0.0, 1.0));
+    return normalize(t * s.x + b * s.y + n * z);
+}
+
+// Sin-product hash shared by the glitter and sparkle randomizers.
+float hash11(float x)
+{
+    return fract(sin(x) * 43758.5469);
+}
+
+// Second-order spherical-harmonic irradiance of a world-space normal.
+vec3 shIrradiance(vec3 n)
+{
+    vec3 lin = vec3(dot(n, env.cSHAr.xyz), dot(n, env.cSHAg.xyz), dot(n, env.cSHAb.xyz));
+    vec4 quadBasis = vec4(n.x * n.y, n.y * n.z, n.z * n.z, n.z * n.x);
+    vec3 quad = vec3(dot(quadBasis, env.cSHBr), dot(quadBasis, env.cSHBg), dot(quadBasis, env.cSHBb));
+    float diff = n.x * n.x + (-(n.y * n.y));
+    return vec3(
+        diff * env.cSHC.x + ((lin.r + env.cSHAr.w) + quad.r),
+        diff * env.cSHC.y + ((lin.g + env.cSHAg.w) + quad.g),
+        diff * env.cSHC.z + ((lin.b + env.cSHAb.w) + quad.b));
+}
+
 void main()
 {
     // ------------------------------------------------------------------
     // Interpolated inputs
     // ------------------------------------------------------------------
-    float invW = 1.0 / gl_FragCoord.w;
     vec2 texUV = fTexCoords01.xy;
     vec3 rawNorm = fNormals.xyz;                    // world-space geometry normal (unnormalized)
     vec3 geomNormal = normalize(rawNorm);
@@ -613,11 +686,8 @@ void main()
     // ------------------------------------------------------------------
     // Surface normal (normal map over TBN) and paint normal
     // ------------------------------------------------------------------
-    float normalMapZ = sqrt(clamp(1.0 - dot(normalMapXY, normalMapXY), 0.0, 1.0));
     vec3 surfBitangent = cross(geomNormal, tangent.xyz);
-    vec3 surfNormal = normalize(normalMapXY.x * tangent.xyz
-                              + normalMapXY.y * (surfBitangent * tangent.w)
-                              + normalMapZ * geomNormal);
+    vec3 surfNormal = perturbNormal(geomNormal, tangent.xyz, surfBitangent * tangent.w, normalMapXY);
 
     // Bitangent of the paint projection; left unnormalized when degenerate.
     vec3 paintBitangent = cross(paintTangent, geomNormal);
@@ -645,6 +715,12 @@ void main()
                          + user3.bravoTeamColorHueBright.xyz * teamTopMask.y
                          + user3.charlieTeamColorHueBright.xyz * teamTopMask.z;
 
+    
+    // ------------------------------------------------------------------
+    // Ink Type enum
+    // ------------------------------------------------------------------
+    int inkType = int(trunc(cInkMode.x));
+
     // ------------------------------------------------------------------
     // Base surface attributes (paint overrides the base material)
     // ------------------------------------------------------------------
@@ -669,7 +745,6 @@ void main()
         roughness = cInkSurface.x;
 
         // Side Order bravo ink lets the metallic base material show through.
-        int inkType = int(trunc(cInkMode.x));
         if (inkType == 2 && teamTopMask.y > 0.5)
         {
             float shine = exp2(paintStrength * cInkCustom1.y * 14.4269505);
@@ -750,15 +825,12 @@ void main()
     vec3 stInkEx = vec3(0.0);
     if (isPainted)
     {
-        int inkTypeInt = int(trunc(cInkMode.x));
         // Ink specular response defaults: flat F0 and a normal flattened
         // toward "straight up" by cInkSpecular.z (in permuted yzx space).
         vec3 inkReflect = vec3(cInkSpecular.x);
-        vec3 inkNorm = vec3((curNorm.x - 1.0) * cInkSpecular.z + 1.0,
-                            curNorm.y * cInkSpecular.z,
-                            curNorm.z * cInkSpecular.z);
+        vec3 inkNorm = vec3((curNorm.x - 1.0) * cInkSpecular.z + 1.0, curNorm.yz * cInkSpecular.z);
         stSpecScaleFactor = 1.0;
-        if (inkTypeInt == 3)
+        if (inkType == 3)
         {
             // --- Oil ink ---------------------------------------------
             // Interfering sine waves over the paint UVs pick a band of
@@ -771,7 +843,7 @@ void main()
             inkReflect = oil * cInkCustom0.z + cInkSpecular.x;
             stDielec = oil * cInkCustom0.w + dielectric;
         }
-        else if (inkTypeInt == 4)
+        else if (inkType == 4)
         {
             // --- Keba ink --------------------------------------------
             // Sine-distorted, time-scrolled noise lookup remapped through
@@ -789,7 +861,7 @@ void main()
                 stDielec = texture(user2Tex, vec2(0.5, gradientPos)).rgb;
             }
         }
-        else if (inkTypeInt == 5)
+        else if (inkType == 5)
         {
             // --- Spookyfest ink --------------------------------------
             // Noise-driven darkening that creeps in with coverage, plus
@@ -801,7 +873,7 @@ void main()
             stDielec = dielectric - dielectric * darken;
             stEmit = emission - emission * cInkSpecular.y;
         }
-        else if (inkTypeInt == 6)
+        else if (inkType == 6)
         {
             // --- Frostyfest ink --------------------------------------
             // Snow: the team color is re-hued twice (a body color and
@@ -844,10 +916,7 @@ void main()
 
             // Perturb the shading normal by the sparkle normal map.
             vec3 sparkleBitan = cross(shadingNormal, tangent.xyz) * tangent.w;
-            float sparkleNormZ = sqrt(clamp(1.0 - dot(sparkleNorm.rg, sparkleNorm.rg), 0.0, 1.0));
-            vec3 glintNormal = normalize(sparkleNorm.r * tangent.xyz
-                                       + sparkleNorm.g * sparkleBitan
-                                       + sparkleNormZ * shadingNormal);
+            vec3 glintNormal = perturbNormal(shadingNormal, tangent.xyz, sparkleBitan, sparkleNorm.rg);
 
             // Half vectors toward and away from the sun, for front-lit
             // and back-lit glint lobes.
@@ -875,8 +944,8 @@ void main()
             float specBack = (visView * (1.0 / (visK + (NdotLb - NdotLb * visK)))) * (ndfBack * ndfBack);
 
             vec3 glintF0 = bodyColor * cInkCustom0.y;
-            float fresnelFront = exp2(VdotHf * (VdotHf * -5.554729939 - 6.98316002));
-            float fresnelBack = exp2(VdotHb * (VdotHb * -5.554729939 - 6.98316002));
+            float fresnelFront = fresnelWeight(VdotHf);
+            float fresnelBack = fresnelWeight(VdotHb);
             float frontSel = (NdotL > 0.0) ? 1.0 : 0.0;
             float backSel = (NdotL < 0.0) ? 1.0 : 0.0;
             vec3 glintSpec = (glintF0 + fresnelFront * (1.0 - glintF0)) * (specFront * frontSel)
@@ -912,7 +981,7 @@ void main()
                          bodyColor * cInkSurface.z, bodyBlend);
             stExtra = glint - glint * edgeBlend;
         }
-        else if (inkTypeInt == 7)
+        else if (inkType == 7)
         {
             // --- Springfest ink --------------------------------------
             // Candy sprinkles. A sprinkle sheet (user2: x hue shift,
@@ -948,11 +1017,8 @@ void main()
             stEmit = mix(emission, sprinkledEmit * cInkMode.y, sprinkleBlend);
 
             // Embossed normal along the paint axes.
-            float sprinkleNormZ = sqrt(clamp(1.0 - dot(sprinkleNorm, sprinkleNorm), 0.0, 1.0));
-            vec3 embossed = paintTangent * sprinkleNorm.x
-                          + cross(rawNorm, paintTangent) * sprinkleNorm.y
-                          + rawNorm * sprinkleNormZ;
-            vec3 inkNormal = normalize(mix(shadingNormal, normalize(embossed), sprinkleBlend));
+            vec3 embossed = perturbNormal(rawNorm, paintTangent, cross(rawNorm, paintTangent), sprinkleNorm);
+            vec3 inkNormal = normalize(mix(shadingNormal, embossed, sprinkleBlend));
             float inkNdotL = dot(inkNormal, -env.cMainLightDir.xyz);
 
             stNorm = inkNormal.yzx;
@@ -962,7 +1028,7 @@ void main()
             stLight = clamp(inkNdotL, 0.0, 1.0) * env.cLightColor.xyz;
             stNdotL = inkNdotL;
         }
-        else if (inkTypeInt == 8)
+        else if (inkType == 8)
         {
             // --- Summerfest ink --------------------------------------
             // Water caustics. A flow map (user2.rg) warps the UVs of a
@@ -991,7 +1057,7 @@ void main()
             stDielec = burst + dielectric;
             stEmit = burst + emission;
         }
-        else if (inkTypeInt == 10)
+        else if (inkType == 10)
         {
             // --- Grandfest Plaza Ink -----------------------------
             // Screen-space Voronoi mosaic: a jittered grid of cells,
@@ -1027,7 +1093,7 @@ void main()
                     if (dist2 < bestDist)
                     {
                         bestDist = dist2;
-                        cellHash = fract(sin(dot(cell, vec2(12.9898005, 78.23300171))) * 43758.5469);
+                        cellHash = hash11(dot(cell, vec2(12.9898005, 78.23300171)));
                     }
                 }
             }
@@ -1059,7 +1125,7 @@ void main()
             float ink9_invFragW = 1.0 / gl_FragCoord.w;
             vec4 ink9_tan = (fTangents * gl_FragCoord.w) * ink9_invFragW;
             float ink9_worldW = (fWorldPos.w * gl_FragCoord.w) * ink9_invFragW;
-            if (inkTypeInt == 9)
+            if (inkType == 9)
             {
                 // --- Grandfest ink ---------------------------------------
                 // Rainbow glitter. A fine glitter sheet (user1: xy
@@ -1106,8 +1172,9 @@ void main()
                 inkBlend = mix(inkBlend, popColor, popFade);
 
                 // Hue of the blended ink color. This branch carries its own
-                // RGB->hue selection tree (the blue-dominant wrap differs
-                // from rgbToHsv(), so it stays inline).
+                // RGB->hue selection tree: unlike rgbToHsv() it takes the
+                // hue base from whichever channel actually is the max, so
+                // blue-dominant colors resolve differently. Do not unify.
                 float selGB = (inkBlend.g >= inkBlend.b) ? 1.0 : 0.0;
                 float maxGB = (inkBlend.g - inkBlend.b) * selGB + inkBlend.b;
                 float minGB = (inkBlend.b - inkBlend.g) * selGB + inkBlend.g;
@@ -1126,9 +1193,7 @@ void main()
                 // sheet's xy in the mesh tangent frame.
                 vec3 tangentDir = ink9_tan.xyz;
                 vec3 bitanDir = ink9_tan.w * cross(shadingNormal, tangentDir);
-                float bumpUp = sqrt(clamp(1.0 - dot(glitter.rg, glitter.rg), 0.0, 1.0));
-                vec3 glitterNorm = normalize(tangentDir * glitter.r + bitanDir * glitter.g
-                                            + shadingNormal * bumpUp);
+                vec3 glitterNorm = perturbNormal(shadingNormal, tangentDir, bitanDir, glitter.rg);
 
                 // Glint geometry: half vector between the view ray and the
                 // main light (the light direction flips on back faces).
@@ -1141,7 +1206,7 @@ void main()
                 float glintNdotV = max(dot(eyeDir, glitterNorm), 9.999999939e-09);
 
                 // Schlick fresnel and a fixed-roughness GGX lobe.
-                float fresnel = exp2(VdotH * (VdotH * -5.554729939 + -6.98316002));
+                float fresnel = fresnelWeight(VdotH);
                 float geoV = glintNdotV * 0.6879500151 + 0.312049955;
                 float geoL = glintNdotL * 0.6879500151 + 0.312049955;
                 float ndf = (1.0 / max((NdotH * NdotH) * -0.8868350387 + 1.0, 9.999999939e-09)) * 0.336399972;
@@ -1149,7 +1214,7 @@ void main()
 
                 // Rare glitter pieces (hash of the sheet texel) get their
                 // tint boosted 100x before the fresnel term.
-                float sparkleHash = fract(sin(glitter.r * 78.23300171 + glitter.b * 12.9898005) * 43758.5469);
+                float sparkleHash = hash11(glitter.r * 78.23300171 + glitter.b * 12.9898005);
                 vec3 sparkleColor = glitterColor;
                 if (sparkleHash <= 0.004999999888)
                 {
@@ -1204,18 +1269,13 @@ void main()
                 // The overlay tilt lives in the paint frame; it only
                 // tilts the facing term that drives the color blend.
                 vec3 paintAxis = (fPaintUVXform.xyz * gl_FragCoord.w) * ink9_invFragW;
-                float overlayUp = sqrt(clamp(1.0 - dot(overlayNorm, overlayNorm), 0.0, 1.0));
-                vec3 overlayWorld = paintAxis * overlayNorm.x
-                                + cross(shadingNormal, paintAxis) * overlayNorm.y
-                                + shadingNormal * overlayUp;
-                float overlayFacing = -dot(eyeDir, normalize(overlayWorld));
+                vec3 overlayWorld = perturbNormal(shadingNormal, paintAxis, cross(shadingNormal, paintAxis), overlayNorm);
+                float overlayFacing = -dot(eyeDir, overlayWorld);
 
                 // Sparkle normal in the mesh tangent frame.
                 vec3 tangentDir = ink9_tan.xyz;
                 vec3 bitanDir = ink9_tan.w * cross(shadingNormal, tangentDir);
-                float sparkleUp = sqrt(clamp(1.0 - dot(sparkle.rg, sparkle.rg), 0.0, 1.0));
-                vec3 sparkleNorm = normalize(tangentDir * sparkle.r + bitanDir * sparkle.g
-                                           + shadingNormal * sparkleUp);
+                vec3 sparkleNorm = perturbNormal(shadingNormal, tangentDir, bitanDir, sparkle.rg);
 
                 // Half vector against the main light (flipped on back
                 // faces) and the standard dot products.
@@ -1228,19 +1288,11 @@ void main()
                 float NdotVs = max(dot(eyeDir, sparkleNorm), 9.999999939e-09);
 
                 // GGX specular, roughness driven by cInkCustom0.w.
-                float ggxAlpha = cInkCustom0.w;
-                float alphaSq = ggxAlpha * ggxAlpha;
-                float kParam = (ggxAlpha * 0.5 + 0.5);
-                float kGeo = (kParam * 0.5) * kParam;
-                float geoVraw = NdotVs * (-kGeo) + NdotVs;
-                float geoLraw = kGeo * (-NdotLs) + NdotLs;
-                float NdotHsq = NdotH * NdotH;
-                float ndfPartial = alphaSq * (1.0 / max((NdotHsq * (alphaSq * alphaSq) + (-NdotHsq)) + 1.0, 9.999999939e-09));
-                float specBrdf = ((1.0 / (kGeo + geoVraw)) * (1.0 / (kGeo + geoLraw))) * (ndfPartial * ndfPartial);
-                float fresnel = exp2(VdotH * (VdotH * -5.554729939 + -6.98316002));
+                float specBrdf = ggxSpecular(NdotH, NdotVs, NdotLs, cInkCustom0.w);
+                float fresnel = fresnelWeight(VdotH);
 
                 // Hash-selected sparkle texels boost the spec color.
-                float sparkleHash = fract(sin(sparkle.r * 78.23300171 + sparkle.b * 12.9898005) * 43758.5469);
+                float sparkleHash = hash11(sparkle.r * 78.23300171 + sparkle.b * 12.9898005);
                 vec3 glitterSpecColor = cInkCustom3.xyz;
                 if (sparkleHash <= cInkCustom4.w)
                 {
@@ -1294,9 +1346,7 @@ void main()
         // Split-sum fresnel from the BRDF LUT (user4).
         vec2 brdfLut = texture(user4Tex, vec2(max(stNdotV, 9.999999939e-09), -stRoughness)).rg;
         vec3 fresnelIbl = inkReflect * brdfLut.x + vec3(brdfLut.y);
-        iblAcc.r = fresnelIbl.r * cubeSample.x;
-        iblAcc.g = fresnelIbl.g * cubeSample.y;
-        iblAcc.b = fresnelIbl.b * cubeSample.z;
+        iblAcc = fresnelIbl * cubeSample;
 
         // Lighting inputs. Note the historical channel swap on the
         // reflectance (rbg) -- the lighting stage below compensates.
@@ -1319,12 +1369,10 @@ void main()
         // --------------------------------------------------------------
         // Reflection direction and cube mip index are kept (the probe is
         // stubbed out) so the minimap hookup can be restored.
-        float NdotV_u = dot(eyeDir, vec3(curNorm.z, curNorm.x, curNorm.y));
+        float NdotV_u = dot(eyeDir, curNorm.zxy);
         float reflFacingU = -NdotV_u;
-        float reflDirX_u = (reflFacingU * curNorm.z) * -2.0 + (-eyeDir.x);
-        float reflDirY_u = (reflFacingU * curNorm.x) * -2.0 + (-eyeDir.y);
-        float reflDirZ_u = (reflFacingU * curNorm.y) * -2.0 + (-eyeDir.z);
-        float invMaxRefl_u = 1.0 / max(abs(reflDirZ_u), max(abs(reflDirX_u), abs(reflDirY_u)));
+        vec3 reflDir_u = (curNorm.zxy * reflFacingU) * -2.0 + (-eyeDir);
+        float invMaxRefl_u = 1.0 / max(abs(reflDir_u.z), max(abs(reflDir_u.x), abs(reflDir_u.y)));
         float cubeMipFloat = cos(roughness * 3.14159274) * -5.5 + 5.5;
         uint cubeMipUint = uint(max(roundEven(roundEven(cubeMipFloat)), 0.0));
         uint cubeMipIdx = clamp(cubeMipUint, 0u, 0xFFFFu);
@@ -1333,9 +1381,7 @@ void main()
         vec2 brdfLutU = texture(user4Tex, vec2(max(NdotV_u, 9.999999939e-09), -roughness)).rg;
         vec3 fresnelU = specF0.rbg * brdfLutU.x + vec3(brdfLutU.y);
         shNorm = curNorm;
-        iblAcc.r = cubeSampleU.x * fresnelU.r;
-        iblAcc.g = cubeSampleU.y * fresnelU.b;
-        iblAcc.b = cubeSampleU.z * fresnelU.g;
+        iblAcc = cubeSampleU * fresnelU;
 
         // Right at the edge of painted regions (negative coverage) the
         // specular is damped based on how much the paint normal faces
@@ -1366,30 +1412,11 @@ void main()
     float st2NdotL_raw = dot(litN, -env.cMainLightDir.xyz);
     float st2NdotL_clamped = max(st2NdotL_raw, 9.999999939e-09);
 
-    // Smith-Schlick visibility and GGX distribution.
-    float roughHalf = (st2Roughness * 0.5 + 0.5);
-    float sunK = roughHalf * 0.5 * roughHalf;
-    float sunAlphaSq = st2Roughness * st2Roughness;
-    float sunGeoL = sunK * (-st2NdotL_clamped) + st2NdotL_clamped;
-    float sunGeoV = sunK * (-st2NdotV_clamped) + st2NdotV_clamped;
-    float sunNdotHsq = sunNdotH * sunNdotH;
-    float sunNdf = sunAlphaSq * (1.0 / max((sunNdotHsq * (sunAlphaSq * sunAlphaSq) + (-sunNdotHsq)) + 1.0, 9.999999939e-09));
-    float sunBrdf = ((1.0 / (sunK + sunGeoV)) * (1.0 / (sunK + sunGeoL))) * (sunNdf * sunNdf);
-    float sunFresnel = exp2(sunVdotH * (sunVdotH * -5.554729939 + -6.98316002));
+    float sunBrdf = ggxSpecular(sunNdotH, st2NdotV_clamped, st2NdotL_clamped, st2Roughness);
+    float sunFresnel = fresnelWeight(sunVdotH);
 
     // --- Second-order SH irradiance ------------------------------------
-    float shXY = shN.x * shN.y;
-    float shYZ = shN.y * shN.z;
-    float shZX = shN.z * shN.x;
-    float shZZ = shN.z * shN.z;
-    float shXXmYY = shN.x * shN.x + (-(shN.y * shN.y));
-    vec3 shLinear = vec3(dot(shN, env.cSHAr.xyz), dot(shN, env.cSHAg.xyz), dot(shN, env.cSHAb.xyz));
-    vec4 shQuadBasis = vec4(shXY, shYZ, shZZ, shZX);
-    vec3 shQuad = vec3(dot(shQuadBasis, env.cSHBr), dot(shQuadBasis, env.cSHBg), dot(shQuadBasis, env.cSHBb));
-    vec3 shTotal = vec3(
-        shXXmYY * env.cSHC.x + ((shLinear.r + env.cSHAr.w) + shQuad.r),
-        shXXmYY * env.cSHC.y + ((shLinear.g + env.cSHAg.w) + shQuad.g),
-        shXXmYY * env.cSHC.z + ((shLinear.b + env.cSHAb.w) + shQuad.b));
+    vec3 shTotal = shIrradiance(shN);
 
     // --- Sun + ambient irradiance --------------------------------------
     // st2Reflect was stored channel-swapped (rbg); the swizzles below
@@ -1409,19 +1436,18 @@ void main()
     int gridZ = max(0, min(int(trunc(((worldPos.z - cLightClusterData[550].z) * cLightClusterData[551].z))), 19));
     int gridCell = gridZ * 20 + gridX;
     float lightListEntry = clusterFloat(gridCell * 4);
-    bool loop_hasLights = floatBitsToInt(lightListEntry) != -1;
+    int lightBits = floatBitsToInt(lightListEntry);
 
     // Accumulators for the cluster-light walk below.
     vec3 accLit = diffLit;
     vec3 accLtEmit = st2Emit;
-    if (loop_hasLights)
+    if (lightBits != -1)
     {
         // --------------------------------------------------------------
         // Cluster lights: the cell entry packs up to 4 light indices,
         // 8 bits each. Index 30 marks the stage's "extra light" (handled
         // after the walk); any index >= 30 terminates the list.
         // --------------------------------------------------------------
-        int lightBits = floatBitsToInt(lightListEntry);
         int curLightIdx = 0;
         for (int i = 0; i < 4; i++)
         {
@@ -1431,20 +1457,14 @@ void main()
                 break;
             }
 
-            // Per-light attributes live in parallel tables inside the
-            // cluster data, 4 floats per light record.
-            int rec = curLightIdx * 4;
-            vec3 lightPos = vec3(clusterFloat(rec + 1840), clusterFloat(rec + 1841), clusterFloat(rec + 1842));
-            float lightRange = clusterFloat(rec + 1720);
-            float lightFalloffExp = clusterFloat(rec + 1721);
-            vec3 lightColor = vec3(clusterFloat(rec + 1600), clusterFloat(rec + 1601), clusterFloat(rec + 1602));
-            bool isSpot = floatBitsToInt(clusterFloat(rec + 2080)) != 0;
+            vec3 lightPos = lightPosition(curLightIdx);
+            float lightRange = lightInvRange(curLightIdx);
+            float lightFalloffExp = lightFalloff(curLightIdx);
+            vec3 litColor = lightColor(curLightIdx);
+            bool isSpot = lightIsSpot(curLightIdx);
 
             // Direction and distance from the fragment to the light.
-            vec3 lightVec = vec3(
-                (-worldPos.x) + lightPos.x,
-                lightPos.y + (-worldPos.y),
-                (-worldPos.z) + lightPos.z);
+            vec3 lightVec = lightPos - worldPos;
             float lightDistSq = dot(lightVec, lightVec);
             vec3 lightDir = lightVec * inversesqrt(lightDistSq);
 
@@ -1455,14 +1475,8 @@ void main()
             float NdotL_raw = dot(litN, lightDir);
             float NdotL = max(NdotL_raw, 9.999999939e-09);
 
-            // Same roughness terms as the sun, so sunK / sunAlphaSq /
-            // sunGeoV are reused; only the light-side terms differ.
-            float geoL = sunK * (-NdotL) + NdotL;
-            float NdotHsq = NdotH * NdotH;
-            float dNumer = ((sunAlphaSq * sunAlphaSq) * NdotHsq + (-NdotHsq));
-            float dPart = sunAlphaSq * (1.0 / (max((dNumer + 1.0), 9.999999939e-09)));
-            float lightBrdf = ((1.0 / (sunK + sunGeoV)) * (1.0 / (sunK + geoL))) * (dPart * dPart);
-            float fresnelWt = exp2(VdotH * (VdotH * -5.554729939 + -6.98316002));
+            float lightBrdf = ggxSpecular(NdotH, st2NdotV_clamped, NdotL, st2Roughness);
+            float fresnelWt = fresnelWeight(VdotH);
 
             // Diffuse + specular response (st2Reflect stored rbg).
             vec3 fresnelC = st2Reflect * (-fresnelWt) + vec3(fresnelWt);
@@ -1474,16 +1488,16 @@ void main()
             float spotAtten = 1.0;
             if (isSpot)
             {
-                vec3 spotDir = vec3(clusterFloat(rec + 1960), clusterFloat(rec + 1961), clusterFloat(rec + 1962));
-                float spotInnerCos = clusterFloat(rec + 1722);
-                float spotFalloff = clusterFloat(rec + 1723);
+                vec3 spotDir = lightSpotDir(curLightIdx);
+                float spotInnerCos = lightSpotCos(curLightIdx);
+                float spotFalloff = lightSpotExp(curLightIdx);
                 float spotDot = dot(lightDir, -spotDir);
                 spotAtten = (exp2(((log2((clamp(((spotDot + (-spotInnerCos)) * (1.0 / ((-spotInnerCos) + 1.0))), 0.0, 1.0)))) * spotFalloff)));
             }
             float lightAtten = (clamp(NdotL_raw, 0.0, 1.0)) * ((exp2((lightFalloffExp * (log2((clamp(distAttenRaw, 0.0, 1.0))))))) * spotAtten);
 
             // Accumulate the lit response and the raw ink light term.
-            vec3 lit = lightAtten * lightColor;
+            vec3 lit = lightAtten * litColor;
             accLit = lit * fullSpec + accLit;
             stInkEmit = lit + stInkEmit;
 
@@ -1491,8 +1505,7 @@ void main()
         }
 
         // Index 30 in the list flags that this cell sees the extra light.
-        bool lt_hasExtraLight = curLightIdx == 30;
-        if (lt_hasExtraLight)
+        if (curLightIdx == 30)
         {
             // ----------------------------------------------------------
             // "Extra light": one stage-wide capsule light with its own
@@ -1501,85 +1514,94 @@ void main()
             //   560 falloff/cone, 561 emitter offset / end fade,
             //   562-565 shadow view-projection matrix rows.
             // ----------------------------------------------------------
-            // Project into the light's shadow map.
+            vec4 exCenter = cLightClusterData[557];   // capsule center
+            vec4 exAxis = cLightClusterData[558];     // capsule axis (y: tilt)
+            vec4 exColor = cLightClusterData[559];    // rgb * w = light color
+            vec4 exAtten = cLightClusterData[560];    // x invRange, y falloffExp,
+                                                      // z cosCone, w spotExp
+            vec4 exShape = cLightClusterData[561];    // x width, y sideScale,
+                                                      // z axialStart, w axialRange
+
+            // Project into the light's shadow map (rows 562-565 hold the
+            // shadow view-projection matrix).
             float shadowU = dot(worldPos, cLightClusterData[562].xyz);
             float shadowV = dot(worldPos, cLightClusterData[563].xyz);
             float shadowZ = dot(worldPos, cLightClusterData[564].xyz);
             float shadowW = dot(worldPos, cLightClusterData[565].xyz);
             float shadowInvW = 1.0 / (shadowW + cLightClusterData[565].w);
-            float shadowUVu = (((shadowU + cLightClusterData[562].w) * shadowInvW) * 0.5 + 0.5);
-            float shadowUVv = (((shadowV + cLightClusterData[563].w) * shadowInvW) * 0.5 + 0.5);
-            float shadowUVz = (((shadowZ + cLightClusterData[564].w) * shadowInvW) * 0.5 + 0.5);
+            float shadowUVu = (shadowU + cLightClusterData[562].w) * shadowInvW * 0.5 + 0.5;
+            float shadowUVv = (shadowV + cLightClusterData[563].w) * shadowInvW * 0.5 + 0.5;
+            float shadowUVz = (shadowZ + cLightClusterData[564].w) * shadowInvW * 0.5 + 0.5;
 
-            // Planar offset from the light center, and from the emitter
-            // point pushed back along the axis by row561.x / row561.y.
-            float deltaX = worldPos.x + (-cLightClusterData[557].x);
-            float deltaZ = worldPos.z + (-cLightClusterData[557].z);
-            float invGridScaleY = 1.0 / cLightClusterData[561].y;
-            float adjCenterX = ((cLightClusterData[561].x * cLightClusterData[558].x) * (-invGridScaleY) + cLightClusterData[557].x);
-            float adjCenterZ = ((cLightClusterData[561].x * cLightClusterData[558].z) * (-invGridScaleY) + cLightClusterData[557].z);
-            float toAdjX = (-worldPos.x) + adjCenterX;
-            float toAdjZ = (-worldPos.z) + adjCenterZ;
-            float toAdjXsq = toAdjX * toAdjX;
-            float adjDistSq = (toAdjZ * toAdjZ + toAdjXsq);
+            // Planar (XZ) offset from the light center, and from the
+            // emitter point pushed back along the axis by width/sideScale.
+            vec2 delta = worldPos.xz - exCenter.xz;
+            float invSideScale = 1.0 / exShape.y;
+            vec2 adjCenter = (exShape.x * exAxis.xz) * (-invSideScale) + exCenter.xz;
+            vec2 toAdj = adjCenter - worldPos.xz;
+            float adjDistSq = toAdj.y * toAdj.y + toAdj.x * toAdj.x;
 
             // The emitter floats above the floor: its height grows with
             // the planar distance along the axis' negative y.
-            float heightOffset = (sqrt(adjDistSq)) * (-cLightClusterData[558].y);
-            float fullInvDist = inversesqrt((toAdjZ * toAdjZ + (heightOffset * heightOffset + toAdjXsq)));
-            vec3 adjDir = vec3(toAdjX * fullInvDist, heightOffset * fullInvDist, toAdjZ * fullInvDist);
+            float heightOffset = sqrt(adjDistSq) * (-exAxis.y);
+            float fullInvDist = inversesqrt(toAdj.y * toAdj.y + (heightOffset * heightOffset + toAdj.x * toAdj.x));
+            vec3 adjDir = vec3(toAdj.x, heightOffset, toAdj.y) * fullInvDist;
 
             // Which side of the axis the fragment is on, and how far
             // along it (front half uses real distance falloff).
-            float crossXZ = deltaX * cLightClusterData[558].z;
-            float crossZX = deltaZ * cLightClusterData[558].x;
-            float gridFacing = (-((crossZX < crossXZ) ? 1.0 : 0.0)) + ((crossZX > crossXZ) ? 1.0 : 0.0) * cLightClusterData[561].y;
-            float distSq = (deltaZ * deltaZ + (deltaX * deltaX));
+            float crossXZ = delta.x * exAxis.z;
+            float crossZX = delta.y * exAxis.x;
+            float gridFacing = (-((crossZX < crossXZ) ? 1.0 : 0.0)) + ((crossZX > crossXZ) ? 1.0 : 0.0) * exShape.y;
+            float distSq = delta.y * delta.y + delta.x * delta.x;
             float invDist = inversesqrt(distSq);
-            float dotDirAxis = ((deltaZ * invDist) * cLightClusterData[558].z + ((deltaX * invDist) * cLightClusterData[558].x));
-            float projAxis = (deltaZ * cLightClusterData[558].z + (deltaX * cLightClusterData[558].x));
-            float axialBlendX = (cLightClusterData[560].z * cLightClusterData[558].x + (-(gridFacing * cLightClusterData[558].z)));
-            float axialBlendZ = (gridFacing * cLightClusterData[558].x + (cLightClusterData[560].z * cLightClusterData[558].z));
-            float facingDot = (deltaX * axialBlendZ + (-(deltaZ * axialBlendX)));
-            bool isBehindAxis = dotDirAxis < cLightClusterData[560].z;
+            float dotDirAxis = (delta.y * invDist) * exAxis.z + (delta.x * invDist) * exAxis.x;
+            float projAxis = delta.y * exAxis.z + delta.x * exAxis.x;
+            float axialBlendX = exAtten.z * exAxis.x - gridFacing * exAxis.z;
+            float axialBlendZ = gridFacing * exAxis.x + exAtten.z * exAxis.z;
+            float facingDot = delta.x * axialBlendZ - delta.y * axialBlendX;
+            bool isBehindAxis = dotDirAxis < exAtten.z;
             bool isForward = projAxis > 0.0;
             bool isBackward = projAxis <= 0.0;
 
-            // GGX response, reusing the sun's roughness terms.
+            // GGX response against the lit normal.
             vec3 halfDir2 = normalize(eyeDir + adjDir);
             float NdotH2 = max(dot(litN, halfDir2), 9.999999939e-09);
             float VdotH2 = max(dot(eyeDir, halfDir2), 9.999999939e-09);
             float NdotL2_raw = dot(litN, adjDir);
             float NdotL2 = max(NdotL2_raw, 9.999999939e-09);
-            float geoL2 = sunK * (-NdotL2) + NdotL2;
-            float NdotH2sq = NdotH2 * NdotH2;
-            float dNumer2 = ((sunAlphaSq * sunAlphaSq) * NdotH2sq + (-NdotH2sq));
-            float dPart2 = sunAlphaSq * (1.0 / (max((dNumer2 + 1.0), 9.999999939e-09)));
-            float lightBrdf2 = ((1.0 / (sunK + sunGeoV)) * (1.0 / (sunK + geoL2))) * (dPart2 * dPart2);
-            float fresnelWt2 = exp2(VdotH2 * (VdotH2 * -5.554729939 + -6.98316002));
+            float lightBrdf2 = ggxSpecular(NdotH2, st2NdotV_clamped, NdotL2, st2Roughness);
+            float fresnelWt2 = fresnelWeight(VdotH2);
             vec3 fresnelC2 = st2Reflect * (-fresnelWt2) + vec3(fresnelWt2);
             vec3 specSum2 = (fresnelC2 + st2Reflect).rbg;
             vec3 fullSpec2 = st2Dielec * 0.3183098733 + (lightBrdf2 * specSum2) * 0.0795774683;
 
             // Attenuation: axial end fade, behind-the-axis side fade,
             // distance falloff and a cone term on the planar direction.
-            float endAtten = clamp(((projAxis + (-cLightClusterData[561].z)) * (-(1.0 / cLightClusterData[561].w)) + 1.0), 0.0, 1.0);
+            float endAtten = clamp((projAxis - exShape.z) * (-(1.0 / exShape.w)) + 1.0, 0.0, 1.0);
             float endAttenSq = endAtten * endAtten;
-            float endAttenSmooth = (endAttenSq * (-endAttenSq) + 1.0);
-            float facingFactor = clamp(((1.0 / cLightClusterData[561].x) * (abs(facingDot))), 0.0, 1.0);
+            float endAttenSmooth = endAttenSq * (-endAttenSq) + 1.0;
+            float endFade = endAttenSmooth * endAttenSmooth;
+
+            float facingFactor = clamp((1.0 / exShape.x) * abs(facingDot), 0.0, 1.0);
             float facingFacSq = facingFactor * facingFactor;
-            float facingSmooth = (facingFacSq * (-facingFacSq) + 1.0);
-            float attenBlend = isBehindAxis ? (facingSmooth * facingSmooth) : 1.0;
-            float effectDist = isForward ? (sqrt(distSq)) : 1.0;
-            float distAttenRaw2 = (effectDist * (-cLightClusterData[560].x) + 1.0);
-            float planarInvLen = inversesqrt((adjDir.z * adjDir.z + (adjDir.x * adjDir.x)));
-            float spotDot2 = ((planarInvLen * adjDir.z) * (-cLightClusterData[558].z) + (planarInvLen * adjDir.x) * (-cLightClusterData[558].x));
-            float totalAtten = (min((endAttenSmooth * endAttenSmooth), attenBlend)) * ((exp2(((log2((clamp(distAttenRaw2, 0.0, 1.0)))) * cLightClusterData[560].y))) * (exp2(((log2((clamp(((spotDot2 + (-cLightClusterData[560].z)) * (1.0 / ((-cLightClusterData[560].z) + 1.0))), 0.0, 1.0)))) * cLightClusterData[560].w))));
-            float NdotLxAtten2 = totalAtten * (clamp(NdotL2_raw, 0.0, 1.0));
+            float facingSmooth = facingFacSq * (-facingFacSq) + 1.0;
+            float sideFade = isBehindAxis ? (facingSmooth * facingSmooth) : 1.0;
+
+            float effectDist = isForward ? sqrt(distSq) : 1.0;
+            float distAttenRaw2 = effectDist * (-exAtten.x) + 1.0;
+            float distFade = exp2(log2(clamp(distAttenRaw2, 0.0, 1.0)) * exAtten.y);
+
+            float planarInvLen = inversesqrt(adjDir.z * adjDir.z + adjDir.x * adjDir.x);
+            float spotDot2 = (planarInvLen * adjDir.z) * (-exAxis.z) + (planarInvLen * adjDir.x) * (-exAxis.x);
+            float coneRamp = clamp((spotDot2 - exAtten.z) * (1.0 / ((-exAtten.z) + 1.0)), 0.0, 1.0);
+            float coneFade = exp2(log2(coneRamp) * exAtten.w);
+
+            float totalAtten = min(endFade, sideFade) * (distFade * coneFade);
+            float NdotLxAtten2 = totalAtten * clamp(NdotL2_raw, 0.0, 1.0);
 
             // Lit color and the shadow test. The back half is always
             // "lit": the mask only shadows the front-facing side.
-            vec3 lit2 = (cLightClusterData[559].w * cLightClusterData[559].xyz) * NdotLxAtten2;
+            vec3 lit2 = (exColor.w * exColor.xyz) * NdotLxAtten2;
             bool shadowPass = (texture(lightPrepassTex, vec2(shadowUVu, ((-shadowUVv) + 1.0))).b) > shadowUVz;
             float shadowMask2 = (shadowPass || isBackward) ? 1.0 : 0.0;
 
@@ -1587,8 +1609,7 @@ void main()
             // pass on painted alpha-team ground.
             bool isPainted2 = (min((paintStrength * 1000.0), 1.0)) > 0.5;
             bool isAlphaTeam = teamTopMask.x > 0.5;
-            int extraInkType = int(trunc(cInkMode.x));
-            bool doPaintInk = (isPainted2 && isAlphaTeam) && (extraInkType == 2);
+            bool doPaintInk = (isPainted2 && isAlphaTeam) && (inkType == 2);
             if (doPaintInk)
             {
                 // --- Side Order sparkle under the extra light ----------
@@ -1603,8 +1624,8 @@ void main()
                 float mipLevel = max(0.0, (min(((float((extraInk_lodInt & 65535))) * 0.00234375009), 6.0)));
                 float mipFloor = floor(mipLevel);
                 vec4 sparkle0 = texture(user1Tex, inkUV * exp2(-mipFloor));
-                vec3 sparkle = texture(user1Tex, inkUV * exp2((-(mipFloor + 1.0)))).rgb;
-                if (sparkle0.a >= (mipLevel + (-mipFloor)))
+                vec3 sparkle = texture(user1Tex, inkUV * exp2(-(mipFloor + 1.0))).rgb;
+                if (sparkle0.a >= (mipLevel - mipFloor))
                 {
                     sparkle = sparkle0.rgb;
                 }
@@ -1621,16 +1642,14 @@ void main()
                 vec3 bitanDir2 = tanRow.w * cross(litN, tangentDir2);
 
                 // Sparkle normal in the tangent frame.
-                float sparkleUp = sqrt(clamp(1.0 - dot(sparkle.rg, sparkle.rg), 0.0, 1.0));
-                vec3 sparkleNorm = normalize(tangentDir2 * sparkle.r + bitanDir2 * sparkle.g + litN * sparkleUp);
+                vec3 sparkleNorm = perturbNormal(litN, tangentDir2, bitanDir2, sparkle.rg);
 
                 // The overlay tilt lives in the paint frame; it only
                 // drives the rim term (viewed against the eye ray).
-                float overlayUp = sqrt(clamp(1.0 - dot(overlayNorm, overlayNorm), 0.0, 1.0));
-                vec3 overlayWorld = paintAxis2 * overlayNorm.x + cross(litN, paintAxis2) * overlayNorm.y + litN * overlayUp;
-                float rimFacing = dot(eyeDir, -normalize(overlayWorld));
-                float rimFactor = clamp((rimFacing * 0.5 + 0.5), 0.0, 1.0);
-                float rimGain = (rimFactor * cInkCustom5.y + (-cInkCustom5.y)) + 1.0;
+                vec3 overlayWorld = perturbNormal(litN, paintAxis2, cross(litN, paintAxis2), overlayNorm);
+                float rimFacing = dot(eyeDir, -overlayWorld);
+                float rimFactor = clamp(rimFacing * 0.5 + 0.5, 0.0, 1.0);
+                float rimGain = (rimFactor * cInkCustom5.y - cInkCustom5.y) + 1.0;
 
                 // Flip the light through the surface on back faces.
                 vec3 effectDir = (NdotL2_raw < 0.0) ? (-adjDir) : adjDir;
@@ -1642,17 +1661,8 @@ void main()
                 float NdotHi = max(dot(sparkleNorm, halfDirInk), 9.999999939e-09);
                 float NdotLi = max(dot(sparkleNorm, effectDir), 9.999999939e-09);
                 float NdotVi = max(dot(eyeDir, sparkleNorm), 9.999999939e-09);
-                float inkAlphaSq = cInkCustom0.w * cInkCustom0.w;
-                float inkRemap = (cInkCustom0.w * 0.5 + 0.5);
-                float inkK = (inkRemap * 0.5) * inkRemap;
-                float inkGeoV = (inkK * (-NdotVi) + NdotVi);
-                float inkGeoL = (inkK * (-NdotLi) + NdotLi);
-                float NdotHisq = NdotHi * NdotHi;
-                float inkDNumer = ((inkAlphaSq * inkAlphaSq) * NdotHisq + (-NdotHisq));
-                float inkDPart = inkAlphaSq * (1.0 / (max((inkDNumer + 1.0), 9.999999939e-09)));
-                float inkDsq = inkDPart * inkDPart;
-                float inkBrdf = ((1.0 / (inkK + inkGeoV)) * (1.0 / (inkK + inkGeoL))) * inkDsq;
-                float inkFresnelWt = exp2(VdotHi * (VdotHi * -5.554729939 + -6.98316002));
+                float inkBrdf = ggxSpecular(NdotHi, NdotVi, NdotLi, cInkCustom0.w);
+                float inkFresnelWt = fresnelWeight(VdotHi);
 
                 // Distance and view-plane fades.
                 float viewZ2 = dot(eyeDir, vec3(ctx.cViewInv[0].z, ctx.cViewInv[1].z, ctx.cViewInv[2].z));
@@ -1660,17 +1670,16 @@ void main()
                 float viewBlend = clamp((viewZ2 * cInkCustom1.z + cInkCustom1.w), 0.0, 1.0);
 
                 // Hash-dithered sparkle boost and coverage gates.
-                float hashScaled = sin((sparkle.r * 78.23300171 + (sparkle.b * 12.9898005))) * 43758.5469;
-                bool ditherPass = (hashScaled + (-(floor(hashScaled)))) <= cInkCustom4.w;
+                bool ditherPass = hash11(sparkle.r * 78.23300171 + (sparkle.b * 12.9898005)) <= cInkCustom4.w;
                 vec3 inkSpecBase = ditherPass ? (cInkCustom0.x * cInkCustom3.xyz) : cInkCustom3.xyz;
-                float threshValue = (detailMask * cInkCustom2.z + cInkCustom2.y);
-                float covA = clamp(((-threshValue) + sparkle.b), 0.0, 1.0);
-                float covB = clamp(((-threshValue) + 0.5), 0.0, 1.0);
-                float blendFactor = clamp(((paintStrength + (-cInkMode.w)) * (1.0 / cInkMode.z)), 0.0, 1.0);
-                float covGapA = (-covA) + cInkCustom2.w;
-                float covGapB = (-covB) + cInkCustom2.w;
-                float covBlendA = (blendFactor * (-covGapA) + covGapA);
-                float covBlendB = (blendFactor * (-covGapB) + covGapB);
+                float threshValue = detailMask * cInkCustom2.z + cInkCustom2.y;
+                float covA = clamp(sparkle.b - threshValue, 0.0, 1.0);
+                float covB = clamp(0.5 - threshValue, 0.0, 1.0);
+                float blendFactor = clamp((paintStrength - cInkMode.w) * (1.0 / cInkMode.z), 0.0, 1.0);
+                float covGapA = cInkCustom2.w - covA;
+                float covGapB = cInkCustom2.w - covB;
+                float covBlendA = blendFactor * (-covGapA) + covGapA;
+                float covBlendB = blendFactor * (-covGapB) + covGapB;
 
                 // Specular sparkle layer and the emissive push toward the
                 // ink's pop color.
@@ -1679,7 +1688,7 @@ void main()
                 float covFinalA = depthBlend * (viewBlend * (rimGain * (covA + covBlendA)));
                 vec3 inkSpecOut = covFinalA * ((inkSpecColor + inkSpecFres) * inkBrdf);
                 float emitStrength = (depthBlend * (viewBlend * ((covB + covBlendB) * rimGain))) * cInkCustom0.z;
-                vec3 emitDelta = -st2Emit + cInkCustom3.xyz;
+                vec3 emitDelta = cInkCustom3.xyz - st2Emit;
                 vec3 inkEmit = emitDelta * emitStrength + st2Emit;
                 vec3 litSpec = inkSpecOut * (lit2 * shadowMask2);
                 stInkEx = litSpec * 0.0795774683;
@@ -1693,9 +1702,8 @@ void main()
     // ------------------------------------------------------------------
     // Final compose: sun + ambient + cluster lights + rim, then fog
     // ------------------------------------------------------------------
-    int finalInkType = int(trunc(cInkMode.x));
-    bool isInkSpecial = (finalInkType == 2) || (finalInkType == 6);
-    bool isInkAnySpec = (finalInkType == 9) || isInkSpecial;
+    bool isInkSpecial = (inkType == 2) || (inkType == 6);
+    bool isInkAnySpec = (inkType == 9) || isInkSpecial;
     float inkEmitMask = isInkSpecial ? 1.0 : 0.0;
 
     // Total sun response (prepass shadow + ink stage light).
@@ -1739,20 +1747,27 @@ void main()
 
     // Sun alignment of the view offset drives the fog height blend.
     float fogNdotL = dot(camDelta * fogDistInvLen, env.cMainLightDir.xyz);
-    float fogHeightBlend = (fogNdotL * (-cFogDensity.y) + cFogDensity.y);
+    float fogHeightBlend = fogNdotL * (-cFogDensity.y) + cFogDensity.y;
     float fogDirDot = dot(worldPos, env.cFog1DirStart.xyz);
 
-    // fog0 color, damped where the sun shadow keeps the air dark.
-    vec3 fogColor = ((exp2(((log2(clamp(fogDist * ctx.cScreen.x, 0.0, 1.0))) * cFogDensity.x))) * (exp2(fogHeightBlend))) * cFogColor.xyz;
-    vec3 fogScaled = fogColor * clamp(((lightAccessibility * projShadowVis) * cFogDensity.w + (1.0 - cFogDensity.w)), 0.0, 1.0);
-    vec3 fogDiff = (fogScaled * vec3(cFogDensity.z) + -env.cFog0Color.xyz);
-    vec3 fog0 = (fogDiff * vec3(cFogRange.w) + env.cFog0Color.xyz);
+    // fog0 color: pow(distance ramp, density) * sun-alignment boost,
+    // damped where the sun shadow keeps the air dark.
+    float fogDistRamp = exp2(log2(clamp(fogDist * ctx.cScreen.x, 0.0, 1.0)) * cFogDensity.x);
+    vec3 fogColor = (fogDistRamp * exp2(fogHeightBlend)) * cFogColor.xyz;
+    float fogShadowDamp = clamp((lightAccessibility * projShadowVis) * cFogDensity.w + (1.0 - cFogDensity.w), 0.0, 1.0);
+    vec3 fogScaled = fogColor * fogShadowDamp;
+    vec3 fog0 = (fogScaled * vec3(cFogDensity.z) - env.cFog0Color.xyz) * vec3(cFogRange.w) + env.cFog0Color.xyz;
 
-    // Directional fog1 first, then blend toward fog0 with distance.
-    vec3 fogBlend = -composite + env.cFog1Color.xyz;
-    vec3 preFog = (fogBlend * vec3(((clamp(((fogDirDot * (-env.cFog1EndDamp.x) + env.cFog1DirStart.w)), 0.0, 1.0)) * env.cFog1Color.w)) + composite);
-    vec3 fogMix = fog0 - preFog;
-    vec3 finalColor = (fogMix * vec3(((clamp(-(exp2(((clamp((fogDist * env.cFog0EndDamp.x + env.cFog0DirStart.w), 0.0, 1.0)) * (-cFogRange.x) * 1.44269502))) + 1.0, 0.0, 1.0)) * env.cFog0Color.w)) + preFog);
+    // Directional fog1 first: blend the composite toward the fog1 color
+    // by how far the fragment sits along the fog direction.
+    float fog1Amount = clamp(fogDirDot * (-env.cFog1EndDamp.x) + env.cFog1DirStart.w, 0.0, 1.0) * env.cFog1Color.w;
+    vec3 preFog = (env.cFog1Color.xyz - composite) * vec3(fog1Amount) + composite;
+
+    // Then fog0 on top: exponential distance fade toward the fog0 color
+    // (exp(-x * cFogRange.x), spelled via exp2 with log2(e)).
+    float fog0Ramp = clamp(fogDist * env.cFog0EndDamp.x + env.cFog0DirStart.w, 0.0, 1.0);
+    float fog0Amount = clamp(1.0 - exp2(fog0Ramp * (-cFogRange.x) * 1.44269502), 0.0, 1.0) * env.cFog0Color.w;
+    vec3 finalColor = (fog0 - preFog) * vec3(fog0Amount) + preFog;
 
     oFragColor = vec4(finalColor, 1.0);
 }
